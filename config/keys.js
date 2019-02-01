@@ -1,4 +1,4 @@
 module.exports = {
-  mongoURI: "YOUR_MONGO_URI_HERE",
+  mongoURI: "mongodb://admin:Root2019@ds015478.mlab.com:15478/vstournaments",
   secretOrKey: "secret"
 };
