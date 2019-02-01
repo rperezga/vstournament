@@ -22,6 +22,7 @@ class Navbar extends Component {
               </ul>
               :
               <ul className="right hide-on-med-and-down">
+              <li><Link to="/tournaments"><i className="material-icons left">dashboard</i>Tournaments</Link></li>
                 <li><Link to="/login"><i className="material-icons left">person</i>Login</Link></li>
                 <li><Link to="/register"><i className="material-icons left">person_add</i>Register</Link></li>
               </ul>

@@ -15,6 +15,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 
 import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/Account";
+// import Organizer from "./components/organizer/Organizer";
 
 import "./App.css";
 
@@ -49,6 +50,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              {/* <PrivateRoute exact path="/organizer" component={Organizer} /> */}
               <PrivateRoute exact path="/account" component={Account} />
             </Switch>
           </div>
