@@ -5,10 +5,34 @@ module.exports = function validateRegisterInput(data) {
   let errors = {};
 
   // Convert empty fields to an empty string so we can use validator functions
+  data.userName = !isEmpty(data.userName) ? data.userName : "";
+  data.playerName = !isEmpty(data.playerName) ? data.playerName : "";
+  data.team = !isEmpty(data.team) ? data.team : "";
+  data.region = !isEmpty(data.region) ? data.region : "";  
   data.name = !isEmpty(data.name) ? data.name : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
+
+  // Username checks
+  if (Validator.isEmpty(data.userName)) {
+    errors.userName = "Username field is required";
+  }
+
+  // Playername checks
+  if (Validator.isEmpty(data.playerName)) {
+    errors.playerName = "Playername field is required";
+  }
+
+  // Team checks
+  if (Validator.isEmpty(data.team)) {
+    errors.team = "Team field is required";
+  }
+
+  // Region checks
+  if (Validator.isEmpty(data.region)) {
+    errors.region = "Region field is required";
+  }
 
   // Name checks
   if (Validator.isEmpty(data.name)) {

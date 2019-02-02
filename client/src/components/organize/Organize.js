@@ -6,9 +6,8 @@ class Organize extends Component {
     return (
       <div className="container">
           <h1>ORGANIZE</h1>
+          <Link to="/createEvent">Tournaments</Link>
       </div>
-      
-      
     );
   }
 }
