@@ -75,6 +75,7 @@ class Login extends Component {
                 <MDBCardImage className="img-fluid" src="./login.jpg" waves />
                 <MDBCardBody>
                   <MDBCardTitle>Sign in</MDBCardTitle>
+                  <hr />
                   <MDBCardText>
                     <form noValidate onSubmit={this.onSubmit}>
                       <div className="grey-text">
@@ -90,7 +91,6 @@ class Login extends Component {
                             invalid: errors.email || errors.emailnotfound
                           })}
                           group
-                          type="email"
                         />
 
                         <MDBInput
@@ -98,11 +98,9 @@ class Login extends Component {
                           icon="lock"
                           group
                           type="password"
-                          validate
-                          onChange={this.onChange}
-                          value={this.state.password}
                           id="password"
-                          type="password"
+                          onChange={this.onChange}
+                          value={this.state.password}                          
                           className={classnames("", {
                             invalid: errors.password || errors.passwordincorrect
                           })}
@@ -110,7 +108,7 @@ class Login extends Component {
 
                       </div>
                       <div className="text-center">
-                        <MDBBtn type="submit" >Login</MDBBtn>
+                        <MDBBtn type="submit" >Sign in</MDBBtn>
                       </div>
                     </form>
                     <hr />

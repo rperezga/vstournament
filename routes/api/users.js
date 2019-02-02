@@ -20,20 +20,31 @@ router.post("/register", (req, res) => {
 
   const { errors, isValid } = validateRegisterInput(req.body);
 
+  // console.log(req.body)
+
   // Check validation
   if (!isValid) {
+    console.log('Error')
     return res.status(400).json(errors);
   }
 
   User.findOne({ email: req.body.email }).then(user => {
+    console.log(user)
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
+      
       const newUser = new User({
+        userName: req.body.userName,
+        playerName: req.body.playerName,
+        team: req.body.team,
+        region: req.body.region,
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
       });
+
+      console.log(`User ${newUser}`)
 
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
