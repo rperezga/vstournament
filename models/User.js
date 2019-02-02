@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // Create Schema
 const UserSchema = new Schema({
 
-  username: {
+  userName: {
     type: String,
     required: true
   },
@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     required: true
   },
 
-  regiion: {
+  region: {
     type: String,
     required: true
   },
