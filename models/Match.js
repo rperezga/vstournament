@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const UserSchema = new Schema({
+const MatchSchema = new Schema({
 
     name: {
         type: String,
@@ -47,4 +47,4 @@ const UserSchema = new Schema({
     },
 });
 
-module.exports = User = mongoose.model("matches", UserSchema);
+module.exports = Match = mongoose.model("matches", MatchSchema);

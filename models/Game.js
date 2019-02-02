@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const UserSchema = new Schema({
+const GameSchema = new Schema({
 
     name: {
         type: String,
@@ -17,4 +17,4 @@ const UserSchema = new Schema({
 });
 
 
-module.exports = Game = mongoose.model("games", UserSchema);
+module.exports = Game = mongoose.model("games", GameSchema);

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const UserSchema = new Schema({
+const BracketSchema = new Schema({
 
     name: {
         type: String,
@@ -41,4 +41,4 @@ const UserSchema = new Schema({
     ]
 });
 
-module.exports = Bracket = mongoose.model("brackets", UserSchema);
+module.exports = Bracket = mongoose.model("brackets", BracketSchema);
