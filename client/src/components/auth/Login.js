@@ -5,6 +5,19 @@ import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCol,
+  MDBRow,
+  MDBInput,
+  MDBBtn
+} from 'mdbreact'
+
 class Login extends Component {
   constructor() {
     super();
@@ -53,88 +66,62 @@ class Login extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="row">
-        <div className="col-md-6 offset-md-3" style={{ marginTop: "4rem" }} >
-          <Link to="/" className="btn-flat waves-effect">
-            <i class="fas fa-arrow-left"></i> Back to home</Link>
-          <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-            <h4>
-              <b>Login</b> below
-              </h4>
-            <p className="grey-text text-darken-1">
-              Don't have an account? <Link to="/register">Register</Link>
-            </p>
-          </div>
+      <React.Fragment >
 
-          <form noValidate onSubmit={this.onSubmit}>
+        <MDBRow>
+          <MDBCol md="4" className="offset-md-4">
+            <MDBCol>
+              <MDBCard style={{ width: "30rem" }}>
+                <MDBCardImage className="img-fluid" src="./login.jpg" waves />
+                <MDBCardBody>
+                  <MDBCardTitle>Sign in</MDBCardTitle>
+                  <MDBCardText>
+                    <form noValidate onSubmit={this.onSubmit}>
+                      <div className="grey-text">
 
-            <div class="input-group input-group-lg">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">@</span>
-              </div>
-              <input
-                onChange={this.onChange}
-                value={this.state.email}
-                error={errors.email}
-                id="email"
-                type="email"
-                className={classnames("", {
-                  invalid: errors.email || errors.emailnotfound
-                })}
-                placeholder="user@email.com"
-                class="form-control"
-                aria-describedby="basic-addon1"
-              />
-              <div>
-                <span className="text-danger">
-                  {errors.email}
-                  {errors.emailnotfound}
-                </span>
-              </div>
-            </div>
+                        <MDBInput
+                          label="Type your email"
+                          icon="envelope"
+                          onChange={this.onChange}
+                          value={this.state.email}
+                          id="email"
+                          type="email"
+                          className={classnames("", {
+                            invalid: errors.email || errors.emailnotfound
+                          })}
+                          group
+                          type="email"
+                        />
 
-            <div class="input-group input-group-lg" style={{marginTop: "30px"}}>
-              <input
-                onChange={this.onChange}
-                value={this.state.password}
-                error={errors.password}
-                id="password"
-                type="password"
-                className={classnames("", {
-                  invalid: errors.password || errors.passwordincorrect
-                })}
-                placeholder="Password"
-                class="form-control"
-                aria-describedby="basic-addon1"
-              />
-              <span className="text-danger">
-                {errors.password}
-                {errors.passwordincorrect}
-              </span>
-            </div>
-            <div style={{ paddingLeft: "50px", marginTop: "30px" }}>
-            <button type="button" class="btn btn-primary">Primary</button>
-</div>
+                        <MDBInput
+                          label="Type your password"
+                          icon="lock"
+                          group
+                          type="password"
+                          validate
+                          onChange={this.onChange}
+                          value={this.state.password}
+                          id="password"
+                          type="password"
+                          className={classnames("", {
+                            invalid: errors.password || errors.passwordincorrect
+                          })}
+                        />
 
-
-
-            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-              <button
-                style={{
-                  width: "150px",
-                  borderRadius: "3px",
-                  letterSpacing: "1.5px",
-                  marginTop: "1rem"
-                }}
-                type="submit"
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-              >
-                Login
-                </button>
-            </div>
-          </form>
-        </div>
-      </div>
+                      </div>
+                      <div className="text-center">
+                        <MDBBtn type="submit" >Login</MDBBtn>
+                      </div>
+                    </form>
+                    <hr />
+                    <p className="font-weight-normal" style={{ textAlign: "center" }}>Do not have an account. <a href="#" className="font-weight-bold"><Link to="/register">Register Here!</Link></a></p>
+                  </MDBCardText>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          </MDBCol>
+        </MDBRow>
+      </React.Fragment>
     );
   }
 }

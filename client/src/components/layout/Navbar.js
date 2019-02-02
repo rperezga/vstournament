@@ -77,24 +77,6 @@ class Navbar extends Component {
               </NavText>
             </NavItem>
 
-            <NavItem eventKey="login">
-              <NavIcon>
-                <Link to="/login"><i className="fas fa-sign-in-alt" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/login">Login</Link>
-              </NavText>
-            </NavItem>
-
-            <NavItem eventKey="register">
-              <NavIcon>
-                <Link to="/register"><i className="fas fa-check-double" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/register">Register</Link>
-              </NavText>
-            </NavItem>
-
           </SideNav.Nav>
         </SideNav>
 
