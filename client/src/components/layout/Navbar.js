@@ -11,84 +11,94 @@ class Navbar extends Component {
   render() {
     const { user } = this.props.auth;
     return (
+      <React.Fragment>
 
-      <SideNav
-        onSelect={(selected) => {
-          
-        }}
+        <nav>
+          <div style={{textAlign: "center"}} >
+            <Link to="/" style={{ fontFamily: "monospace" }}>
+              <img src="./logo.png" id="logo" alt="VS Tournament" />
+            </Link>
+          </div>
+          <hr />
+        </nav>
 
-        id="sidebar"
-      >
-        <SideNav.Toggle />
-        <SideNav.Nav defaultSelected="home">
+        <SideNav
+          onSelect={(selected) => {
 
-          <NavItem eventKey="home">
-            <NavIcon>
-              <i className="fab fa-angellist" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/">Tournaments</Link>
-            </NavText>
-          </NavItem>
+          }}
 
-          <NavItem eventKey="players">
-            <NavIcon>
-              <i className="fas fa-users" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/players">Players</Link>
-            </NavText>
-          </NavItem>
+          id="sidebar"
+        >
+          <SideNav.Toggle />
+          <SideNav.Nav defaultSelected="home">
 
-          <NavItem eventKey="organize">
-            <NavIcon>
-              <i className="fas fa-sitemap" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/organize">Organize</Link>
-            </NavText>
-          </NavItem>
+            <NavItem eventKey="home">
+              <NavIcon>
+                <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/">Tournaments</Link>
+              </NavText>
+            </NavItem>
 
-          <NavItem eventKey="participate">
-            <NavIcon>
-              <i className="fas fa-bullhorn" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/participate">Paticipate</Link>
-            </NavText>
-          </NavItem>
+            <NavItem eventKey="players">
+              <NavIcon>
+                <Link to="/players"><i className="fas fa-users" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/players">Players</Link>
+              </NavText>
+            </NavItem>
 
-          <NavItem eventKey="account">
-            <NavIcon>
-              <i className="far fa-user" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/account">Account</Link>
-            </NavText>
-          </NavItem>
+            <NavItem eventKey="organize">
+              <NavIcon>
+                <Link to="/organize"><i className="fas fa-sitemap" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/organize">Organize</Link>
+              </NavText>
+            </NavItem>
 
-          <NavItem eventKey="login">
-            <NavIcon>
-              <i className="fas fa-sign-in-alt" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/login">Login</Link>
-            </NavText>
-          </NavItem>
+            <NavItem eventKey="participate">
+              <NavIcon>
+                <Link to="/participate"><i className="fas fa-bullhorn" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/participate">Paticipate</Link>
+              </NavText>
+            </NavItem>
 
-          <NavItem eventKey="register">
-            <NavIcon>
-              <i className="fas fa-check-double" style={{ fontSize: '1.75em' }} />
-            </NavIcon>
-            <NavText>
-              <Link to="/register">Register</Link>
-            </NavText>
-          </NavItem>
+            <NavItem eventKey="account">
+              <NavIcon>
+                <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/account">Account</Link>
+              </NavText>
+            </NavItem>
 
-        </SideNav.Nav>
-      </SideNav>
+            <NavItem eventKey="login">
+              <NavIcon>
+                <Link to="/login"><i className="fas fa-sign-in-alt" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/login">Login</Link>
+              </NavText>
+            </NavItem>
 
+            <NavItem eventKey="register">
+              <NavIcon>
+                <Link to="/register"><i className="fas fa-check-double" style={{ fontSize: '1.75em' }} /></Link>
+              </NavIcon>
+              <NavText>
+                <Link to="/register">Register</Link>
+              </NavText>
+            </NavItem>
 
+          </SideNav.Nav>
+        </SideNav>
+
+      </React.Fragment>
 
     );
   }

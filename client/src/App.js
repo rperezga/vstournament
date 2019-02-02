@@ -9,7 +9,7 @@ import store from "./store";
 
 import Navbar from "./components/layout/Navbar";
 
-import Tournaments from "./components/tournaments/Tournaments";
+import Events from "./components/events/Events";
 import Players from "./components/players/Players";
 import Organize from "./components/organize/Organize";
 import Participate from "./components/participate/Participate";
@@ -43,27 +43,20 @@ class App extends Component {
     return (
 
       <Provider store={store}>
+
         <Router>
-          <div className="wrapper">
-            <div id="sidebar">
-              <Navbar />
-            </div>
-
-            <div id="content">
-              <Route exact path="/" component={Tournaments} />
-              <Route exact path="/players" component={Players} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-              <Switch>
-                <PrivateRoute exact path="/organize" component={Organize} />
-                <PrivateRoute exact path="/participate" component={Participate} />
-                <PrivateRoute exact path="/account" component={Account} />
-              </Switch>
-
-            </div>
-
-          </div>
-
+          <React.Fragment>
+            <Navbar />
+            <Route exact path="/" component={Events} />
+            <Route exact path="/players" component={Players} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Switch>
+              <PrivateRoute exact path="/organize" component={Organize} />
+              <PrivateRoute exact path="/participate" component={Participate} />
+              <PrivateRoute exact path="/account" component={Account} />
+            </Switch>
+          </React.Fragment>
         </Router>
 
       </Provider>
