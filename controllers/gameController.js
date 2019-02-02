@@ -1,4 +1,4 @@
-const game = require("../model/Game");
+const game = require("../models/Game");
 
 module.exports = {
 

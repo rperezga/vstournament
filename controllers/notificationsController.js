@@ -1,4 +1,4 @@
-const notification = require("../model/Notification");
+const notification = require("../models/Notification");
 
 module.exports = {
 

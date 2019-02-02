@@ -1,4 +1,4 @@
-const bracket = require("../model/Bracket");
+const bracket = require("../models/Bracket");
 
 module.exports = {
 

@@ -1,4 +1,4 @@
-const tournament = require("../model/Tournament");
+const tournament = require("../models/Tournament");
 
 module.exports = {
 

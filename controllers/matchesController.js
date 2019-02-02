@@ -1,4 +1,4 @@
-const match = require("../model/Match");
+const match = require("../models/Match");
 
 module.exports = {
 
