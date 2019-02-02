@@ -40,6 +40,13 @@ const TournamentSchema = new Schema({
         }
     ],
 
+    notifications: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Notification"
+        }
+    ],
+
     result: [
         {
             user:{
