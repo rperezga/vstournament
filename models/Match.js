@@ -45,6 +45,12 @@ const MatchSchema = new Schema({
             required: false
         }
     },
+
+    // the possible values are new, running, finsihed
+    status: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = Match = mongoose.model("matches", MatchSchema);

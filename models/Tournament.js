@@ -28,15 +28,31 @@ const TournamentSchema = new Schema({
 
     players: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "User"
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: "User"
+            },
+
+            //pending, approved, declined
+            status: {
+                type: String,
+                required: true
+            }
         }
     ],
 
     judges: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "User"
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: "User"
+            },
+
+            //pending, approved, declined
+            status: {
+                type: String,
+                required: true
+            }
         }
     ],
 
@@ -58,7 +74,13 @@ const TournamentSchema = new Schema({
                 required: true
             }
         }
-    ]
+    ],
+    
+    // the possible values are new, open, closed, running, ended
+    status: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = Tournament = mongoose.model("tournaments", TournamentSchema);
