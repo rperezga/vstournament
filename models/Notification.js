@@ -13,6 +13,26 @@ const NotificationShema = new Schema({
         type: Date,
         default: Date.now
     },
+
+    notificationType: {
+        type: String,
+        required: true
+    },
+
+    bracket: {
+        type: Schema.Types.ObjectId,
+        ref: "Bracket"
+    },
+
+    tournament: {
+        type: Schema.Types.ObjectId,
+        ref: "Tournament"
+    },
+
+    event: {
+        type: Schema.Types.ObjectId,
+        ref: "Event"
+    }
 });
 
 module.exports = Notification = mongoose.model("notifications", NotificationShema);

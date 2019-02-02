@@ -38,7 +38,14 @@ const BracketSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Match"
         }
-    ]
+    ],
+
+    // the possible values are new, running, finished
+    status: {
+        type: String,
+        required: true
+    }
+
 });
 
 module.exports = Bracket = mongoose.model("brackets", BracketSchema);

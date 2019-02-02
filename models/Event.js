@@ -34,7 +34,15 @@ const EventSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Tournament"
         }
-    ]
+    ],
+
+    // the possible values are new, open, closed, running, ended
+    status: {
+        type: String,
+        required: true,
+        default: "new"
+    }
+        
 });
 
 module.exports = Event = mongoose.model("events", EventSchema);
