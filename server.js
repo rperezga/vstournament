@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
+const assert = require("assert");
+const io = require('socket.io')();
+const MongoClient = require("mongodb").MongoClient;
+
 const users = require("./routes/api/users");
 const brackets = require("./routes/api/brackets");
 const events = require("./routes/api/events");
@@ -51,3 +55,54 @@ app.use("/api/tournaments", tournaments);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
+
+
+// ----  REAL TIME DATABASE  --------
+
+
+
+
+
+// ----  WEB SOCKET  -------- 
+ 
+io.on('connection', (socket) => {
+  socket.on('subscribeToTimer', (interval) => {
+
+    const pipeline = [
+      {
+        $project: { documentKey: false }
+      }
+    ];
+    
+    MongoClient.connect(db)
+      .then(client => {
+    
+        console.log("Connected correctly to server");
+        // specify db and collections
+        const db = client.db();
+        const collection = db.collection("tests");
+    
+        const changeStream = collection.watch(pipeline);
+        // start listen to changes
+        changeStream.on("change", function (change) {
+          console.log('----------------------------------------------------')
+          console.log(change);
+
+          socket.emit('changeUpdate', change.operationType);
+          
+        });         
+    
+      })
+      .catch(err => {
+        console.error(err);
+      });    
+  });
+});
+
+const socketPort = 8080;
+io.listen(socketPort);
+console.log('listening on port ', socketPort);
+
+
+
+

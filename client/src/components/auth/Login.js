@@ -82,7 +82,6 @@ class Login extends Component {
 
                         <MDBInput
                           label="Type your email"
-                          icon="envelope"
                           onChange={this.onChange}
                           value={this.state.email}
                           id="email"
@@ -95,7 +94,6 @@ class Login extends Component {
 
                         <MDBInput
                           label="Type your password"
-                          icon="lock"
                           group
                           type="password"
                           id="password"
