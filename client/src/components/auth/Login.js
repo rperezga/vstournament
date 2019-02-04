@@ -6,7 +6,6 @@ import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
@@ -31,13 +30,13 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
 
     if (nextProps.errors) {
@@ -75,13 +74,13 @@ class Login extends Component {
                 <MDBCardImage className="img-fluid" src="./login.jpg" waves />
                 <MDBCardBody>
                   <MDBCardTitle>Sign in</MDBCardTitle>
+                  <hr />
                   <MDBCardText>
                     <form noValidate onSubmit={this.onSubmit}>
                       <div className="grey-text">
 
                         <MDBInput
                           label="Type your email"
-                          icon="envelope"
                           onChange={this.onChange}
                           value={this.state.email}
                           id="email"
@@ -90,19 +89,15 @@ class Login extends Component {
                             invalid: errors.email || errors.emailnotfound
                           })}
                           group
-                          type="email"
                         />
 
                         <MDBInput
                           label="Type your password"
-                          icon="lock"
                           group
                           type="password"
-                          validate
-                          onChange={this.onChange}
-                          value={this.state.password}
                           id="password"
-                          type="password"
+                          onChange={this.onChange}
+                          value={this.state.password}                          
                           className={classnames("", {
                             invalid: errors.password || errors.passwordincorrect
                           })}
@@ -110,7 +105,7 @@ class Login extends Component {
 
                       </div>
                       <div className="text-center">
-                        <MDBBtn type="submit" >Login</MDBBtn>
+                        <MDBBtn type="submit" >Sign in</MDBBtn>
                       </div>
                     </form>
                     <hr />

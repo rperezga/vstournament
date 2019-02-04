@@ -36,7 +36,7 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
-                required: true
+                // required: true
             }
         }
     ],
@@ -51,7 +51,7 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
-                required: true
+                // required: true
             }
         }
     ],
@@ -71,7 +71,7 @@ const TournamentSchema = new Schema({
             },
             position: {
                 type: Number,
-                required: true
+                // required: true
             }
         }
     ],
@@ -79,7 +79,7 @@ const TournamentSchema = new Schema({
     // the possible values are new, open, closed, running, ended
     status: {
         type: String,
-        required: true
+        // required: true
     }
 });
 
