@@ -6,7 +6,6 @@ import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
@@ -31,13 +30,13 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
 
     if (nextProps.errors) {
