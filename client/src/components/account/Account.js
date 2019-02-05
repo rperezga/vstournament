@@ -1,9 +1,23 @@
+import { subscribeToTimer } from '../../socket';
+
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 
 class Account extends Component {
+
+  state = {
+    value: 'no activity yet'
+  }
+
+  constructor(props) {
+    super(props);
+    subscribeToTimer((value) => this.setState({
+      value
+    }));
+  }
+
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
@@ -35,6 +49,11 @@ class Account extends Component {
             >
               Logout
             </button>
+
+            <p className="App-intro">
+              This is the value: {this.state.value}
+            </p>
+
           </div>
         </div>
       </div>

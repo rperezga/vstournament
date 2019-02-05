@@ -1,4 +1,3 @@
-import { subscribeToTimer } from '../../socket';
 import {
   MDBContainer,
   MDBBtn,
@@ -7,24 +6,22 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBInput,
-  MDBListGroup, 
+  MDBListGroup,
   MDBListGroupItem
 } from 'mdbreact';
 
 import { connect } from "react-redux";
-
-import API from "../../actions/API";
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import API from "../../utils/tournamentAPI";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import API from "../../actions/API";
+import Moment from 'react-moment';
 
 class Organize extends Component {
 
   state = {
-    value: 'no activity yet',
     modal: false,
     date: '',
     name: '',
@@ -48,10 +45,7 @@ class Organize extends Component {
 
   constructor(props) {
     super(props);
-    subscribeToTimer((value) => this.setState({
-      value
-    }));
-    this.setState({organizer: this.props.auth.user.id});
+    this.setState({ organizer: this.props.auth.user.id });
     this.state = {
       date: '',
       name: '',
@@ -61,14 +55,14 @@ class Organize extends Component {
   }
 
   componentDidMount() {
-    this.setState({organizer: this.props.auth.user.id});
+    this.setState({ organizer: this.props.auth.user.id });
     this.loadTournaments();
   }
 
   loadTournaments = () => {
     API.getTournaments()
       .then(res =>
-        this.setState({ tournaments: res.data, name: "", date: ""})
+        this.setState({ tournaments: res.data, name: "", date: "" })
       )
       .catch(err => console.log(err));
   };
@@ -78,7 +72,7 @@ class Organize extends Component {
   };
 
   onSubmit = e => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const tournamentData = {
       name: this.state.name,
@@ -100,14 +94,13 @@ class Organize extends Component {
 
 
 
-  render() {  
-    
+  render() {
+
     //console.log(this.state)
 
     return (
       <div className="container">
         <h1>ORGANIZE</h1>
-        {/* <Link to="/createEvent">Tournaments</Link> */}
 
         <p>{this.state.organizer}</p>
 
@@ -116,19 +109,22 @@ class Organize extends Component {
 
 
         <MDBContainer>
-        {this.state.tournaments.length ? (
-              <MDBListGroup>
-                {this.state.tournaments.map(tournament => (
-                  <MDBListGroupItem key={tournament._id}>
-                    <Link to={"/tournaments/" + tournament._id}>
-                      <strong>
-                        {tournament.name} is {tournament.status} happening on {tournament.date}
-                      </strong>
-                    </Link>
-                  </MDBListGroupItem>
-                ))}
-              </MDBListGroup>
-            ) : (
+          {this.state.tournaments.length ? (
+            <MDBListGroup>
+              {this.state.tournaments.map(tournament => (
+                <MDBListGroupItem key={tournament._id}>
+                  <Link to={"/tournaments/" + tournament._id}>
+                    <strong>
+                      {tournament.name} is {tournament.status} happening on -- 
+                      <Moment format=" YYYY/MM/DD HH:mm">
+                        {tournament.date}
+                      </Moment>
+                    </strong>
+                  </Link>
+                </MDBListGroupItem>
+              ))}
+            </MDBListGroup>
+          ) : (
               <h3>No Results to Display</h3>
             )}
           <MDBBtn onClick={this.toggle}>Create Tournament</MDBBtn>
@@ -148,6 +144,11 @@ class Organize extends Component {
                     group
                   />
 
+
+
+
+
+
                   {/* <MDBInput
                     label="Game"
                     onChange={this.onChange}
@@ -156,14 +157,19 @@ class Organize extends Component {
                     type="text"
                     group
                   /> */}
+
                   <DatePicker
                     selected={this.state.date}
                     onChange={this.handleChange}
                     showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={30}
                     dateFormat="MMMM d, yyyy h:mm aa"
-                    showDisabledMonthNavigation
-                    placeholderText="Click to select a date and time"
+                    timeCaption="time"
+                    id="tournamentPicker"
                   />
+
+
                   {/* <MDBDropdown>
                     <MDBDropdownToggle caret color="primary">
                       MDBDropdown
@@ -182,7 +188,7 @@ class Organize extends Component {
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-                <MDBBtn color="primary"  type="submit">Save changes</MDBBtn>
+                <MDBBtn color="primary" type="submit">Save changes</MDBBtn>
               </MDBModalFooter>
             </form>
           </MDBModal>
