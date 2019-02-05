@@ -14,9 +14,14 @@ const TournamentSchema = new Schema({
         ref: "Game"
     },
 
-    date: {
+    createdAt: {
         type: Date,
         default: Date.now
+    },
+
+    date: {
+        type: Date,
+        required: true
     },
 
     brackets: [
@@ -79,8 +84,14 @@ const TournamentSchema = new Schema({
     // the possible values are new, open, closed, running, ended
     status: {
         type: String,
-        // required: true
-    }
+        // required: true,
+        default: "new"
+    },
+
+    organizer: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
 });
 
 module.exports = Tournament = mongoose.model("tournaments", TournamentSchema);
