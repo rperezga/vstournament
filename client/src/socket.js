@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:8080');
+const socket = openSocket('http://192.168.150.127:8080');
 
 function subscribeToTimer(cb) {
     socket.on('changeUpdate', value => cb(value));

@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
     "axios": "^0.18.0",
@@ -23,8 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:5000",
+  },  
   "eslintConfig": {
     "extends": "react-app"
   },

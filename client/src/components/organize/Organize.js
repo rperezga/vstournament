@@ -11,7 +11,7 @@ import {
 
 import { connect } from "react-redux";
 
-import axios from "axios";
+import API from "../../actions/API";
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
@@ -38,7 +38,6 @@ class Organize extends Component {
     subscribeToTimer((value) => this.setState({
       value
     }));
-    this.setState({userId: this.props.auth.user.id});
   }
 
   componentDidMount() {
@@ -58,12 +57,10 @@ class Organize extends Component {
 
     };
 
-    // axios
-    //   .post("/api/tournaments/create", tournamentData)
-    //   .then(res => console.log('Tournament created!'))
-    //   .catch(err =>
-    //     console.log(err)
-    //   );
+    API.tournamentCreate(tournamentData)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
   };
 
 

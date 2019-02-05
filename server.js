@@ -40,6 +40,18 @@ mongoose
 // Passport middleware
 app.use(passport.initialize());
 
+// Heather middleware
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Access-Control-Request-Headers, Accept, Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method');
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+
+	next();
+});
+
 // Passport config
 require("./config/passport")(passport);
 
