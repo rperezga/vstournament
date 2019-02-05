@@ -96,7 +96,6 @@ class Organize extends Component {
   }
 
 
-
   render() {  
     
     //console.log(this.state)
@@ -107,10 +106,6 @@ class Organize extends Component {
         {/* <Link to="/createEvent">Tournaments</Link> */}
 
         <p>{this.state.organizer}</p>
-
-
-
-
 
         <MDBContainer>
         {this.state.tournaments.length ? (
@@ -161,19 +156,6 @@ class Organize extends Component {
                     showDisabledMonthNavigation
                     placeholderText="Click to select a date and time"
                   />
-                  {/* <MDBDropdown>
-                    <MDBDropdownToggle caret color="primary">
-                      MDBDropdown
-                    </MDBDropdownToggle>
-                    <MDBDropdownMenu basic>
-                      <MDBDropdownItem>Action</MDBDropdownItem>
-                      <MDBDropdownItem>Another Action</MDBDropdownItem>
-                      <MDBDropdownItem>Something else here</MDBDropdownItem>
-                      <MDBDropdownItem divider />
-                      <MDBDropdownItem>Separated link</MDBDropdownItem>
-                    </MDBDropdownMenu>
-                  </MDBDropdown> */}
-
                 </div>
 
               </MDBModalBody>
