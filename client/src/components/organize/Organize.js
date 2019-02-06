@@ -7,7 +7,8 @@ import {
   MDBModalFooter,
   MDBInput,
   MDBListGroup,
-  MDBListGroupItem
+  MDBListGroupItem,
+  MDBDatePicker
 } from 'mdbreact';
 
 import { connect } from "react-redux";
@@ -15,8 +16,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/tournamentAPI";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
 
 class Organize extends Component {
@@ -34,7 +35,7 @@ class Organize extends Component {
     //notifications: [],
     //result: [{user: '', position: ''}]
 
-  };
+  };  
 
   toggle = () => {
     this.setState({
@@ -95,9 +96,6 @@ class Organize extends Component {
 
 
   render() {
-
-    //console.log(this.state)
-
     return (
       <div className="container">
         <h1>ORGANIZE</h1>
@@ -158,6 +156,8 @@ class Organize extends Component {
                     group
                   /> */}
 
+<MDBDatePicker getValue={this.getPickerValue} />
+{/* 
                   <DatePicker
                     selected={this.state.date}
                     onChange={this.handleChange}
@@ -166,8 +166,8 @@ class Organize extends Component {
                     timeIntervals={30}
                     dateFormat="MMMM d, yyyy h:mm aa"
                     timeCaption="time"
-                    id="tournamentPicker"
-                  />
+                    style={{background: 'red'}}
+                  /> */}
 
 
                   {/* <MDBDropdown>

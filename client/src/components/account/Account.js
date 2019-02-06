@@ -13,9 +13,12 @@ class Account extends Component {
 
   constructor(props) {
     super(props);
-    subscribeToTimer((value) => this.setState({
-      value
-    }));
+    subscribeToTimer((value) => {
+      let response = JSON.stringify(value);
+      this.setState({
+        value: response
+      })
+    });
   }
 
   onLogoutClick = e => {
