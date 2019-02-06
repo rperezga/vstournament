@@ -70,11 +70,6 @@ app.listen(port, () => console.log(`Server up and running on port ${port} !`));
 
 
 // ----  REAL TIME DATABASE  --------
-
-
-
-
-
 // ----  WEB SOCKET  -------- 
  
 io.on('connection', (socket) => {
@@ -100,7 +95,7 @@ io.on('connection', (socket) => {
           console.log('----------------------------------------------------')
           console.log(change);
 
-          socket.emit('changeUpdate', change.operationType);
+          socket.emit('changeUpdate', change);
           
         });         
     
