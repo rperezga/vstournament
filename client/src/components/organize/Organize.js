@@ -7,8 +7,7 @@ import {
   MDBModalFooter,
   MDBInput,
   MDBListGroup,
-  MDBListGroupItem,
-  MDBDatePicker
+  MDBListGroupItem
 } from 'mdbreact';
 
 import { connect } from "react-redux";
@@ -17,8 +16,8 @@ import { Link } from "react-router-dom";
 import API from "../../utils/tournamentAPI";
 import gameApi from "../../utils/gameAPI";
 
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
 
 class Organize extends Component {
@@ -119,7 +118,7 @@ class Organize extends Component {
   render() {  
 
     return (
-      <div className="container">
+      <div>
         <h1>ORGANIZE</h1>
         {this.props.auth.user.id ? (
             <MDBBtn onClick={this.toggle}>Create Tournament</MDBBtn>
@@ -145,6 +144,7 @@ class Organize extends Component {
           ) : (
               <h3>No Results to Display</h3>
             )}
+            
           <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
             <form noValidate onSubmit={this.onSubmit}>
               <MDBModalHeader toggle={this.toggle}>Create new Tournament</MDBModalHeader>

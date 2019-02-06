@@ -9,41 +9,35 @@ class Navbar extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false };
-  }
-
-
-
-  // VER DONDE VOY A MOSTRAR ESTO
-  toggleNav() {
-    if (this.state.open == true) {
-      this.setState({
-        open: false
-      });
-    } else {
-      this.setState({
-        open: true
-      });
+    this.state = {
+      visible: true
     }
-    console.log(this.state.open)
+
+    this.toggleNavMenu = this.toggleNavMenu.bind(this);
   }
-  // VER DONDE VOY A MOSTRAR ESTO
 
-
-
-
+  toggleNavMenu() {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
 
   render() {
     return (
       <React.Fragment>
-        <SideNav>
-          <SideNav.Toggle />
+        <SideNav visible={this.props.visible} style={{heigth: "100%"}}>
+
+          <SideNav.Toggle onClick={() => {
+              this.props.toggleMenu(this.state.visible);
+              this.toggleNavMenu()
+            }
+          } />
 
           <SideNav.Nav defaultSelected="home">
 
-            <NavItem eventKey="home">
+            <NavItem eventKey="home">              
               <NavIcon>
-                <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.75em' }} /></Link>
+                <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.4em' }} /></Link>
               </NavIcon>
               <NavText>
                 <Link to="/">Tournaments</Link>
@@ -52,7 +46,7 @@ class Navbar extends Component {
 
             <NavItem eventKey="players">
               <NavIcon>
-                <Link to="/players"><i className="fas fa-users" style={{ fontSize: '1.75em' }} /></Link>
+                <Link to="/players"><i className="fas fa-users" style={{ fontSize: '1.4em' }} /></Link>
               </NavIcon>
               <NavText>
                 <Link to="/players">Players</Link>
@@ -61,7 +55,7 @@ class Navbar extends Component {
 
             <NavItem eventKey="organize">
               <NavIcon>
-                <Link to="/organize"><i className="fas fa-sitemap" style={{ fontSize: '1.75em' }} /></Link>
+                <Link to="/organize"><i className="fas fa-sitemap" style={{ fontSize: '1.4em' }} /></Link>
               </NavIcon>
               <NavText>
                 <Link to="/organize">Organize</Link>
@@ -70,7 +64,7 @@ class Navbar extends Component {
 
             <NavItem eventKey="participate">
               <NavIcon>
-                <Link to="/participate"><i className="fas fa-bullhorn" style={{ fontSize: '1.75em' }} /></Link>
+                <Link to="/participate"><i className="fas fa-bullhorn" style={{ fontSize: '1.4em' }} /></Link>
               </NavIcon>
               <NavText>
                 <Link to="/participate">Paticipate</Link>
@@ -79,7 +73,7 @@ class Navbar extends Component {
 
             <NavItem eventKey="account">
               <NavIcon>
-                <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.75em' }} /></Link>
+                <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.4em' }} /></Link>
               </NavIcon>
               <NavText>
                 <Link to="/account">Account</Link>

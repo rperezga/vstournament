@@ -99,12 +99,13 @@ module.exports = {
         });
     },
 
-    getUserById: function (req, res) {
-        User.findOne(req.params.id).then(user => {
+    getUserById: function (req, res) {        
+        User.findById(req.params.id).then(user => {
             if (!user) {
-                return res.status(404).json({ emailnotfound: "User not found" });
+              return res.status(404).json({ emailnotfound: "User not found" });
             } else {
-                return res.status(200).json({ user: user })
+                console.log(user)
+              return res.status(200).json({ user: user })
             }
         });
     }
