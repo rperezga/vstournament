@@ -100,6 +100,16 @@ const TournamentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
+
+    venue: {
+        type: String,
+        required: true
+    },
+
+    address: {
+        type: String,
+        required: true
+    },
 });
 
 module.exports = Tournament = mongoose.model("tournaments", TournamentSchema);

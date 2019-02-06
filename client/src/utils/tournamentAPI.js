@@ -5,6 +5,10 @@ export default {
   getTournaments: function() {
       return axios.get("/api/tournaments");
   },
+
+  getUser: function (id) {
+    return axios.get("/api/users/find/" + id);
+  },
   // Saves a tournament to the database
   saveTournament: function(data) {
     //   return axios.post("/api/tournaments", data);
@@ -20,5 +24,9 @@ export default {
   //updates a tournament to the database
   updateTournament: function (id, data) {
       return axios.put("/api/tournaments" + id, data);
+  },
+
+  getUserTournaments: function (id) {
+      return axios.get("/api/tournaments/byuser/" + id)
   }
 };
