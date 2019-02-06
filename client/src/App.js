@@ -6,6 +6,7 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
+import "./App.css"
 
 import Navbar from "./components/layout/Navbar";
 
@@ -39,25 +40,52 @@ if (localStorage.jwtToken) {
   }
 }
 
+
+
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    };
+  }
+
+  toggleMenu(childState) {
+    this.setState(() => {
+      return ({ visible: childState })
+    })
+  }
+
   render() {
+    const isVisible = this.state.visible;
+    let bodyStyle;
+
+    if (isVisible) {
+      bodyStyle = "isVisible"
+    } else {
+      bodyStyle = "notVisible"
+    }
+
     return (
 
       <Provider store={store}>
 
         <Router>
           <React.Fragment>
-            <Navbar />
-            
-            <Route exact path="/" component={props => <Events />} />
-            <Route exact path="/players" component={Players} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Switch>
-              <PrivateRoute exact path="/organize" component={Organize} />
-              <PrivateRoute exact path="/participate" component={Participate} />
-              <PrivateRoute exact path="/account" component={Account} />
-            </Switch>
+            <Navbar toggleMenu={this.toggleMenu.bind(this)} />
+
+            <div className={bodyStyle}>
+              <Route exact path="/" component={props => <Events />} />
+              <Route exact path="/players" component={Players} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Switch>
+                <PrivateRoute exact path="/organize" component={Organize} />
+                <PrivateRoute exact path="/participate" component={Participate} />
+                <PrivateRoute exact path="/account" component={Account} />
+              </Switch>
+            </div>
 
           </React.Fragment>
         </Router>

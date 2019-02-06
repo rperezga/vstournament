@@ -9,35 +9,29 @@ class Navbar extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false };
-  }
-
-
-
-  // VER DONDE VOY A MOSTRAR ESTO
-  toggleNav() {
-    if (this.state.open == true) {
-      this.setState({
-        open: false
-      });
-    } else {
-      this.setState({
-        open: true
-      });
+    this.state = {
+      visible: true
     }
-    console.log(this.state.open)
+
+    this.toggleNavMenu = this.toggleNavMenu.bind(this);
   }
-  // VER DONDE VOY A MOSTRAR ESTO
 
-
-
-
+  toggleNavMenu() {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
 
   render() {
     return (
       <React.Fragment>
-        <SideNav>
-          <SideNav.Toggle />
+        <SideNav visible={this.props.visible} >
+
+          <SideNav.Toggle onClick={() => {
+            this.props.toggleMenu(this.state.visible);
+            this.toggleNavMenu()
+          }
+          } />
 
           <SideNav.Nav defaultSelected="home">
 

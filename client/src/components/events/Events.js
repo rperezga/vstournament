@@ -3,10 +3,10 @@ import React, { Component } from "react";
 class Events extends Component {
   render() {
     return (
-      <div className="container">
+
+      <div>
           <h1>EVENTS</h1>
-      </div>
-      
+      </div>      
       
     );
   }
