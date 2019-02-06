@@ -1,35 +1,44 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
-import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import SideNav, { NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 
 import './Navbar.css'
 
 class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { open: false };
+  }
+
+
+
+  // VER DONDE VOY A MOSTRAR ESTO
+  toggleNav() {
+    if (this.state.open == true) {
+      this.setState({
+        open: false
+      });
+    } else {
+      this.setState({
+        open: true
+      });
+    }
+    console.log(this.state.open)
+  }
+  // VER DONDE VOY A MOSTRAR ESTO
+
+
+
+
+
   render() {
-    const { user } = this.props.auth;
     return (
       <React.Fragment>
-
-        <nav>
-          <div style={{textAlign: "center"}} >
-            <Link to="/" style={{ fontFamily: "monospace" }}>
-              <img src="./logo.png" id="logo" alt="VS Tournament" />
-            </Link>
-          </div>
-          <hr />
-        </nav>
-
-        <SideNav
-          onSelect={(selected) => {
-
-          }}
-
-          id="sidebar"
-        >
+        <SideNav>
           <SideNav.Toggle />
+
           <SideNav.Nav defaultSelected="home">
 
             <NavItem eventKey="home">
@@ -81,15 +90,8 @@ class Navbar extends Component {
         </SideNav>
 
       </React.Fragment>
-
     );
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps
-)(Navbar);
+export default Navbar;

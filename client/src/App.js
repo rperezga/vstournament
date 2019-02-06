@@ -38,6 +38,7 @@ if (localStorage.jwtToken) {
     window.location.href = "./login";
   }
 }
+
 class App extends Component {
   render() {
     return (
@@ -47,7 +48,8 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <Navbar />
-            <Route exact path="/" component={Events} />
+            
+            <Route exact path="/" component={props => <Events />} />
             <Route exact path="/players" component={Players} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
@@ -56,6 +58,7 @@ class App extends Component {
               <PrivateRoute exact path="/participate" component={Participate} />
               <PrivateRoute exact path="/account" component={Account} />
             </Switch>
+
           </React.Fragment>
         </Router>
 

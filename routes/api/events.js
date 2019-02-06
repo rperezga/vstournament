@@ -12,4 +12,7 @@ router.route("/:id")
     .put(eventsController.update)
     .delete(eventsController.remove);
 
+// router.route("/test")
+//     .post(eventsController.test)
+
 module.exports = router;

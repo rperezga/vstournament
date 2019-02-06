@@ -39,7 +39,8 @@ const EventSchema = new Schema({
     // the possible values are new, open, closed, running, ended
     status: {
         type: String,
-        required: true
+        required: true,
+        default: "new"
     }
         
 });
