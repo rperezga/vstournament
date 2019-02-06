@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import API from "../../utils/tournamentAPI";
+import gameApi from "../../utils/gameAPI";
 
 class Organize extends Component {
 
@@ -25,9 +26,12 @@ class Organize extends Component {
     modal: false,
     date: '',
     name: '',
-    //status: '',
     organizer: '',
+    venue: '',
+    address: '',
     tournaments: [],
+    games: []
+    //status: '',
     //brackets: [],
     //players: [{user: '', status: ''}],
     //judges: [{user: '', status: ''}],
@@ -42,7 +46,6 @@ class Organize extends Component {
     });
   }
 
-
   constructor(props) {
     super(props);
     subscribeToTimer((value) => this.setState({
@@ -52,20 +55,42 @@ class Organize extends Component {
     this.state = {
       date: '',
       name: '',
-      tournaments: []
+      tournaments: [],
+      games: ''
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    this.setState({organizer: this.props.auth.user.id});
-    this.loadTournaments();
+    API.getUser(this.props.auth.user.id).then(res => {
+      this.setState({organizer: res.data.user._id});
+      this.loadAllTournaments();
+      this.loadAllGames();
+    });
   }
 
-  loadTournaments = () => {
+  loadAllGames() {
+    gameApi.getGames()
+      .then(res => {
+        this.setState({games: res.data});
+      })
+      .catch(err => console.log(err));
+  }
+
+  loadAllTournaments = () => {
     API.getTournaments()
-      .then(res =>
-        this.setState({ tournaments: res.data, name: "", date: ""})
+      .then(res => {
+          this.setState({tournaments: res.data});
+        }
+      )
+      .catch(err => console.log(err));
+  };
+
+  loadTournaments = () => {
+    API.getUserTournaments(this.state.organizer)
+      .then(res => {
+          this.setState({tournaments: res.data});
+        }
       )
       .catch(err => console.log(err));
   };
@@ -75,8 +100,6 @@ class Organize extends Component {
   };
 
   onSubmit = e => {
-    e.preventDefault();
-
     const tournamentData = {
       name: this.state.name,
       date: this.state.date,
@@ -95,18 +118,16 @@ class Organize extends Component {
     });
   }
 
-
   render() {  
-    
-    //console.log(this.state)
 
     return (
       <div className="container">
         <h1>ORGANIZE</h1>
-        {/* <Link to="/createEvent">Tournaments</Link> */}
+        {this.props.auth.user.id ? (
+            <MDBBtn onClick={this.toggle}>Create Tournament</MDBBtn>
+          ): ("")}
 
-        <p>{this.state.organizer}</p>
-
+        <h3>Tournaments</h3>
         <MDBContainer>
         {this.state.tournaments.length ? (
               <MDBListGroup>
@@ -123,14 +144,12 @@ class Organize extends Component {
             ) : (
               <h3>No Results to Display</h3>
             )}
-          <MDBBtn onClick={this.toggle}>Create Tournament</MDBBtn>
           <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
             <form noValidate onSubmit={this.onSubmit}>
               <MDBModalHeader toggle={this.toggle}>Create new Tournament</MDBModalHeader>
               <MDBModalBody>
 
                 <div className="grey-text">
-
                   <MDBInput
                     label="Name"
                     onChange={this.onChange}
@@ -139,16 +158,23 @@ class Organize extends Component {
                     type="text"
                     group
                   />
-
-                  {/* <MDBInput
-                    label="Game"
+                  <MDBInput
+                    label="Venue"
                     onChange={this.onChange}
-                    value={this.state.game}
-                    id="game"
+                    value={this.state.venue}
+                    id="venue"
                     type="text"
                     group
-                  /> */}
-                  <DatePicker
+                  />
+                  <MDBInput
+                    label="Address"
+                    onChange={this.onChange}
+                    value={this.state.address}
+                    id="address"
+                    type="text"
+                    group
+                  />
+                  <DatePicker className="browser-default custom-select"
                     selected={this.state.date}
                     onChange={this.handleChange}
                     showTimeSelect
@@ -156,6 +182,17 @@ class Organize extends Component {
                     showDisabledMonthNavigation
                     placeholderText="Click to select a date and time"
                   />
+                  <div> 
+                    <select className="browser-default custom-select">
+                    <option>Choose game for tournament</option>
+                    {this.state.games.length ? (
+                      this.state.games.map(game => (
+                        <option value={game._id}>{game.name}</option>
+                      ))
+
+                    ) : ("")}
+                    </select>
+                  </div>
                 </div>
 
               </MDBModalBody>
@@ -166,8 +203,6 @@ class Organize extends Component {
             </form>
           </MDBModal>
         </MDBContainer>
-
-
       </div>
     );
   }

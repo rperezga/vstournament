@@ -9,7 +9,6 @@ import store from "./store";
 
 import Navbar from "./components/layout/Navbar";
 
-import Events from "./components/events/Events";
 import Players from "./components/players/Players";
 import Organize from "./components/organize/Organize";
 import Participate from "./components/participate/Participate";
@@ -49,12 +48,11 @@ class App extends Component {
           <React.Fragment>
             <Navbar />
             
-            <Route exact path="/" component={props => <Events />} />
             <Route exact path="/players" component={Players} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/organize" component={Organize} />
             <Switch>
-              <PrivateRoute exact path="/organize" component={Organize} />
               <PrivateRoute exact path="/participate" component={Participate} />
               <PrivateRoute exact path="/account" component={Account} />
             </Switch>

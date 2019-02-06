@@ -9,7 +9,6 @@ const MongoClient = require("mongodb").MongoClient;
 
 const users = require("./routes/api/users");
 const brackets = require("./routes/api/brackets");
-const events = require("./routes/api/events");
 const games = require("./routes/api/games");
 const matches = require("./routes/api/matches");
 const notifications = require("./routes/api/notifications");
@@ -46,7 +45,6 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 app.use("/api/brackets", brackets);
-app.use("/api/events", events);
 app.use("/api/games", games);
 app.use("/api/matches", matches);
 app.use("/api/notifications", notifications);

@@ -12,4 +12,7 @@ router.route("/:id")
     .put(tournamentsController.update)
     .delete(tournamentsController.remove);
 
+router.route("/byuser/:id")
+    .get(tournamentsController.findByUserId)
+
 module.exports = router;
