@@ -1,4 +1,3 @@
-import { subscribeToTimer } from '../../socket';
 import {
   MDBContainer,
   MDBBtn,
@@ -7,22 +6,24 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBInput,
-  MDBListGroup, 
-  MDBListGroupItem
+  MDBListGroup,
+  MDBListGroupItem,
+  MDBDatePicker
 } from 'mdbreact';
 
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import API from "../../utils/tournamentAPI";
 import gameApi from "../../utils/gameAPI";
+
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+import Moment from 'react-moment';
 
 class Organize extends Component {
 
   state = {
-    value: 'no activity yet',
     modal: false,
     date: '',
     name: '',
@@ -38,7 +39,7 @@ class Organize extends Component {
     //notifications: [],
     //result: [{user: '', position: ''}]
 
-  };
+  };  
 
   toggle = () => {
     this.setState({
@@ -48,10 +49,7 @@ class Organize extends Component {
 
   constructor(props) {
     super(props);
-    subscribeToTimer((value) => this.setState({
-      value
-    }));
-    this.setState({organizer: this.props.auth.user.id});
+    this.setState({ organizer: this.props.auth.user.id });
     this.state = {
       date: '',
       name: '',
@@ -129,19 +127,22 @@ class Organize extends Component {
 
         <h3>Tournaments</h3>
         <MDBContainer>
-        {this.state.tournaments.length ? (
-              <MDBListGroup>
-                {this.state.tournaments.map(tournament => (
-                  <MDBListGroupItem key={tournament._id}>
-                    <Link to={"/tournaments/" + tournament._id}>
-                      <strong>
-                        {tournament.name} is {tournament.status} happening on {tournament.date}
-                      </strong>
-                    </Link>
-                  </MDBListGroupItem>
-                ))}
-              </MDBListGroup>
-            ) : (
+          {this.state.tournaments.length ? (
+            <MDBListGroup>
+              {this.state.tournaments.map(tournament => (
+                <MDBListGroupItem key={tournament._id}>
+                  <Link to={"/tournaments/" + tournament._id}>
+                    <strong>
+                      {tournament.name} is {tournament.status} happening on -- 
+                      <Moment format=" YYYY/MM/DD HH:mm">
+                        {tournament.date}
+                      </Moment>
+                    </strong>
+                  </Link>
+                </MDBListGroupItem>
+              ))}
+            </MDBListGroup>
+          ) : (
               <h3>No Results to Display</h3>
             )}
           <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
@@ -178,6 +179,8 @@ class Organize extends Component {
                     selected={this.state.date}
                     onChange={this.handleChange}
                     showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={30}
                     dateFormat="MMMM d, yyyy h:mm aa"
                     showDisabledMonthNavigation
                     placeholderText="Click to select a date and time"
@@ -198,7 +201,7 @@ class Organize extends Component {
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-                <MDBBtn color="primary"  type="submit">Save changes</MDBBtn>
+                <MDBBtn color="primary" type="submit">Save changes</MDBBtn>
               </MDBModalFooter>
             </form>
           </MDBModal>
