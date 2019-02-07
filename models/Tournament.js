@@ -81,13 +81,11 @@ const TournamentSchema = new Schema({
         }
     ],
     
-    // the possible values are 
-    
     // smash.gg
+
     // running,
     // closed, 
-    // open,
-    // demas
+    // new,
 
 
     status: {

@@ -6,9 +6,12 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
+import "./App.css"
 
 import Navbar from "./components/layout/Navbar";
+import Heather from "./components/layout/Heather";
 
+import Tournaments from "./components/tournaments/Tournaments";
 import Players from "./components/players/Players";
 import Organize from "./components/organize/Organize";
 import Participate from "./components/participate/Participate";
@@ -16,6 +19,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Account from "./components/account/Account";
+import ViewTournament from "./components/tournaments/ViewTournament";
 
 
 // Check for token to keep user logged in
@@ -39,23 +43,51 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    };
+  }
+
+  toggleMenu(childState) {
+    this.setState(() => {
+      return ({ visible: childState })
+    })
+  }
+
   render() {
+    const isVisible = this.state.visible;
+    let bodyStyle;
+
+    if (isVisible) {
+      bodyStyle = "isVisible"
+    } else {
+      bodyStyle = "notVisible"
+    }
+
     return (
 
       <Provider store={store}>
 
         <Router>
           <React.Fragment>
-            <Navbar />
-            
-            <Route exact path="/players" component={Players} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/organize" component={Organize} />
-            <Switch>
-              <PrivateRoute exact path="/participate" component={Participate} />
-              <PrivateRoute exact path="/account" component={Account} />
-            </Switch>
+            <Navbar toggleMenu={this.toggleMenu.bind(this)} />
+
+            <div className={bodyStyle}>
+              <Heather />
+
+              <Route exact path="/" component={Tournaments} />
+              <Route exact path="/players" component={Players} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/organize" component={Organize} />
+              <Route exact path="/viewtournament/:id" component={ViewTournament} />
+              <Switch>
+                <PrivateRoute exact path="/participate" component={Participate} />
+                <PrivateRoute exact path="/account" component={Account} />
+              </Switch>
+            </div>
 
           </React.Fragment>
         </Router>

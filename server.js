@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
-const assert = require("assert");
 const io = require('socket.io')();
 const MongoClient = require("mongodb").MongoClient;
 
@@ -17,11 +16,7 @@ const tournaments = require("./routes/api/tournaments");
 const app = express();
 
 // Bodyparser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // DB Config
@@ -107,7 +102,6 @@ io.on('connection', (socket) => {
 const socketPort = 8080;
 io.listen(socketPort);
 console.log('listening on port ', socketPort);
-
 
 
 
