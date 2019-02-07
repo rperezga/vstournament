@@ -19,6 +19,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Account from "./components/account/Account";
+import ViewTournament from "./components/tournaments/ViewTournament";
 
 
 // Check for token to keep user logged in
@@ -81,6 +82,7 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/organize" component={Organize} />
+              <Route exact path="/viewtournament/:id" component={ViewTournament} />
               <Switch>
                 <PrivateRoute exact path="/participate" component={Participate} />
                 <PrivateRoute exact path="/account" component={Account} />

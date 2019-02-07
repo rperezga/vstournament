@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import API from "../../utils/tournamentAPI";
 
 import CardTournament from "./CardTournament"
@@ -32,14 +31,16 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        return (
-                            <CardTournament
-                                id={tournament._id}
-                                name={tournament.name}
-                                date={tournament.date}
-                                game={tournament.game}
-                            />
-                        )
+                        if (tournament.status === 'running') {
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game}
+                                />
+                            )
+                        }
                     })}
                 </div>
 
@@ -49,14 +50,16 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        return (
-                            <CardTournament
-                                id={tournament._id}
-                                name={tournament.name}
-                                date={tournament.date}
-                                game={tournament.game}
-                            />
-                        )
+                        if (tournament.status === 'new') {
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game}
+                                />
+                            )
+                        }
                     })}
                 </div>
 
@@ -66,14 +69,16 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        return (
-                            <CardTournament
-                                id={tournament._id}
-                                name={tournament.name}
-                                date={tournament.date}
-                                game={tournament.game}
-                            />
-                        )
+                        if (tournament.status === 'closed') {
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game}
+                                />
+                            )
+                        }
                     })}
                 </div>
 

@@ -15,7 +15,7 @@ export default {
   },
   // Gets the tournament with the given id
   getTournament: function(id) {
-      return axios.get("/api/tournaments" + id);
+      return axios.get("/api/tournaments/" + id);
   },
   // Deletes the tournament with the given id
   deleteTournament: function(id) {
