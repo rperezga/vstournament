@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import API from "../../utils/tournamentAPI";
+import VolunteerCard from './VolunteerCard';
 import {
   MDBContainer,
   MDBBtn,
@@ -24,10 +27,29 @@ class Volunteer extends Component {
       tabUpcoming: 'nav-link',
       tabFinished: 'nav-link',
       tabRejected: 'nav-link',
+      tournaments: []
     }
 
     this.handleClick = this.handleClick.bind(this);
   }
+
+  componentDidMount() {
+    this.loadTournaments();
+  }
+
+
+  loadTournaments = () => {
+    API.getJudgeTournaments(this.props.auth.user.id)
+      .then(res => {
+        this.setState({ tournaments: res.data });
+        console.log(this.state.tournaments)
+      }
+      )
+      .catch(err => console.log(err));
+  };
+
+
+
 
   handleClick(event) {
     const id = event.target.id;
@@ -42,7 +64,7 @@ class Volunteer extends Component {
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
       })
-    }else if(id === 'judge') {
+    } else if (id === 'judge') {
       this.setState({
         tabPending: 'nav-link',
         tabJudge: 'nav-link active',
@@ -50,7 +72,7 @@ class Volunteer extends Component {
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
       })
-    }else if(id === 'upcoming') {
+    } else if (id === 'upcoming') {
       this.setState({
         tabPending: 'nav-link',
         tabJudge: 'nav-link',
@@ -58,7 +80,7 @@ class Volunteer extends Component {
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
       })
-    }else if(id === 'finished') {
+    } else if (id === 'finished') {
       this.setState({
         tabPending: 'nav-link',
         tabJudge: 'nav-link',
@@ -66,7 +88,7 @@ class Volunteer extends Component {
         tabFinished: 'nav-link active',
         tabRejected: 'nav-link',
       })
-    }else{
+    } else {
       this.setState({
         tabPending: 'nav-link',
         tabJudge: 'nav-link',
@@ -106,7 +128,43 @@ class Volunteer extends Component {
 
           <div style={{ margin: "20px 50px" }}>
             <h1>
-              {this.state.tab}
+              {/* {this.state.tab} */}
+
+
+              {this.state.tournaments.map((tournament, index) => {
+                const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
+                if (this.state.tab === 'pending' && result.status === 'pending') {
+                  return (
+                    <VolunteerCard
+                      name={tournament.name}
+                    />
+                  )
+                }else if (this.state.tab === 'judge' && result.status === 'judge') {
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                  }else  if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                }else if (this.state.tab === 'finished' && result.status === 'finished') {
+                  return (
+                    <VolunteerCard
+                      name={tournament.name}
+                    />
+                  )
+              }else  if (this.state.tab === 'rejected' && result.status === 'rejected') {
+                return (
+                  <VolunteerCard
+                    name={tournament.name}
+                  />
+                )
+            }
+              })}
             </h1>
           </div>
         </div>
@@ -116,4 +174,8 @@ class Volunteer extends Component {
   }
 }
 
-export default Volunteer;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Volunteer);
