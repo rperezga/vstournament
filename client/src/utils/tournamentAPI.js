@@ -11,7 +11,7 @@ export default {
   },
   // Saves a tournament to the database
   saveTournament: function(data) {
-    return axios.post("/api/tournaments", data);
+      return axios.post("/api/tournaments", data);
   },
   // Gets the tournament with the given id
   getTournament: function(id) {
@@ -28,5 +28,10 @@ export default {
   //get tournaments of user by id
   getUserTournaments: function (id) {
     return axios.get("/api/tournaments/byuser/" + id)
-  }
+  },
+  getJudgeTournaments: function (id) {
+    return axios.get("/api/tournaments/judge/" + id)
+    } 
+
+
 };

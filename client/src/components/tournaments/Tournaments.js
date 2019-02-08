@@ -6,18 +6,18 @@ import CardTournament from "./CardTournament"
 class Tournaments extends Component {
 
     state = {
-        tournaments: []
+        tournaments: [],
+        organizer: ''
     }
 
     componentDidMount() {
-        this.loadAllTournaments();
+        this.loadAllTournaments(this.state.organizer);
     }
 
     loadAllTournaments = () => {
         const data = API.getTournaments()
             .then(res => {
                 this.setState({ tournaments: res.data });
-                console.log(this.state.tournaments)
             }
             )
             .catch(err => console.log(err));
