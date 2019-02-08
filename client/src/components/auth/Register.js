@@ -91,6 +91,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.userName}
                               id="userName"
+                              name="userName"
                               type="text"
                               className={classnames("", {
                                 invalid: errors.userName || errors.usernamenotfound
@@ -104,6 +105,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.playerName}
                               id="playerName"
+                              name="playerName"
                               type="text"
                               className={classnames("", {
                                 invalid: errors.playerName || errors.playernotfound
@@ -120,6 +122,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.team}
                               id="team"
+                              name="team"
                               type="text"
                               className={classnames("", {
                                 invalid: errors.team || errors.teamnotfound
@@ -133,6 +136,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.region}
                               id="region"
+                              name="region"
                               type="text"
                               className={classnames("", {
                                 invalid: errors.region || errors.regionnotfound
@@ -165,6 +169,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.email}
                               id="email"
+                              name="email"
                               type="email"
                               className={classnames("", {
                                 invalid: errors.email || errors.emailnotfound
@@ -181,6 +186,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.password}
                               id="password"
+                              name="password"
                               type="password"
                               className={classnames("", {
                                 invalid: errors.password
@@ -194,6 +200,7 @@ class Register extends Component {
                               onChange={this.onChange}
                               value={this.state.password2}
                               id="password2"
+                              name="password2"
                               type="password"
                               className={classnames("", {
                                 invalid: errors.password2
