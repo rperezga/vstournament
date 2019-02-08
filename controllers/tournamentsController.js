@@ -44,5 +44,13 @@ module.exports = {
             .find({organizer: req.params.id})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
+    },
+
+    findByJudge: function (req, res) {
+        console.log(req.params);
+        tournament
+            .find({"judges.user": req.params.id})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
     }
 };

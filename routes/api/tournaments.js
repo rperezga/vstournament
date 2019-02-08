@@ -15,4 +15,8 @@ router.route("/:id")
 router.route("/byuser/:id")
     .get(tournamentsController.findByUserId)
 
+
+router.route("/judge/:id")
+    .get(tournamentsController.findByJudge)
+
 module.exports = router;

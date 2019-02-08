@@ -28,5 +28,10 @@ export default {
   //get tournaments of user by id
   getUserTournaments: function (id) {
     return axios.get("/api/tournaments/byuser/" + id)
-  }
+  },
+  getJudgeTournaments: function (id) {
+    return axios.get("/api/tournaments/judge/" + id)
+    } 
+
+
 };
