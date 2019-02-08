@@ -27,20 +27,6 @@ class Organize extends Component {
 
   state = {
     modal: false,
-    date: '',
-    name: '',
-    organizer: '',
-    venue: '',
-    address: '',
-    tournaments: [],
-    games: []
-    //status: '',
-    //brackets: [],
-    //players: [{user: '', status: ''}],
-    //judges: [{user: '', status: ''}],
-    //notifications: [],
-    //result: [{user: '', position: ''}]
-
   };
 
   toggle = () => {
@@ -51,12 +37,21 @@ class Organize extends Component {
 
   constructor(props) {
     super(props);
-    this.setState({ organizer: this.props.auth.user.id });
     this.state = {
       date: '',
       name: '',
+      organizer: '',
+      venue: '',
+      address: '',
       tournaments: [],
-      games: ''
+      games: [],
+      game: ''
+      //status: '',
+      //brackets: [],
+      //players: [{user: '', status: ''}],
+      //judges: [{user: '', status: ''}],
+      //notifications: [],
+      //result: [{user: '', position: ''}]
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -64,7 +59,7 @@ class Organize extends Component {
   componentDidMount() {
     API.getUser(this.props.auth.user.id).then(res => {
       this.setState({ organizer: res.data.user._id });
-      this.loadAllTournaments();
+      this.loadMyTournaments();
       this.loadAllGames();
     });
   }
@@ -86,12 +81,9 @@ class Organize extends Component {
       .catch(err => console.log(err));
   };
 
-  loadTournaments = () => {
+  loadMyTournaments = () => {
     API.getUserTournaments(this.state.organizer)
-      .then(res => {
-        this.setState({ tournaments: res.data });
-      }
-      )
+      .then(res => this.setState({ tournaments: res.data }))
       .catch(err => console.log(err));
   };
 
@@ -103,12 +95,14 @@ class Organize extends Component {
     const tournamentData = {
       name: this.state.name,
       date: this.state.date,
-      //status: this.state.status,
-      organizer: this.state.organizer
+      organizer: this.state.organizer,
+      game: this.state.game,
+      venue: this.state.venue,
+      address: this.state.address
     };
 
     API.saveTournament(tournamentData)
-      .then(res => this.loadTournaments())
+      .then(res => this.loadMyTournaments())
       .catch(err => console.log(err));
   }
 
@@ -223,7 +217,7 @@ class Organize extends Component {
                   <MDBRow>
                     <MDBCol size="7">
                       <div>
-                        <select className="browser-default custom-select">
+                        <select className="browser-default custom-select" id="game" onChange={this.onChange}>
                           <option>Choose game for tournament</option>
                           {this.state.games.length ? (
                             this.state.games.map(game => (
@@ -243,7 +237,7 @@ class Organize extends Component {
                         timeIntervals={30}
                         dateFormat="MMMM d, yyyy h:mm aa"
                         showDisabledMonthNavigation
-                        placeholderText="Click to select a date and time"
+                        placeholderText="Date and time"
                       />
                     </MDBCol>
                   </MDBRow>

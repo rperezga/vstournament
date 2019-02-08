@@ -39,6 +39,7 @@ module.exports = {
     },
 
     findByUserId: function (req, res) {
+        console.log(req.params);
         tournament
             .find({organizer: req.params.id})
             .then(dbModel => res.json(dbModel))
