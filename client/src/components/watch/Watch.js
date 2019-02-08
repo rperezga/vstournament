@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-class Players extends Component {
+class Watch extends Component {
   render() {
     return (
       <div>
-          <h1>PLAYERS</h1>
+          <h1>WATCH</h1>
       </div>
       
       
@@ -12,4 +12,4 @@ class Players extends Component {
   }
 }
 
-export default Players;
+export default Watch;
