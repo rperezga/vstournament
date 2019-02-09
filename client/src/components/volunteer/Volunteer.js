@@ -135,25 +135,42 @@ class Volunteer extends Component {
                       name={tournament.name}
                     />
                   )
-                } else if (this.state.tab === 'judge' && result.status === 'judge') {
-                  return (
-                    <VolunteerCard
-                      name={tournament.name}
-                    />
-                  )
-                } else if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
-                  return (
-                    <VolunteerCard
-                      name={tournament.name}
-                    />
-                  )
-                } else if (this.state.tab === 'finished' && result.status === 'finished') {
-                  return (
-                    <VolunteerCard
-                      name={tournament.name}
-                    />
-                  )
-                } else if (this.state.tab === 'rejected' && result.status === 'rejected') {
+                } else if (result.status === 'approved') {
+                  if(this.state.tab === 'judge' && tournament.status === 'running'){
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                  }else if(this.state.tab === 'finished' && tournament.status === 'closed'){
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                  }else if(this.state.tab === 'upcoming' && tournament.status === 'new'){
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                  }
+                  
+                }
+                //  else if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
+                //   return (
+                //     <VolunteerCard
+                //       name={tournament.name}
+                //     />
+                //   )
+                // } else if (this.state.tab === 'finished' && result.status === 'finished') {
+                //   return (
+                //     <VolunteerCard
+                //       name={tournament.name}
+                //     />
+                //   )
+                // } 
+                else if (this.state.tab === 'rejected' && result.status === 'rejected') {
                   return (
                     <VolunteerCard
                       name={tournament.name}
