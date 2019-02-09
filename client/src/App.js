@@ -13,7 +13,6 @@ import Heather from "./components/layout/Heather";
 
 import Tournaments from "./components/tournaments/Tournaments";
 import Volunteer from "./components/volunteer/Volunteer";
-import Watch from "./components/watch/Watch";
 import Organize from "./components/organize/Organize";
 import Participate from "./components/participate/Participate";
 import Register from "./components/auth/Register";
@@ -86,8 +85,7 @@ class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/organize" component={Organize} />
                 <PrivateRoute exact path="/volunteer" component={Volunteer} />
-                <PrivateRoute exact path="/participate" component={Participate} />
-                <PrivateRoute exact path="/watch" component={Watch} />                
+                <PrivateRoute exact path="/participate" component={Participate} />              
                 <PrivateRoute exact path="/account" component={Account} />
                 <PrivateRoute exact path="/edit-tournament/:id" component={EditTournament} />
               </Switch>
