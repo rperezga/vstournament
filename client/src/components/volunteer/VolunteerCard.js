@@ -15,6 +15,7 @@ class VolunteerCard extends Component {
                     <div className="col-7">
                         <h3>{this.props.name}</h3>
                         <h4>Game: {this.props.game}</h4>
+                        <h4>Date: {this.props.date}</h4>
                     </div>
                     <div className="col-2" style={{textAlign: "center"}}>
                     <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>

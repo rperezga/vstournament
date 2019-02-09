@@ -39,16 +39,17 @@ module.exports = {
     },
 
     findByUserId: function (req, res) {
-        console.log(req.params);
         tournament
             .find({organizer: req.params.id})
-            .then(dbModel => res.json(dbModel))
+            .populate('game')
+            .then(dbModel => {console.log(dbModel);res.json(dbModel)})
             .catch(err => res.status(422).json(err));
     },
 
     findByJudge: function (req, res) {
         tournament
-            .find({'judges.user' : req.params.id })        
+            .find({'judges.user' : req.params.id })
+            .populate('game')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     }

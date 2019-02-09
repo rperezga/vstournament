@@ -45,7 +45,11 @@ class Organize extends Component {
       address: '',
       tournaments: [],
       games: [],
-      game: ''
+      game: '',
+      tab: 'new',
+      tabNew: 'nav-link active',
+      tabLive: 'nav-link',
+      tabCompleted: 'nav-link',
       //status: '',
       //brackets: [],
       //players: [{user: '', status: ''}],
@@ -54,6 +58,7 @@ class Organize extends Component {
       //result: [{user: '', position: ''}]
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +67,32 @@ class Organize extends Component {
       this.loadMyTournaments();
       this.loadAllGames();
     });
+  }
+
+  handleTabClick(event) {
+    const id = event.target.id;
+    this.setState({
+      tab: id
+    })
+    if (id === 'new') {
+      this.setState({
+        tabNew: 'nav-link active',
+        tabLive: 'nav-link',
+        tabCompleted: 'nav-link'
+      })
+    } else if (id === 'live') {
+      this.setState({
+        tabNew: 'nav-link',
+        tabLive: 'nav-link active',
+        tabCompleted: 'nav-link'
+      })
+    } else if (id === 'completed') {
+      this.setState({
+        tabNew: 'nav-link',
+        tabLive: 'nav-link',
+        tabCompleted: 'nav-link active'
+      })
+    }
   }
 
   loadAllGames() {
@@ -83,7 +114,7 @@ class Organize extends Component {
 
   loadMyTournaments = () => {
     API.getUserTournaments(this.state.organizer)
-      .then(res => this.setState({ tournaments: res.data }))
+      .then(res => {this.setState({ tournaments: res.data })})
       .catch(err => console.log(err));
   };
 
@@ -131,58 +162,58 @@ class Organize extends Component {
             </div>
           </div>
 
-
-
-
           <div style={{ margin: "0 50px" }}>
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a className="nav-link active" href="#">Pending Tournaments</a>
+                <a className={this.state.tabNew} id="new" onClick={this.handleTabClick}>New Tournaments</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">Closed Tournaments</a>
+                <a className={this.state.tabLive} id="live" onClick={this.handleTabClick}>Live Tournaments</a>
+              </li>
+              <li className="nav-item">
+                <a className={this.state.tabCompleted} id="completed" onClick={this.handleTabClick}>Completed Tournaments</a>
               </li>
             </ul>
 
-            <ul style={{ marginTop: "15px" }}>
-              <MyTournaments thumbnail="" />
-              <MyTournaments thumbnail="" />
-            </ul>
+            <div style={{ margin: "20px 50px" }}>
+              <h1>
 
+                {this.state.tournaments.map((tournament, index) => {
+                  if (this.state.tab === 'new' && (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed')) {
+                    return (
+                      <MyTournaments
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                      />
+                    )
+                  } 
+                  else if(this.state.tab === 'live' && tournament.status === 'running'){
+                    return (
+                      <MyTournaments
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                      />
+                    )
+                  }
+                  else if(this.state.tab === 'completed' && tournament.status === 'finished'){
+                    return (
+                      <MyTournaments
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                      />
+                    )
+                  }
+                })
+                }
+              </h1>
+            </div>
           </div>
-
-
-
-
-
         </div>
 
-
-
-
-
-
-
         <MDBContainer>
-          {this.state.tournaments.length ? (
-            <MDBListGroup>
-              {this.state.tournaments.map(tournament => (
-                <MDBListGroupItem key={tournament._id}>
-                  <Link to={"/tournaments/" + tournament._id}>
-                    <strong>
-                      {tournament.name} is {tournament.status} happening on --
-                      <Moment format=" YYYY/MM/DD HH:mm">
-                        {tournament.date}
-                      </Moment>
-                    </strong>
-                  </Link>
-                </MDBListGroupItem>
-              ))}
-            </MDBListGroup>
-          ) : (
-              <h3>No Results to Display</h3>
-            )}
-
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
             <form noValidate onSubmit={this.onSubmit}>
               <MDBModalHeader toggle={this.toggle}>Create new Tournament</MDBModalHeader>
