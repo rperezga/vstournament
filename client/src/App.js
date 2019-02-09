@@ -20,6 +20,7 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Account from "./components/account/Account";
 import ViewTournament from "./components/tournaments/ViewTournament";
+import EditTournament from "./components/organize/EditTournament";
 
 
 // Check for token to keep user logged in
@@ -86,6 +87,7 @@ class App extends Component {
                 <PrivateRoute exact path="/volunteer" component={Volunteer} />
                 <PrivateRoute exact path="/participate" component={Participate} />              
                 <PrivateRoute exact path="/account" component={Account} />
+                <PrivateRoute exact path="/edit-tournament/:id" component={EditTournament} />
               </Switch>
             </div>
 
