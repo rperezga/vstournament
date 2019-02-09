@@ -3,20 +3,6 @@ import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import VolunteerCard from './VolunteerCard';
 
-import {
-  MDBContainer,
-  MDBBtn,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter,
-  MDBInput,
-  MDBListGroup,
-  MDBListGroupItem,
-  MDBRow,
-  MDBCol
-} from 'mdbreact';
-
 class Volunteer extends Component {
 
   constructor(props) {
@@ -133,47 +119,38 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
+                      game={tournament.game}
                     />
                   )
                 } else if (result.status === 'approved') {
-                  if(this.state.tab === 'judge' && tournament.status === 'running'){
+                  if (this.state.tab === 'judge' && tournament.status === 'running') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
+                        game={tournament.game}
                       />
                     )
-                  }else if(this.state.tab === 'finished' && tournament.status === 'closed'){
+                  } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
+                        game={tournament.game}
                       />
                     )
-                  }else if(this.state.tab === 'upcoming' && tournament.status === 'new'){
+                  } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
+                        game={tournament.game}
                       />
                     )
                   }
-                  
                 }
-                //  else if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
-                //   return (
-                //     <VolunteerCard
-                //       name={tournament.name}
-                //     />
-                //   )
-                // } else if (this.state.tab === 'finished' && result.status === 'finished') {
-                //   return (
-                //     <VolunteerCard
-                //       name={tournament.name}
-                //     />
-                //   )
-                // } 
                 else if (this.state.tab === 'rejected' && result.status === 'rejected') {
                   return (
                     <VolunteerCard
                       name={tournament.name}
+                      game={tournament.game}
                     />
                   )
                 }

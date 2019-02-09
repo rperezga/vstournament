@@ -1,9 +1,29 @@
 import React, { Component } from "react";
-import { MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBCol } from 'mdbreact';
-import Moment from 'react-moment';
-import { Link } from "react-router-dom";
+import API from "../../utils/tournamentAPI";
 
 class VolunteerCard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+          game: {}
+        }
+    }
+
+    componentDidMount() {
+        this.loadGame();
+    }
+
+    loadGame = () => {
+        API.getGame(this.props.game)
+            .then(res => {
+                this.setState({ game: res.data });
+                console.log(this.state.game)
+            }
+            )
+            .catch(err => console.log(err));
+    };
+
     render() {
         return (
             <React.Fragment>
@@ -14,7 +34,7 @@ class VolunteerCard extends Component {
                     </div>
                     <div className="col-7">
                         <h3>{this.props.name}</h3>
-                        <h4>Game: {this.props.game}</h4>
+                        <h4>Game: {this.state.game.name}</h4>
                     </div>
                     <div className="col-2" style={{textAlign: "center"}}>
                     <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>
