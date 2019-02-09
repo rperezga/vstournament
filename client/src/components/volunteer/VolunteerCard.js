@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import { MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBCol } from 'mdbreact';
-import Moment from 'react-moment';
-import { Link } from "react-router-dom";
 
 class VolunteerCard extends Component {
     render() {
@@ -14,7 +11,7 @@ class VolunteerCard extends Component {
                     </div>
                     <div className="col-7">
                        <h3>{this.props.name}</h3>
-                       <h4>Game: {this.state.game.name}</h4>
+                       <h4>Game: {this.props.game}</h4>
                    </div>
                     <div className="col-2" style={{textAlign: "center"}}>
                     <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>
