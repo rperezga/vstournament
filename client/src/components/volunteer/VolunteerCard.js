@@ -1,9 +1,29 @@
 import React, { Component } from "react";
-import { MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBCol } from 'mdbreact';
-import Moment from 'react-moment';
-import { Link } from "react-router-dom";
+import API from "../../utils/tournamentAPI";
 
 class VolunteerCard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+          game: {}
+        }
+    }
+
+    componentDidMount() {
+        this.loadGame();
+    }
+
+    loadGame = () => {
+        API.getGame(this.props.game)
+            .then(res => {
+                this.setState({ game: res.data });
+                console.log(this.state.game)
+            }
+            )
+            .catch(err => console.log(err));
+    };
+
     render() {
         return (
             <React.Fragment>
