@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import VolunteerCard from './VolunteerCard';
+
 import {
   MDBContainer,
   MDBBtn,
@@ -37,7 +38,6 @@ class Volunteer extends Component {
     this.loadTournaments();
   }
 
-
   loadTournaments = () => {
     API.getJudgeTournaments(this.props.auth.user.id)
       .then(res => {
@@ -47,9 +47,6 @@ class Volunteer extends Component {
       )
       .catch(err => console.log(err));
   };
-
-
-
 
   handleClick(event) {
     const id = event.target.id;
@@ -128,43 +125,61 @@ class Volunteer extends Component {
 
           <div style={{ margin: "20px 50px" }}>
             <h1>
-              {/* {this.state.tab} */}
-
 
               {this.state.tournaments.map((tournament, index) => {
                 const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
+
                 if (this.state.tab === 'pending' && result.status === 'pending') {
                   return (
                     <VolunteerCard
                       name={tournament.name}
                     />
                   )
-                }else if (this.state.tab === 'judge' && result.status === 'judge') {
+                } else if (result.status === 'approved') {
+                  if(this.state.tab === 'judge' && tournament.status === 'running'){
                     return (
                       <VolunteerCard
                         name={tournament.name}
                       />
                     )
-                  }else  if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
+                  }else if(this.state.tab === 'finished' && tournament.status === 'closed'){
                     return (
                       <VolunteerCard
                         name={tournament.name}
                       />
                     )
-                }else if (this.state.tab === 'finished' && result.status === 'finished') {
+                  }else if(this.state.tab === 'upcoming' && tournament.status === 'new'){
+                    return (
+                      <VolunteerCard
+                        name={tournament.name}
+                      />
+                    )
+                  }
+                  
+                }
+                //  else if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
+                //   return (
+                //     <VolunteerCard
+                //       name={tournament.name}
+                //     />
+                //   )
+                // } else if (this.state.tab === 'finished' && result.status === 'finished') {
+                //   return (
+                //     <VolunteerCard
+                //       name={tournament.name}
+                //     />
+                //   )
+                // } 
+                else if (this.state.tab === 'rejected' && result.status === 'rejected') {
                   return (
                     <VolunteerCard
                       name={tournament.name}
                     />
                   )
-              }else  if (this.state.tab === 'rejected' && result.status === 'rejected') {
-                return (
-                  <VolunteerCard
-                    name={tournament.name}
-                  />
-                )
-            }
-              })}
+                }
+              })
+              }
+
             </h1>
           </div>
         </div>

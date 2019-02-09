@@ -27,7 +27,7 @@ class Navbar extends Component {
     const { user } = this.props.auth;
     return (
       <React.Fragment>
-        <SideNav visible={this.props.visible} style={{ heigth: "100%" }}>
+        <SideNav visible={this.props.visible} style={{ heigth: "100%", position: "fixed" }}>
 
           <SideNav.Toggle onClick={() => {
             this.props.toggleMenu(this.state.visible);
