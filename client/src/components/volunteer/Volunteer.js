@@ -119,7 +119,7 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
-                      game={tournament.game}
+                      game={tournament.game.name}
                     />
                   )
                 } else if (result.status === 'approved') {
@@ -127,21 +127,21 @@ class Volunteer extends Component {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game}
+                        game={tournament.game.name}
                       />
                     )
                   } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game}
+                        game={tournament.game.name}
                       />
                     )
                   } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game}
+                        game={tournament.game.name}
                       />
                     )
                   }
@@ -150,7 +150,7 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
-                      game={tournament.game}
+                      game={tournament.game.name}
                     />
                   )
                 }

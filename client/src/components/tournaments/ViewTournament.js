@@ -2,15 +2,22 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { MDBJumbotron, MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import API from "../../utils/tournamentAPI";
+import { connect } from "react-redux";
 
 class ViewTournament extends Component {
 
-    state = {
-        tournament: {}
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            tournament: {}
+        }
     }
+
 
     componentDidMount() {
         this.loadTournament();
+        console.log(`USER: ${this.props.auth.user.id}`)
     }
 
     loadTournament = () => {
@@ -29,9 +36,13 @@ class ViewTournament extends Component {
     render() {
         return (
 
-            <MDBContainer className="mt-5">
+            <MDBContainer className="mt-5">                
 
                 <Link to="/"> <i className="fas fa-arrow-left" /> Back to tournaments </Link>
+
+                <div style={{ textAlign: "right" }}>
+                    { this.props.auth.user.id ? <MDBBtn>Judge Volunteer</MDBBtn> : "" }
+                </div>
 
                 <MDBRow style={{ marginTop: "20px" }}>
                     <MDBCol>
@@ -59,4 +70,9 @@ class ViewTournament extends Component {
     }
 }
 
-export default ViewTournament;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ViewTournament);
+
