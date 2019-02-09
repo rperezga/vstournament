@@ -53,4 +53,4 @@ const MatchSchema = new Schema({
     }
 });
 
-module.exports = Match = mongoose.model("matches", MatchSchema);
+module.exports = Match = mongoose.model("Match", MatchSchema, "matches");
