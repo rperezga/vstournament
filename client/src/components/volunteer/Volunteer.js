@@ -16,8 +16,6 @@ import {
   MDBRow,
   MDBCol
 } from 'mdbreact';
-import API from "../../utils/tournamentAPI";
-import VolunteerCard from "./VolunteerCard";
 
 class Volunteer extends Component {
 
@@ -130,9 +128,6 @@ class Volunteer extends Component {
 
               {this.state.tournaments.map((tournament, index) => {
                 const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
-                
-              {this.state.tournaments.map((tournament, index) => {
-                const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
 
                 if (this.state.tab === 'pending' && result.status === 'pending') {
                   return (
@@ -140,32 +135,34 @@ class Volunteer extends Component {
                       name={tournament.name}
                     />
                   )
-                }else if (this.state.tab === 'judge' && result.status === 'judge') {
-                    return (
-                      <VolunteerCard
-                        name={tournament.name}
-                      />
-                    )
-                  }else  if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
-                    return (
-                      <VolunteerCard
-                        name={tournament.name}
-                      />
-                    )
-                }else if (this.state.tab === 'finished' && result.status === 'finished') {
+                } else if (this.state.tab === 'judge' && result.status === 'judge') {
                   return (
                     <VolunteerCard
                       name={tournament.name}
                     />
                   )
-              }else  if (this.state.tab === 'rejected' && result.status === 'rejected') {
-                return (
-                  <VolunteerCard
-                    name={tournament.name}
-                  />
-                )
-            }
-              })}
+                } else if (this.state.tab === 'upcoming' && result.status === 'upcoming') {
+                  return (
+                    <VolunteerCard
+                      name={tournament.name}
+                    />
+                  )
+                } else if (this.state.tab === 'finished' && result.status === 'finished') {
+                  return (
+                    <VolunteerCard
+                      name={tournament.name}
+                    />
+                  )
+                } else if (this.state.tab === 'rejected' && result.status === 'rejected') {
+                  return (
+                    <VolunteerCard
+                      name={tournament.name}
+                    />
+                  )
+                }
+              })
+              }
+
             </h1>
           </div>
         </div>
