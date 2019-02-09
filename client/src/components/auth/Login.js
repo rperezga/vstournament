@@ -67,55 +67,49 @@ class Login extends Component {
     return (
       <React.Fragment >
 
-        <MDBRow>
-          <MDBCol md="4" className="offset-md-4">
-            <MDBCol>
-              <MDBCard style={{ width: "30rem" }}>
-                <MDBCardImage className="img-fluid" src="./login.jpg" waves />
-                <MDBCardBody>
-                  <MDBCardTitle>Sign in</MDBCardTitle>
-                  <hr />
-                  <MDBCardText>
-                    <form noValidate onSubmit={this.onSubmit}>
-                      <div className="grey-text">
+        <MDBCard style={{ width: "30rem", margin: "0 auto" }}>
+          <MDBCardImage className="img-fluid" src="./login.jpg" waves />
+          <MDBCardBody>
+            <MDBCardTitle>Sign in</MDBCardTitle>
+            <hr />
+            <MDBCardText>
+              <form noValidate onSubmit={this.onSubmit}>
+                <div className="grey-text">
 
-                        <MDBInput
-                          label="Type your email"
-                          onChange={this.onChange}
-                          value={this.state.email}
-                          id="email"
-                          type="email"
-                          className={classnames("", {
-                            invalid: errors.email || errors.emailnotfound
-                          })}
-                          group
-                        />
+                  <MDBInput
+                    label="Type your email"
+                    onChange={this.onChange}
+                    value={this.state.email}
+                    id="email"
+                    type="email"
+                    className={classnames("", {
+                      invalid: errors.email || errors.emailnotfound
+                    })}
+                    group
+                  />
 
-                        <MDBInput
-                          label="Type your password"
-                          group
-                          type="password"
-                          id="password"
-                          onChange={this.onChange}
-                          value={this.state.password}                          
-                          className={classnames("", {
-                            invalid: errors.password || errors.passwordincorrect
-                          })}
-                        />
+                  <MDBInput
+                    label="Type your password"
+                    group
+                    type="password"
+                    id="password"
+                    onChange={this.onChange}
+                    value={this.state.password}
+                    className={classnames("", {
+                      invalid: errors.password || errors.passwordincorrect
+                    })}
+                  />
 
-                      </div>
-                      <div className="text-center">
-                        <MDBBtn type="submit" >Sign in</MDBBtn>
-                      </div>
-                    </form>
-                    <hr />
-                    <p className="font-weight-normal" style={{ textAlign: "center" }}>Do not have an account. <a href="#" className="font-weight-bold"><Link to="/register">Register Here!</Link></a></p>
-                  </MDBCardText>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-          </MDBCol>
-        </MDBRow>
+                </div>
+                <div className="text-center">
+                  <MDBBtn type="submit" >Sign in</MDBBtn>
+                </div>
+              </form>
+              <hr />
+              <p className="font-weight-normal" style={{ textAlign: "center" }}>Do not have an account. <a href="#" className="font-weight-bold"><Link to="/register">Register Here!</Link></a></p>
+            </MDBCardText>
+          </MDBCardBody>
+        </MDBCard>
       </React.Fragment>
     );
   }

@@ -7,7 +7,7 @@ class VolunteerCard extends Component {
     render() {
         return (
             <React.Fragment>
-                <hi>{this.props.name}</hi>
+                <h1>{this.props.name}</h1>
             </React.Fragment>
         );
     }

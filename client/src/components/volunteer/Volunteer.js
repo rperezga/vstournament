@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import VolunteerCard from './VolunteerCard';
+
 import {
   MDBContainer,
   MDBBtn,
@@ -15,6 +16,8 @@ import {
   MDBRow,
   MDBCol
 } from 'mdbreact';
+import API from "../../utils/tournamentAPI";
+import VolunteerCard from "./VolunteerCard";
 
 class Volunteer extends Component {
 
@@ -37,7 +40,6 @@ class Volunteer extends Component {
     this.loadTournaments();
   }
 
-
   loadTournaments = () => {
     API.getJudgeTournaments(this.props.auth.user.id)
       .then(res => {
@@ -47,9 +49,6 @@ class Volunteer extends Component {
       )
       .catch(err => console.log(err));
   };
-
-
-
 
   handleClick(event) {
     const id = event.target.id;
@@ -128,11 +127,13 @@ class Volunteer extends Component {
 
           <div style={{ margin: "20px 50px" }}>
             <h1>
-              {/* {this.state.tab} */}
-
 
               {this.state.tournaments.map((tournament, index) => {
                 const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
+                
+              {this.state.tournaments.map((tournament, index) => {
+                const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
+
                 if (this.state.tab === 'pending' && result.status === 'pending') {
                   return (
                     <VolunteerCard
