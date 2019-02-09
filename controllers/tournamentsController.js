@@ -5,6 +5,7 @@ module.exports = {
     findAll: function(req, res) {
         tournament
             .find(req.query)
+            .populate('game')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -42,7 +43,7 @@ module.exports = {
         tournament
             .find({organizer: req.params.id})
             .populate('game')
-            .then(dbModel => {console.log(dbModel);res.json(dbModel)})
+            .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
 
