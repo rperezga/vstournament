@@ -13,10 +13,9 @@ class VolunteerCard extends Component {
                         <img src={this.props.thumbnail || "https://placehold.it/200x100"} style={{ width: "100%" }} />
                     </div>
                     <div className="col-7">
-                        <h3>{this.props.name}</h3>
-                        <h4>Game: {this.props.game}</h4>
-                        <h4>Date: {this.props.date}</h4>
-                    </div>
+                       <h3>{this.props.name}</h3>
+                       <h4>Game: {this.state.game.name}</h4>
+                   </div>
                     <div className="col-2" style={{textAlign: "center"}}>
                     <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>
                     </div>
