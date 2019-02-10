@@ -6,8 +6,6 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBInput,
-  MDBListGroup,
-  MDBListGroupItem,
   MDBRow,
   MDBCol
 } from 'mdbreact';
@@ -17,11 +15,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/tournamentAPI";
 import gameApi from "../../utils/gameAPI";
-import MyTournaments from "./MyTournaments"
+import OrganizeTab from "./OrganizeTab"
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Moment from 'react-moment';
 
 class Organize extends Component {
 
@@ -31,7 +28,7 @@ class Organize extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
@@ -106,6 +103,7 @@ class Organize extends Component {
   loadAllTournaments = () => {
     API.getTournaments()
       .then(res => {
+        console.log(res);
         this.setState({ tournaments: res.data });
       }
       )
@@ -143,7 +141,6 @@ class Organize extends Component {
     });
   }
 
-
   render() {
     return (
       <div style={{ margin: '20px' }}>
@@ -177,32 +174,34 @@ class Organize extends Component {
 
             <div style={{ margin: "20px 50px" }}>
               <h1>
-
-                {this.state.tournaments.map((tournament, index) => {
+                {this.state.tournaments.map((tournament) => {
                   if (this.state.tab === 'new' && (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed')) {
                     return (
-                      <MyTournaments
+                      <OrganizeTab
                         name={tournament.name}
                         date={tournament.date}
                         game={tournament.game.name}
+                        tournamentId={tournament._id}
                       />
                     )
                   } 
                   else if(this.state.tab === 'live' && tournament.status === 'running'){
                     return (
-                      <MyTournaments
+                      <OrganizeTab
                         name={tournament.name}
                         date={tournament.date}
                         game={tournament.game.name}
+                        tournamentId={tournament._id}
                       />
                     )
                   }
                   else if(this.state.tab === 'completed' && tournament.status === 'finished'){
                     return (
-                      <MyTournaments
+                      <OrganizeTab
                         name={tournament.name}
                         date={tournament.date}
                         game={tournament.game.name}
+                        tournamentId={tournament._id}
                       />
                     )
                   }
@@ -272,15 +271,14 @@ class Organize extends Component {
                       />
                     </MDBCol>
                   </MDBRow>
-
-
                 </div>
-
               </MDBModalBody>
+
               <MDBModalFooter>
                 <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
                 <MDBBtn color="primary" type="submit">Save changes</MDBBtn>
               </MDBModalFooter>
+
             </form>
           </MDBModal>
         </MDBContainer>
