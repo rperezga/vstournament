@@ -36,18 +36,18 @@ class ViewTournament extends Component {
     render() {
         return (
 
-            <MDBContainer className="mt-5">                
+            <MDBContainer className="mt-5">
 
                 <Link to="/"> <i className="fas fa-arrow-left" /> Back to tournaments </Link>
-
-                <div style={{ textAlign: "right" }}>
-                    { this.props.auth.user.id ? <MDBBtn>Judge Volunteer</MDBBtn> : "" }
-                </div>
 
                 <MDBRow style={{ marginTop: "20px" }}>
                     <MDBCol>
                         <MDBJumbotron>
-                            {/* <i className="far fa-edit" style={{ fontSize: '1.7em', float: 'right', marginRight: '20px', marginTop: '-20px' }} /> */}
+
+                            <div style={{ textAlign: "right" }}>
+                                {(this.props.auth.user.id && this.state.tournament.status === 'open') ? <div><MDBBtn color="secondary">Volunteer</MDBBtn>   <MDBBtn color="success">Register</MDBBtn></div> : ""}
+                            </div>
+
                             <h2 className="h1 display-3">{this.state.tournament.name}</h2>
 
                             <p className="lead">
