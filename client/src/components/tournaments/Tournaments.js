@@ -33,28 +33,17 @@ class Tournaments extends Component {
 
                     {this.state.tournaments.map((tournament, index) => {
                         if (tournament.status === 'running') {
-                            if(tournament.game){
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        game={tournament.game.name}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            }else{
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            }                            
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
+                                />
+                            )
                         }
                     })}
                 </div>
@@ -65,54 +54,18 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        if (tournament.status === 'new') {
-                            if(tournament.game){
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        game={tournament.game.name}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            }else{
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            } 
-                        }else if (tournament.status === 'open') {
-                            if(tournament.game){
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        game={tournament.game.name}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                        btn={'true'}
-                                    />
-                                )
-                            }else{
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                        btn={'true'}
-                                    />
-                                )
-                            } 
+                        if (tournament.status === 'new' || tournament.status === 'open') {
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
+                                />
+                            )
                         }
                     })}
                 </div>
@@ -124,28 +77,17 @@ class Tournaments extends Component {
 
                     {this.state.tournaments.map((tournament, index) => {
                         if (tournament.status === 'closed') {
-                            if(tournament.game){
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        game={tournament.game.name}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            }else{
-                                return (
-                                    <CardTournament
-                                        id={tournament._id}
-                                        name={tournament.name}
-                                        date={tournament.date}
-                                        venue={tournament.venue}
-                                        address={tournament.address}
-                                    />
-                                )
-                            } 
+                            return (
+                                <CardTournament
+                                    id={tournament._id}
+                                    name={tournament.name}
+                                    date={tournament.date}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
+                                />
+                            )
                         }
                     })}
                 </div>
