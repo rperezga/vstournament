@@ -6,12 +6,11 @@ import CardTournament from "./CardTournament"
 class Tournaments extends Component {
 
     state = {
-        tournaments: [],
-        organizer: ''
+        tournaments: []
     }
 
     componentDidMount() {
-        this.loadAllTournaments(this.state.organizer);
+        this.loadAllTournaments();
     }
 
     loadAllTournaments = () => {
