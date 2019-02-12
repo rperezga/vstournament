@@ -55,6 +55,14 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
+    findByPlayer: function (req, res) {
+        tournament
+            .find({ 'players.user': req.params.id })
+            .populate('game')
+            .populate('brackets')
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+    },
 
     subsVolunteer: function (req, res) {
         tournament
