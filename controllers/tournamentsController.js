@@ -51,6 +51,7 @@ module.exports = {
         tournament
             .find({ 'judges.user': req.params.id })
             .populate('game')
+            .populate('brackets')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
