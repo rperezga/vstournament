@@ -49,5 +49,3 @@ const BracketSchema = new Schema({
 });
 
 module.exports = Bracket = mongoose.model("Bracket", BracketSchema, "brackets" );
-
-

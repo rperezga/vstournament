@@ -6,17 +6,17 @@ import CardTournament from "./CardTournament"
 class Tournaments extends Component {
 
     state = {
-        tournaments: [],
-        organizer: ''
+        tournaments: []
     }
 
     componentDidMount() {
-        this.loadAllTournaments(this.state.organizer);
+        this.loadAllTournaments();
     }
 
     loadAllTournaments = () => {
-        const data = API.getTournaments()
+        API.getTournaments()
             .then(res => {
+                console.log(res.data)
                 this.setState({ tournaments: res.data });
             }
             )
@@ -37,7 +37,10 @@ class Tournaments extends Component {
                                     id={tournament._id}
                                     name={tournament.name}
                                     date={tournament.date}
-                                    game={tournament.game}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
                                 />
                             )
                         }
@@ -50,13 +53,16 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        if (tournament.status === 'new') {
+                        if (tournament.status === 'new' || tournament.status === 'open') {
                             return (
                                 <CardTournament
                                     id={tournament._id}
                                     name={tournament.name}
                                     date={tournament.date}
-                                    game={tournament.game}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
                                 />
                             )
                         }
@@ -75,7 +81,10 @@ class Tournaments extends Component {
                                     id={tournament._id}
                                     name={tournament.name}
                                     date={tournament.date}
-                                    game={tournament.game}
+                                    game={tournament.game.name}
+                                    venue={tournament.venue}
+                                    address={tournament.address}
+                                    status={tournament.status}
                                 />
                             )
                         }

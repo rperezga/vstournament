@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import API from "../../utils/tournamentAPI";
 
 class VolunteerCard extends Component {
 
@@ -35,12 +34,12 @@ class VolunteerCard extends Component {
                         <img src={this.props.thumbnail || "https://placehold.it/200x100"} style={{ width: "100%" }} />
                     </div>
                     <div className="col-7">
+          
                         <h3>{this.props.name}</h3>
                         <h4>Game: {this.state.game.name}</h4>
                         {this.props.brackets ? <h5>Bracket: {this.props.brackets}</h5> : ''}
                         
                     </div>
-                   
                     <div className="col-2" style={{textAlign: "center"}}>
                     <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>
                     </div>

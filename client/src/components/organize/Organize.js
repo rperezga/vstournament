@@ -6,8 +6,6 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBInput,
-  MDBListGroup,
-  MDBListGroupItem,
   MDBRow,
   MDBCol
 } from 'mdbreact';
@@ -17,11 +15,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/tournamentAPI";
 import gameApi from "../../utils/gameAPI";
-import MyTournaments from "./MyTournaments"
+import OrganizeTab from "./OrganizeTab"
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Moment from 'react-moment';
 
 class Organize extends Component {
 
@@ -31,7 +28,7 @@ class Organize extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
@@ -45,7 +42,11 @@ class Organize extends Component {
       address: '',
       tournaments: [],
       games: [],
-      game: ''
+      game: '',
+      tab: 'new',
+      tabNew: 'nav-link active',
+      tabLive: 'nav-link',
+      tabCompleted: 'nav-link',
       //status: '',
       //brackets: [],
       //players: [{user: '', status: ''}],
@@ -54,6 +55,7 @@ class Organize extends Component {
       //result: [{user: '', position: ''}]
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +64,32 @@ class Organize extends Component {
       this.loadMyTournaments();
       this.loadAllGames();
     });
+  }
+
+  handleTabClick(event) {
+    const id = event.target.id;
+    this.setState({
+      tab: id
+    })
+    if (id === 'new') {
+      this.setState({
+        tabNew: 'nav-link active',
+        tabLive: 'nav-link',
+        tabCompleted: 'nav-link'
+      })
+    } else if (id === 'live') {
+      this.setState({
+        tabNew: 'nav-link',
+        tabLive: 'nav-link active',
+        tabCompleted: 'nav-link'
+      })
+    } else if (id === 'completed') {
+      this.setState({
+        tabNew: 'nav-link',
+        tabLive: 'nav-link',
+        tabCompleted: 'nav-link active'
+      })
+    }
   }
 
   loadAllGames() {
@@ -75,6 +103,7 @@ class Organize extends Component {
   loadAllTournaments = () => {
     API.getTournaments()
       .then(res => {
+        console.log(res);
         this.setState({ tournaments: res.data });
       }
       )
@@ -83,7 +112,7 @@ class Organize extends Component {
 
   loadMyTournaments = () => {
     API.getUserTournaments(this.state.organizer)
-      .then(res => this.setState({ tournaments: res.data }))
+      .then(res => {this.setState({ tournaments: res.data })})
       .catch(err => console.log(err));
   };
 
@@ -112,7 +141,6 @@ class Organize extends Component {
     });
   }
 
-
   render() {
     return (
       <div style={{ margin: '20px' }}>
@@ -131,58 +159,60 @@ class Organize extends Component {
             </div>
           </div>
 
-
-
-
           <div style={{ margin: "0 50px" }}>
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a className="nav-link active" href="#">Pending Tournaments</a>
+                <a className={this.state.tabNew} id="new" onClick={this.handleTabClick}>New Tournaments</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">Closed Tournaments</a>
+                <a className={this.state.tabLive} id="live" onClick={this.handleTabClick}>Live Tournaments</a>
+              </li>
+              <li className="nav-item">
+                <a className={this.state.tabCompleted} id="completed" onClick={this.handleTabClick}>Completed Tournaments</a>
               </li>
             </ul>
 
-            <ul style={{ marginTop: "15px" }}>
-              <MyTournaments thumbnail="" />
-              <MyTournaments thumbnail="" />
-            </ul>
-
+            <div style={{ margin: "20px 50px" }}>
+              <h1>
+                {this.state.tournaments.map((tournament) => {
+                  if (this.state.tab === 'new' && (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed')) {
+                    return (
+                      <OrganizeTab
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                        tournamentId={tournament._id}
+                      />
+                    )
+                  } 
+                  else if(this.state.tab === 'live' && tournament.status === 'running'){
+                    return (
+                      <OrganizeTab
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                        tournamentId={tournament._id}
+                      />
+                    )
+                  }
+                  else if(this.state.tab === 'completed' && tournament.status === 'finished'){
+                    return (
+                      <OrganizeTab
+                        name={tournament.name}
+                        date={tournament.date}
+                        game={tournament.game.name}
+                        tournamentId={tournament._id}
+                      />
+                    )
+                  }
+                })
+                }
+              </h1>
+            </div>
           </div>
-
-
-
-
-
         </div>
 
-
-
-
-
-
-
         <MDBContainer>
-          {this.state.tournaments.length ? (
-            <MDBListGroup>
-              {this.state.tournaments.map(tournament => (
-                <MDBListGroupItem key={tournament._id}>
-                  <Link to={"/tournaments/" + tournament._id}>
-                    <strong>
-                      {tournament.name} is {tournament.status} happening on --
-                      <Moment format=" YYYY/MM/DD HH:mm">
-                        {tournament.date}
-                      </Moment>
-                    </strong>
-                  </Link>
-                </MDBListGroupItem>
-              ))}
-            </MDBListGroup>
-          ) : (
-              <h3>No Results to Display</h3>
-            )}
-
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
             <form noValidate onSubmit={this.onSubmit}>
               <MDBModalHeader toggle={this.toggle}>Create new Tournament</MDBModalHeader>
@@ -241,15 +271,14 @@ class Organize extends Component {
                       />
                     </MDBCol>
                   </MDBRow>
-
-
                 </div>
-
               </MDBModalBody>
+
               <MDBModalFooter>
                 <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
                 <MDBBtn color="primary" type="submit">Save changes</MDBBtn>
               </MDBModalFooter>
+
             </form>
           </MDBModal>
         </MDBContainer>

@@ -2,27 +2,61 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { MDBJumbotron, MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import API from "../../utils/tournamentAPI";
+import { connect } from "react-redux";
 
 class ViewTournament extends Component {
 
-    state = {
-        tournament: {}
+    constructor(props) {
+        super(props);
+        this.state = {
+            tournament: {},
+            userId: '',
+            asVolunteer: false,
+            asPlayer: false
+        }
     }
 
     componentDidMount() {
-        this.loadTournament();
+        API.getUser(this.props.auth.user.id).then(res => {
+            this.setState({ userId: res.data.user._id });
+            this.loadTournament();
+        });
     }
 
     loadTournament = () => {
         const data = API.getTournament(this.props.match.params.id)
             .then(res => {
                 this.setState({ tournament: res.data });
-                console.log(this.state.tournament)
+               
+                if(res.data.judges.find(judge => judge.user === this.props.auth.user.id)){
+                    this.setState({asVolunteer: true})
+                }
+
+                if(res.data.players.find(player => player.user === this.props.auth.user.id)){
+                    this.setState({asPlayer: true})
+                }
             }
             )
             .catch(err => console.log(err));
     };
 
+    volunteer = () => {
+        const data = API.subsVolunteer(this.state.tournament.id, {id: this.state.userId} )
+            .then(res => {
+                this.setState({asVolunteer: true})
+                alert("You have been subscribed as a volunteer")
+            })
+            .catch(err => console.log(err));
+    };
+
+    player = () => {
+        const data = API.subsPlayer(this.state.tournament.id, {id: this.state.userId} )
+            .then(res => {
+                this.setState({asPlayer: true})
+                alert("You have been subscribed as a player")
+            })
+            .catch(err => console.log(err));
+    };
 
 
 
@@ -36,7 +70,22 @@ class ViewTournament extends Component {
                 <MDBRow style={{ marginTop: "20px" }}>
                     <MDBCol>
                         <MDBJumbotron>
-                            {/* <i className="far fa-edit" style={{ fontSize: '1.7em', float: 'right', marginRight: '20px', marginTop: '-20px' }} /> */}
+
+                            <div style={{ textAlign: "right" }}>
+                                {(this.props.auth.user.id && this.state.tournament.status === 'open') ?
+                                    <div>
+                                        {this.state.asVolunteer ?
+                                            <MDBBtn color="secondary" onClick={this.volunteer} disabled>Volunteer</MDBBtn> :
+                                            <MDBBtn color="secondary" onClick={this.volunteer} >Volunteer</MDBBtn>
+                                        }
+                                        {this.state.asPlayer ?
+                                            <MDBBtn color="success" onClick={this.player} disabled>Register</MDBBtn> :
+                                            <MDBBtn color="success" onClick={this.player} >Register</MDBBtn>
+                                        }                                        
+                                    </div> :
+                                    ""}
+                            </div>
+
                             <h2 className="h1 display-3">{this.state.tournament.name}</h2>
 
                             <p className="lead">
@@ -59,4 +108,9 @@ class ViewTournament extends Component {
     }
 }
 
-export default ViewTournament;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ViewTournament);
+

@@ -36,6 +36,16 @@ export default {
 
     getGame: function (id) {
         return axios.get("/api/games/" + id)
-    }
+    },
+
+    //Subscribe as Volunteer
+    subsVolunteer: function (id, data) {
+        return axios.put("/api/tournaments/subsvolunteer/" + id, data);
+    },
+
+    //Subscribe as Player
+    subsPlayer: function (id, data) {
+        return axios.put("/api/tournaments/subsplayer/" + id, data);
+    },
 
 };

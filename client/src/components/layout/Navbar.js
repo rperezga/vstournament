@@ -74,15 +74,6 @@ class Navbar extends Component {
                 </NavText>
               </NavItem>
 
-              <NavItem eventKey="watch">
-                <NavIcon>
-                  <Link to="/watch"><i className="fas fa-video" style={{ fontSize: '1.4em' }} /></Link>
-                </NavIcon>
-                <NavText>
-                  <Link to="/watch">Watch</Link>
-                </NavText>
-              </NavItem>
-
               <NavItem eventKey="account">
                 <NavIcon>
                   <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.4em' }} /></Link>

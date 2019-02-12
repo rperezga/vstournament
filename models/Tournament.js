@@ -108,4 +108,4 @@ const TournamentSchema = new Schema({
     },
 });
 
-module.exports = Tournament = mongoose.model("tournaments", TournamentSchema);
+module.exports = Tournament = mongoose.model("Tournament", TournamentSchema, "tournaments");
