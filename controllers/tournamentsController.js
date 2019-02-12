@@ -48,7 +48,8 @@ module.exports = {
 
     findByJudge: function (req, res) {
         tournament
-            .find({'judges.user' : req.params.id })        
+            .find({'judges.user' : req.params.id }) 
+            .populate('brackets')    
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     }

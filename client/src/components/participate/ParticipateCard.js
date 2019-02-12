@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import API from "../../utils/tournamentAPI";
 
-class VolunteerCard extends Component {
+class ParticipateCard extends Component {
 
     constructor(props) {
         super(props);
@@ -51,4 +51,4 @@ class VolunteerCard extends Component {
     }
 }
 
-export default VolunteerCard;
+export default ParticipateCard;
