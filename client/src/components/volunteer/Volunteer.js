@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import VolunteerCard from './VolunteerCard';
+import { element } from "prop-types";
 
 class Volunteer extends Component {
 
@@ -91,15 +92,17 @@ class Volunteer extends Component {
 
           <div style={{ margin: "0 50px" }}>
             <ul className="nav nav-tabs">
-              <li className="nav-item">
-                <a className={this.state.tabPending} id="pending" onClick={this.handleClick} >Pending Applications</a>
-              </li>
-              <li className="nav-item">
+            <li className="nav-item">
                 <a className={this.state.tabJudge} id="judge" onClick={this.handleClick}>Judge Bracket</a>
               </li>
               <li className="nav-item">
                 <a className={this.state.tabUpcoming} id="upcoming" onClick={this.handleClick}>Upcoming Tournaments</a>
               </li>
+              <li className="nav-item">
+                <a className={this.state.tabPending} id="pending" onClick={this.handleClick} >Pending Applications</a>
+              </li>
+             
+             
               <li className="nav-item">
                 <a className={this.state.tabFinished} id="finished" onClick={this.handleClick}>Finished Tournaments</a>
               </li>
@@ -124,12 +127,21 @@ class Volunteer extends Component {
                   )
                 } else if (result.status === 'approved') {
                   if (this.state.tab === 'judge' && tournament.status === 'running') {
-                    return (
-                      <VolunteerCard
-                        name={tournament.name}
-                        game={tournament.game.name}
-                      />
-                    )
+                      var value = '';
+                      let a = tournament.brackets;
+                      a.map((element) => {
+                        let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
+                        if(ajudges){
+                          value = element.name
+                        }
+                      })
+                      return (
+                        <VolunteerCard
+                          name={tournament.name}
+                          game={tournament.game} 
+                          brackets={value}                            
+                        />
+                      )
                   } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
                     return (
                       <VolunteerCard
