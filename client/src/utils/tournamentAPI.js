@@ -33,6 +33,9 @@ export default {
     getJudgeTournaments: function (id) {
         return axios.get("/api/tournaments/judge/" + id)
     },
+    getPlayerTournaments: function (id) {
+        return axios.get("/api/tournaments/player/" + id)
+    },
 
     getGame: function (id) {
         return axios.get("/api/games/" + id)
