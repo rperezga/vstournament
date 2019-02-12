@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../../utils/tournamentAPI";
+
 class VolunteerCard extends Component {
 
     constructor(props) {
