@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { MDBBtn, MDBCard, MDBCardImage } from "mdbreact";
+import { MDBBtn, MDBCard, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
+
+import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 
 class ViewTournament extends Component {
 
@@ -58,6 +60,8 @@ class ViewTournament extends Component {
         const data = API.getTournament(this.props.match.params.id)
             .then(res => {
                 this.setState({ tournament: res.data });
+
+                console.log(this.state.tournament)
 
                 if (res.data.judges.find(judge => judge.user === this.props.auth.user.id)) {
                     this.setState({ asVolunteer: true })
@@ -115,9 +119,11 @@ class ViewTournament extends Component {
                                 ""}
 
                             {(this.props.auth.user.id && this.state.tournament.status === 'running') ?
-                                <div style={{width: '800px', margin: '0 auto'}}>
-                                    <MDBCardImage className="img-fluid" src={this.props.thumbnail || "https://placehold.it/900x500"} waves />
-                                </div> :
+                                <div style={{ position: 'relative', width: '800px', margin: '0 auto' }}>
+                                    <ReactTwitchEmbedVideo channel={this.state.tournament.channel} />
+                                </div>
+
+                                :
                                 ""}
                         </div>
 
@@ -138,6 +144,30 @@ class ViewTournament extends Component {
                                 </li>
                             </ul>
                         </div>
+
+                        {this.state.tab == 'players' ?
+
+                            <MDBTable>
+                                <MDBTableHead>
+                                    <tr>
+                                        <th>Player Name</th>
+                                        <th>Team</th>
+                                        <th>Region</th>
+                                    </tr>
+                                </MDBTableHead>
+                                <MDBTableBody>
+                                    {this.state.tournament.players.map((player) =>
+                                        <tr>
+                                            <td>{player.user}</td>
+                                        </tr>
+                                    )}
+                                </MDBTableBody>
+                            </MDBTable>
+                            :
+                            ""
+                        }
+
+
 
 
 
