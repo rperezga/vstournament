@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+
 import API from "../../utils/tournamentAPI";
+import APIUser from "../../utils/userAPI";
 
 import { MDBJumbotron, MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter  } from "mdbreact";
 
@@ -14,7 +16,10 @@ class Account extends Component {
       user: {},
       modal: false,
       userName: '',
-      playerName: ''
+      playerName: '',
+      name: '',
+      team: '',
+      region: ''
     }    
   }
 
@@ -34,20 +39,49 @@ class Account extends Component {
   };
 
   onEditClick = e => {
-    e.preventDefault();
     this.setState({
       modal: !this.state.modal
     }); 
+
     this.state.userName = this.state.user.userName 
-    this.state.playerName = this.state.user.playerName 
+    this.state.playerName = this.state.user.playerName
+    this.state.name = this.state.user.name
+    this.state.team = this.state.user.team
+    this.state.region = this.state.user.region 
   };
 
+  onCancelClick = e => {
+    this.setState({
+      modal: !this.state.modal
+    }); 
+  };
+
+  onSubmitClick = e => {
+    this.setState({
+      modal: !this.state.modal
+    }); 
+
+    const userData = {
+      userName: this.state.userName,
+      playerName: this.state.playerName,
+      name: this.state.name,
+      team: this.state.team,
+      region: this.state.region
+    };
+
+    APIUser.updateUser(this.props.auth.user.id, userData).then((res)=>{
+      if(res){
+        API.getUser(this.props.auth.user.id).then(res => {
+          this.setState({ user: res.data.user });
+        });
+      }
+    })
+  };
   
 
 
   render() {
     const { user } = this.props.auth;
-    var dataUser = {}
 
     return (
       <MDBContainer className="mt-5 text-center">
@@ -139,10 +173,37 @@ class Account extends Component {
                 type="text"
                 group
               />
+              <MDBInput
+                label="Name"
+                onChange={this.onChange}
+                value={this.state.name}
+                id="name"
+                name="name"
+                type="text"
+                group
+              />
+              <MDBInput
+                label="Team"
+                onChange={this.onChange}
+                value={this.state.team}
+                id="team"
+                name="team"
+                type="text"
+                group
+              />
+              <MDBInput
+                label="Region"
+                onChange={this.onChange}
+                value={this.state.region}
+                id="region"
+                name="region"
+                type="text"
+                group
+              />
             </MDBModalBody>
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={this.onEditClick}>Close</MDBBtn>
-              <MDBBtn color="primary">Save changes</MDBBtn>
+              <MDBBtn color="secondary" onClick={this.onCancelClick}>Close</MDBBtn>
+              <MDBBtn color="primary" onClick={this.onSubmitClick}>Save changes</MDBBtn>
             </MDBModalFooter>
           </form>
         </MDBModal>
