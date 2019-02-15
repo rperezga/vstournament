@@ -51,4 +51,8 @@ export default {
         return axios.put("/api/tournaments/subsplayer/" + id, data);
     },
 
+    updateStatus: function (id, data) {
+        return axios.put("/api/tournaments/status/" + id, data);
+    }
+
 };

@@ -83,13 +83,13 @@ const TournamentSchema = new Schema({
         type: String,
         required: true,
         default: "new",
-        enum: [
-            "new",    /* Organizer just created the tournament; only organizer can see under "Organize" */
-            "open",    /* Tournament is open to registration, becomes visible in "Tournaments". Players can register and volunteers can apply */
-            "closed",    /* Tournament registration is closed */
-            "running",    /* Tournmanent is live */
-            "finished"    /* Tournmanet is completed */
-        ]
+        // enum: [
+        //     "new",    /* Organizer just created the tournament; only organizer can see under "Organize" */
+        //     "open",    /* Tournament is open to registration, becomes visible in "Tournaments". Players can register and volunteers can apply */
+        //     "closed",    /* Tournament registration is closed */
+        //     "running",    /* Tournmanent is live */
+        //     "finished"    /* Tournmanet is completed */
+        // ]
     },
 
     organizer: {
