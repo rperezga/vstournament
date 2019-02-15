@@ -12,7 +12,7 @@ module.exports = {
 
     findById: function (req, res) {
         tournament
-            .findById(req.params.id)
+            .findById(req.params.id)            
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -50,6 +50,14 @@ module.exports = {
     findByJudge: function (req, res) {
         tournament
             .find({ 'judges.user': req.params.id })
+            .populate('game')
+            .populate('brackets')
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+    },
+    findByPlayer: function (req, res) {
+        tournament
+            .find({ 'players.user': req.params.id })
             .populate('game')
             .populate('brackets')
             .then(dbModel => res.json(dbModel))

@@ -106,6 +106,11 @@ const TournamentSchema = new Schema({
         type: String,
         required: true
     },
+
+    channel: {
+        type: String,
+        required: true
+    },
 });
 
 module.exports = Tournament = mongoose.model("Tournament", TournamentSchema, "tournaments");
