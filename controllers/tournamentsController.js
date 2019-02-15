@@ -76,8 +76,14 @@ module.exports = {
             .findOneAndUpdate(req.params.id, { $push:{ players: {"user": req.body.id, "status": 'pending'} }})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
+    },
+
+    updateStatus: function (req, res) {
+        console.log(req.body.status);
+        tournament
+            .findByIdAndUpdate(req.params.id, {$set: {status: req.body.status}}, {new: true})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
     }
-
-
 
 };
