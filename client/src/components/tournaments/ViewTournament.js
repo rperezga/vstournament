@@ -150,6 +150,7 @@ class ViewTournament extends Component {
                             <MDBTable>
                                 <MDBTableHead>
                                     <tr>
+                                        <th>Name</th>
                                         <th>Player Name</th>
                                         <th>Team</th>
                                         <th>Region</th>
@@ -158,7 +159,10 @@ class ViewTournament extends Component {
                                 <MDBTableBody>
                                     {this.state.tournament.players.map((player) =>
                                         <tr>
-                                            <td>{player.user}</td>
+                                            <td>{player.user.name}</td>
+                                            <td>{player.user.playerName}</td>
+                                            <td>{player.user.team}</td>
+                                            <td>{player.user.region}</td>
                                         </tr>
                                     )}
                                 </MDBTableBody>
