@@ -100,10 +100,16 @@ module.exports = {
             if (!user) {
               return res.status(404).json({ emailnotfound: "User not found" });
             } else {
-                console.log(user)
               return res.status(200).json({ user: user })
             }
         });
+    },
+
+    update: function (req, res) {
+        User
+            .findOneAndUpdate({_id: req.params.id }, req.body)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
     }
 
 };
