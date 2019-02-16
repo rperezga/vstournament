@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MDBBtn, MDBCard, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
+import Bracket from '../brackets/Brackets'
 
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 
@@ -61,13 +62,11 @@ class ViewTournament extends Component {
             .then(res => {
                 this.setState({ tournament: res.data });
 
-                console.log(this.state.tournament)
-
-                if (res.data.judges.find(judge => judge.user === this.props.auth.user.id)) {
+                if (res.data.judges.find(judge => judge.user._id === this.props.auth.user.id)) {
                     this.setState({ asVolunteer: true })
                 }
 
-                if (res.data.players.find(player => player.user === this.props.auth.user.id)) {
+                if (res.data.players.find(player => player.user._id === this.props.auth.user.id)) {
                     this.setState({ asPlayer: true })
                 }
             }
@@ -147,6 +146,14 @@ class ViewTournament extends Component {
                             </ul>
                         </div>
 
+                        {this.state.tab == 'brackets' ?
+                            <div style={{ margin: '20px' }}>
+                                <Bracket />
+                            </div>
+                            :
+                            ""
+                        }
+
                         {this.state.tab == 'players' ?
 
                             <MDBTable>
@@ -173,12 +180,7 @@ class ViewTournament extends Component {
                             ""
                         }
 
-
-
-
-
                     </MDBCard>
-
 
                 </div>
 

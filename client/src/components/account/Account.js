@@ -76,8 +76,7 @@ class Account extends Component {
         });
       }
     })
-  };
-  
+  };  
 
 
   render() {
@@ -90,7 +89,7 @@ class Account extends Component {
             <MDBJumbotron>
               <h2 className="h1 display-3">Hello, {this.state.user.name}!</h2>
               <h3>
-                Thank you for be part of VS Torunaments!
+                Thank you for being part of VS Torunaments!
               </h3>
 
               <hr className="my-2" />
@@ -116,20 +115,8 @@ class Account extends Component {
                   letterSpacing: "1.5px",
                   marginTop: "2rem"
                 }}
-                onClick={this.onLogoutClick}
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-              >
-                Logout
-              </button>
-
-              <button
-                style={{
-                  borderRadius: "3px",
-                  letterSpacing: "1.5px",
-                  marginTop: "2rem"
-                }}
                 onClick={this.onEditClick}
-                className="btn btn-large waves-effect waves-light hoverable green accent-3"
+                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
               >
                 Edit
               </button>
@@ -140,11 +127,11 @@ class Account extends Component {
                   letterSpacing: "1.5px",
                   marginTop: "2rem"
                 }}
-                // onClick={this.onLogoutClick}
+                onClick={this.onLogoutClick}
                 className="btn btn-large waves-effect waves-light hoverable red accent-3"
               >
-                Change Password
-              </button>
+                Logout
+              </button>             
 
             </MDBJumbotron>
           </MDBCol>
