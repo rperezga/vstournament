@@ -6,13 +6,16 @@ module.exports = {
         tournament
             .find(req.query)
             .populate('game')
+            .populate('players.user')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
 
     findById: function (req, res) {
         tournament
-            .findById(req.params.id).populate('players.user')
+            .findById(req.params.id)
+            .populate('game')  
+            .populate('players.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -25,8 +28,9 @@ module.exports = {
     },
 
     update: function (req, res) {
+        console.log(req.body);
         tournament
-            .findOneAndUpdate({ _id: req.params.id }, req.body)
+            .findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -43,6 +47,7 @@ module.exports = {
         tournament
             .find({ organizer: req.params.id })
             .populate('game')
+            .populate('players.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -80,7 +85,6 @@ module.exports = {
     },
 
     updateStatus: function (req, res) {
-        console.log(req.body.status);
         tournament
             .findByIdAndUpdate(req.params.id, {$set: {status: req.body.status}}, {new: true})
             .then(dbModel => res.json(dbModel))

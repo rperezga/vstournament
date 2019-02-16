@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import {
     MDBContainer,
     MDBBtn,
-    MDBInput,
     MDBRow,
     MDBCol,
-    MDBAlert
+    MDBAlert,
+    MDBTable, 
+    MDBTableBody, 
+    MDBTableHead
   } from 'mdbreact';
-import API from '../../utils/tournamentAPI'
+import API from '../../utils/tournamentAPI';
+import gameApi from "../../utils/gameAPI";
 
   class EditTournament extends Component {
 
     constructor(props) {
-
         super(props);
         this.state = {
           name: '',
@@ -20,6 +22,8 @@ import API from '../../utils/tournamentAPI'
           address: '',
           venue: '',
           status: '',
+          games: [],
+          players: [],
           tab: 'info',
           tabInfo: 'nav-link active',
           tabPlayers: 'nav-link',
@@ -30,9 +34,41 @@ import API from '../../utils/tournamentAPI'
           editButton: 'Edit'
         };
 
+        this.columns = [
+          {
+            label: '#',
+            field: 'id',
+            sort: 'asc'
+          },
+          {
+            label: 'Name',
+            field: 'name',
+            sort: 'asc'
+          },
+          {
+            label: 'Player Name',
+            field: 'playerName',
+            sort: 'asc'
+          },
+          {
+            label: 'Status',
+            field: 'status',
+            sort: 'asc'
+          },
+          {
+            label: 'Aprove/Decline',
+            field: 'approval',
+            sort: 'asc'
+          }
+        ];
+
+        this.rows = [];
+
         this.handleTabClick = this.handleTabClick.bind(this);
         this.changeStatus = this.changeStatus.bind(this);
         this.editTournamentInfo = this.editTournamentInfo.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.populatePlayers = this.populatePlayers.bind(this);
     }
 
     componentDidMount() {
@@ -40,13 +76,57 @@ import API from '../../utils/tournamentAPI'
         .then(res => {
           this.setState({
             name: res.data.name,
-            game: res.data.game,
+            game: res.data.game.name,
+            gameId: res.data.game._id,
             address: res.data.address,
             venue: res.data.venue,
-            status: res.data.status
+            status: res.data.status,
+            players: res.data.players
           });
           this.setInfoMessage();
+          this.loadAllGames();
+          this.populatePlayers();
         }).catch(err => console.log(err));
+    }
+
+    populatePlayers() {
+
+      let id = 1;
+      this.state.players.map(player => {
+
+        let approveButton = <MDBBtn color="blue" outline size="sm">Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm">Decline</MDBBtn>;
+
+        let row = {
+          id: id,
+          name: player.user.userName,
+          playerName: player.user.playerName,
+          status: player.status,
+          approval:[]
+        }
+
+        if (player.status == 'pending'){
+          row.approval.push(approveButton);
+          row.approval.push(declineButton);
+        }
+
+        else {
+          row.approval.push('Player has been ' + player.status);
+        }
+
+        this.rows.push(row);
+        id = id + 1;
+
+      });
+    }
+
+    loadAllGames() {
+
+      gameApi.getGames()
+        .then(res => {
+          this.setState({ games: res.data });
+        })
+        .catch(err => console.log(err));
     }
 
     setInfoMessage() {
@@ -88,22 +168,26 @@ import API from '../../utils/tournamentAPI'
     }
 
     handleTabClick(event) {
+
       const id = event.target.id;
       this.setState({
         tab: id
       })
+
       if (id === 'info') {
         this.setState({
           tabInfo: 'nav-link active',
           tabPlayers: 'nav-link',
           tabVolunteers: 'nav-link',
         })
+
       } else if (id === 'players') {
         this.setState({
           tabInfo: 'nav-link',
           tabPlayers: 'nav-link active',
           tabVolunteers: 'nav-link',
         })
+
       } else if (id === 'volunteers') {
         this.setState({
           tabInfo: 'nav-link',
@@ -135,15 +219,46 @@ import API from '../../utils/tournamentAPI'
     }
 
     editTournamentInfo () {
-      
+
       if (this.state.disable) {
         this.setState ({disable: false, editButton: 'Update'})
       }
-
       else {
         this.setState({disable: true, editButton: 'Edit'})
       }
+
+      this.updateTournament();
     }
+
+    updateTournament() {
+
+      if (this.state.editButton == 'Update'){
+        const data = {
+          name: this.state.name,
+          game: this.state.game,
+          venue: this.state.venue,
+          address: this.state.address
+        }
+
+        API.updateTournament(this.props.match.params.id, data)
+          .then (res => {
+            this.setState({
+              name: res.data.name,
+              game: res.data.game.name,
+              gameId: res.data.game._id,
+              address: res.data.address,
+              venue: res.data.venue,
+              status: res.data.status,
+              players: res.data.players
+            })
+          })
+          .catch(err => console.log(err));
+      }
+    } 
+
+    onChange = e => {
+      this.setState({ [e.target.id]: e.target.value });
+    };
 
     render () {
         return (
@@ -170,76 +285,96 @@ import API from '../../utils/tournamentAPI'
                         </ul>
 
                         <div style={{ margin: "20px 50px" }}>
-                        
-                          <MDBAlert color="info" >
-                            <MDBRow className="row">
-                              <MDBCol className="col-10" style={{paddingTop: '10px'}}>
-                                {this.state.infoMessage}
+                          {this.state.tab === 'info' ?
+                          <div>                           
+                            <MDBAlert color="info" >
+                              <MDBRow className="row">
+                                <MDBCol className="col-10" style={{paddingTop: '10px'}}>
+                                  {this.state.infoMessage}
+                                </MDBCol>
+                                <MDBCol className="col-2">
+                                  <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button>
+                                </MDBCol>
+                              </MDBRow>
+                            </MDBAlert>
+                            <div className="form-group">
+                            <MDBRow>
+                              <MDBCol md="6">
+                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                Name
+                              </label>
+                              <input
+                                type="text"
+                                id="name"
+                                className="form-control"
+                                value={this.state.name}
+                                disabled={this.state.disable}
+                                onChange={this.onChange} 
+                              />
                               </MDBCol>
-                              <MDBCol className="col-2">
-                                <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button>
+                              <MDBCol md="6">
+                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                Game
+                              </label>
+                              <select 
+                                className="browser-default custom-select" 
+                                id="game" 
+                                onChange={this.onChange} 
+                                disabled={this.state.disable}>
+                              
+                              {this.state.games.length ? (
+                                this.state.games.map(game => (
+                                <option value={game._id}>{game.name}</option>
+                              ))
+                            ) : ("")}
+                          </select>
                               </MDBCol>
                             </MDBRow>
-                          </MDBAlert>
-                          <MDBRow>
-                            <MDBCol md="6">
-                            <label htmlFor="defaultFormContactNameEx" className="grey-text">
-                              Name
-                            </label>
-                            <input
-                              type="text"
-                              id="defaultFormContactNameEx"
-                              className="form-control"
-                              value={this.state.name}
-                              disabled={this.state.disable}
-                            />
-                            </MDBCol>
-                            <MDBCol md="6">
-                            <label htmlFor="defaultFormContactNameEx" className="grey-text">
-                              Game
-                            </label>
-                            <input
-                              type="text"
-                              id="defaultFormContactNameEx"
-                              className="form-control"
-                              value={this.state.game}
-                              disabled={this.state.disable}
-                            />
-                            </MDBCol>
-                          </MDBRow>
-                          <br />
-                          <MDBRow>
-                            <MDBCol md="6">
-                            <label htmlFor="defaultFormContactNameEx" className="grey-text">
-                              Venue
-                            </label>
-                            <input
-                              type="text"
-                              id="defaultFormContactNameEx"
-                              className="form-control"
-                              value={this.state.venue}
-                              disabled={this.state.disable}
-                            />
-                            </MDBCol>
-                            <MDBCol md="6">
-                            <label htmlFor="defaultFormContactNameEx" className="grey-text">
-                              Address
-                            </label>
-                            <input
-                              type="text"
-                              id="defaultFormContactNameEx"
-                              className="form-control"
-                              value={this.state.address}
-                              disabled={this.state.disable}
-                            />
-                            </MDBCol>
-                          </MDBRow>
-                          <br />
-                          <MDBRow>
-                          <MDBCol md="3">
-                            <button className="btn btn-primary" onClick={this.editTournamentInfo}>{this.state.editButton}</button>
-                            </MDBCol>
-                          </MDBRow>
+                            <br />
+                            <MDBRow>
+                              <MDBCol md="6">
+                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                Venue
+                              </label>
+                              <input
+                                type="text"
+                                id="venue"
+                                className="form-control"
+                                value={this.state.venue}
+                                disabled={this.state.disable}
+                                onChange={this.onChange}
+                              />
+                              </MDBCol>
+                              <MDBCol md="6">
+                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                Address
+                              </label>
+                              <input
+                                type="text"
+                                id="address"
+                                className="form-control"
+                                value={this.state.address}
+                                disabled={this.state.disable}
+                                onChange={this.onChange}
+                              />
+                              </MDBCol>
+                            </MDBRow>
+                            <br />
+                            <MDBRow>
+                            <MDBCol md="3">
+                              <button className="btn btn-primary" onClick={this.editTournamentInfo}>{this.state.editButton}</button>
+                              </MDBCol>
+                            </MDBRow>
+                            </div>
+                          </div>
+                          :''}
+
+                          {this.state.tab === 'players' ?
+                            <MDBTable btn>
+                              <MDBTableHead columns={this.columns} />
+                              <MDBTableBody rows={this.rows} />
+                            </MDBTable> : ''
+                          }
                         </div>
                     </div>
                 </div>
