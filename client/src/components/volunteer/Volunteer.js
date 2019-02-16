@@ -72,6 +72,10 @@ class Volunteer extends Component {
     if (id === 'pending') {
       this.setState({
         tabPending: 'nav-link active',
+        tabJudge: 'nav-link',
+        tabUpcoming: 'nav-link',
+        tabFinished: 'nav-link',
+        tabRejected: 'nav-link',
 
       })
     } else if (id === 'judge') {
@@ -189,7 +193,7 @@ class Volunteer extends Component {
                           <MDBModalHeader toggle={this.toggle}>Match Edit</MDBModalHeader>
                           <MDBModalBody>
                             {/* id: player1, id: player2, id: match */}
-                            <InputMatch player1={this.player1} player2={this.player2} p1id={this.p1id} p2id={this.p2id} matchid={this.matchid} />
+                            <InputMatch toggle={this.toggle.bind(this)} player1={this.player1} player2={this.player2} p1id={this.p1id} p2id={this.p2id} matchid={this.matchid} />
                           </MDBModalBody>
                         </MDBModal>
                       </React.Fragment>
