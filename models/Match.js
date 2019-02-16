@@ -9,6 +9,11 @@ const MatchSchema = new Schema({
         required: true
     },
 
+    judge: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+
     player1: {
 
         isBye: {
