@@ -15,7 +15,7 @@ module.exports = {
         tournament
             .findById(req.params.id)
             .populate('game')  
-            .populate('players.user')          
+            .populate('players.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -60,6 +60,7 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
+    
     findByPlayer: function (req, res) {
         tournament
             .find({ 'players.user': req.params.id })
@@ -71,14 +72,14 @@ module.exports = {
 
     subsVolunteer: function (req, res) {
         tournament
-            .findOneAndUpdate(req.params.id, { $push:{ judges: {"user": req.body.id, "status": 'pending'} }})
+            .findByIdAndUpdate(req.params.id, { $push:{ judges: {"user": req.body.id, "status": 'pending'} }})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
 
     subsPlayer: function (req, res) {
         tournament
-            .findOneAndUpdate(req.params.id, { $push:{ players: {"user": req.body.id, "status": 'pending'} }})
+            .findByIdAndUpdate(req.params.id, { $push:{ players: {"user": req.body.id, "status": 'pending'} }})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },

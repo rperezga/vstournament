@@ -76,18 +76,20 @@ class ViewTournament extends Component {
     };
 
     volunteer = () => {
-        const data = API.subsVolunteer(this.state.tournament.id, { id: this.state.userId })
+        const data = API.subsVolunteer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asVolunteer: true })
+                this.loadTournament()
                 alert("You have been subscribed as a volunteer")
             })
             .catch(err => console.log(err));
     };
 
     player = () => {
-        const data = API.subsPlayer(this.state.tournament.id, { id: this.state.userId })
+        const data = API.subsPlayer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asPlayer: true })
+                this.loadTournament()
                 alert("You have been subscribed as a player")
             })
             .catch(err => console.log(err));
@@ -150,6 +152,7 @@ class ViewTournament extends Component {
                             <MDBTable>
                                 <MDBTableHead>
                                     <tr>
+                                        <th>Name</th>
                                         <th>Player Name</th>
                                         <th>Team</th>
                                         <th>Region</th>
@@ -158,7 +161,10 @@ class ViewTournament extends Component {
                                 <MDBTableBody>
                                     {this.state.tournament.players.map((player) =>
                                         <tr>
-                                            <td>{player.user}</td>
+                                            <td>{player.user.name}</td>
+                                            <td>{player.user.playerName}</td>
+                                            <td>{player.user.team}</td>
+                                            <td>{player.user.region}</td>
                                         </tr>
                                     )}
                                 </MDBTableBody>
