@@ -11,8 +11,6 @@ import {
   MDBCardImage,
   MDBCardTitle,
   MDBCardText,
-  MDBCol,
-  MDBRow,
   MDBInput,
   MDBBtn
 } from 'mdbreact'

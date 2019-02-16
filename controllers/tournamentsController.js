@@ -6,6 +6,7 @@ module.exports = {
         tournament
             .find(req.query)
             .populate('game')
+            .populate('players.user')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -13,6 +14,8 @@ module.exports = {
     findById: function (req, res) {
         tournament
             .findById(req.params.id)
+            .populate('game')  
+            .populate('players.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -25,8 +28,9 @@ module.exports = {
     },
 
     update: function (req, res) {
+        console.log(req.body);
         tournament
-            .findOneAndUpdate({ _id: req.params.id }, req.body)
+            .findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -43,6 +47,7 @@ module.exports = {
         tournament
             .find({ organizer: req.params.id })
             .populate('game')
+            .populate('players.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -56,6 +61,7 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
+    
     findByPlayer: function (req, res) {
         tournament
             .find({ 'players.user': req.params.id })
@@ -67,18 +73,23 @@ module.exports = {
 
     subsVolunteer: function (req, res) {
         tournament
-            .findOneAndUpdate(req.params.id, { $push:{ judges: {"user": req.body.id, "status": 'pending'} }})
+            .findByIdAndUpdate(req.params.id, { $push:{ judges: {"user": req.body.id, "status": 'pending'} }})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
 
     subsPlayer: function (req, res) {
         tournament
-            .findOneAndUpdate(req.params.id, { $push:{ players: {"user": req.body.id, "status": 'pending'} }})
+            .findByIdAndUpdate(req.params.id, { $push:{ players: {"user": req.body.id, "status": 'pending'} }})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
-    },   
+    },
 
-
+    updateStatus: function (req, res) {
+        tournament
+            .findByIdAndUpdate(req.params.id, {$set: {status: req.body.status}}, {new: true})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+    }
 
 };

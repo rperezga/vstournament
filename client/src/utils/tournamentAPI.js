@@ -19,11 +19,11 @@ export default {
     },
     // Deletes the tournament with the given id
     deleteTournament: function (id) {
-        return axios.delete("/api/tournaments" + id);
+        return axios.delete("/api/tournaments/" + id);
     },
     //updates a tournament to the database
     updateTournament: function (id, data) {
-        return axios.put("/api/tournaments" + id, data);
+        return axios.put("/api/tournaments/" + id, data);
     },
 
     getUserTournaments: function (id) {
@@ -50,5 +50,9 @@ export default {
     subsPlayer: function (id, data) {
         return axios.put("/api/tournaments/subsplayer/" + id, data);
     },
+
+    updateStatus: function (id, data) {
+        return axios.put("/api/tournaments/status/" + id, data);
+    }
 
 };

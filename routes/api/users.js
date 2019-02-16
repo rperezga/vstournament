@@ -11,5 +11,8 @@ router.route("/login")
 router.route("/find/:id")
   .get(usersController.getUserById);
 
+  router.route("/:id")
+  .put(usersController.update);
+
 module.exports = router;
 
