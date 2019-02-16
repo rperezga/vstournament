@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MDBBtn, MDBCard, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
+import Bracket from '../brackets/Brackets'
 
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 
@@ -144,6 +145,14 @@ class ViewTournament extends Component {
                                 </li>
                             </ul>
                         </div>
+
+                        {this.state.tab == 'brackets' ?
+                            <div style={{ margin: '20px' }}>
+                                <Bracket />
+                            </div>
+                            :
+                            ""
+                        }
 
                         {this.state.tab == 'players' ?
 
