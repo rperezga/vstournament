@@ -100,7 +100,6 @@ module.exports = {
             if (!user) {
               return res.status(404).json({ emailnotfound: "User not found" });
             } else {
-                console.log(user)
               return res.status(200).json({ user: user })
             }
         });

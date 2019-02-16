@@ -76,18 +76,20 @@ class ViewTournament extends Component {
     };
 
     volunteer = () => {
-        const data = API.subsVolunteer(this.state.tournament.id, { id: this.state.userId })
+        const data = API.subsVolunteer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asVolunteer: true })
+                this.loadTournament()
                 alert("You have been subscribed as a volunteer")
             })
             .catch(err => console.log(err));
     };
 
     player = () => {
-        const data = API.subsPlayer(this.state.tournament.id, { id: this.state.userId })
+        const data = API.subsPlayer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asPlayer: true })
+                this.loadTournament()
                 alert("You have been subscribed as a player")
             })
             .catch(err => console.log(err));
