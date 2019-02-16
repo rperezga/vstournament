@@ -72,6 +72,10 @@ class Volunteer extends Component {
     if (id === 'pending') {
       this.setState({
         tabPending: 'nav-link active',
+        tabJudge: 'nav-link',
+        tabUpcoming: 'nav-link',
+        tabFinished: 'nav-link',
+        tabRejected: 'nav-link',
 
       })
     } else if (id === 'judge') {
