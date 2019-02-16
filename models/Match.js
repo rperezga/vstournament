@@ -9,9 +9,9 @@ const MatchSchema = new Schema({
         required: true
     },
 
-    status: {
-        type: String,
-        required: true
+    judge: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
 
     player1: {

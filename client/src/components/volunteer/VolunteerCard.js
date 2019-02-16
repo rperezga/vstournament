@@ -11,7 +11,7 @@ class VolunteerCard extends Component {
 
     componentDidMount() {
         this.loadGame();
-        console.log(`Bracket en el card ${this.props.brackets}`)
+        console.log(this.props)
     }
 
     loadGame = () => {
@@ -33,15 +33,16 @@ class VolunteerCard extends Component {
                     <div className="col-3">
                         <img src={this.props.thumbnail || "https://placehold.it/200x100"} style={{ width: "100%" }} />
                     </div>
-                    <div className="col-7">
+                    <div className="col-5">
           
                         <h3>{this.props.name}</h3>
                         <h4>Game: {this.state.game.name}</h4>
                         {this.props.brackets ? <h5>Bracket: {this.props.brackets}</h5> : ''}
                         
                     </div>
-                    <div className="col-2" style={{textAlign: "center"}}>
-                    <button className="btn btn-primary" id="savebtn" dataid="{props.index}" onClick="{props.saveArticle}">Edit</button>
+                    <div className="col-4" style={{textAlign: "center"}}>
+                    {this.props.match ? <button className="btn btn-primary" id="savebtn" dataid={this.props.matchId} onClick={()=>{ this.props.toggle()}}>{this.props.match}</button>  : ''}
+                    
                     </div>
                 </div>
             </li>

@@ -12,7 +12,7 @@ class ParticipateCard extends Component {
 
     componentDidMount() {
         this.loadGame();
-        console.log(`Bracket en el card ${this.props.brackets}`)
+        
     }
 
     loadGame = () => {
