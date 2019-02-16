@@ -9,41 +9,47 @@ const BracketSchema = new Schema({
         required: true
     },
 
+    /*
     date: {
         type: Date,
         required: true
     },
-
-    description: {
-        type: String,
-        required: true
-    },
+    */
 
     players: [
         {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true
         }
     ],
 
     judges: [
         {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true
         }
     ],
 
     matches: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Match"
+            ref: "Match",
+            required: true
         }
     ],
 
     // the possible values are new, running, finished
     status: {
         type: String,
-        required: true
+        required: true,
+        enum: [
+            "new",
+            "running",
+            "finished"
+        ],
+        default: 'new'
     }
 
 });
