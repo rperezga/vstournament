@@ -16,25 +16,8 @@ import gameApi from "../../utils/gameAPI";
 
     constructor(props) {
         super(props);
-        this.state = {
-          name: '',
-          game: '',
-          address: '',
-          venue: '',
-          status: '',
-          games: [],
-          players: [],
-          tab: 'info',
-          tabInfo: 'nav-link active',
-          tabPlayers: 'nav-link',
-          tabVolunteers: 'nav-link',
-          infoMessage: '',
-          statusButton: '',
-          disable: true,
-          editButton: 'Edit'
-        };
 
-        this.columns = [
+        const columns = [
           {
             label: '#',
             field: 'id',
@@ -59,19 +42,42 @@ import gameApi from "../../utils/gameAPI";
             label: 'Aprove/Decline',
             field: 'approval',
             sort: 'asc'
-          }
+          },
         ];
 
-        this.rows = [];
+        this.state = {
+          name: '',
+          game: '',
+          address: '',
+          venue: '',
+          status: '',
+          games: [],
+          players: [],
+          judges: [],
+          tab: 'info',
+          tabInfo: 'nav-link active',
+          tabPlayers: 'nav-link',
+          tabVolunteers: 'nav-link',
+          infoMessage: '',
+          statusButton: '',
+          disable: true,
+          editButton: 'Edit',
+          playersRows: [],
+          judgesRows: [],
+          columns: columns
+        };
 
         this.handleTabClick = this.handleTabClick.bind(this);
         this.changeStatus = this.changeStatus.bind(this);
         this.editTournamentInfo = this.editTournamentInfo.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.populatePlayers = this.populatePlayers.bind(this);
+        this.populatePlayersAndVolunteers = this.populatePlayersAndVolunteers.bind(this);
+        this.approveUser = this.approveUser.bind(this);
+        this.declineUser = this.declineUser.bind(this);
     }
 
     componentDidMount() {
+
       API.getTournament(this.props.match.params.id)
         .then(res => {
           this.setState({
@@ -85,17 +91,19 @@ import gameApi from "../../utils/gameAPI";
           });
           this.setInfoMessage();
           this.loadAllGames();
-          this.populatePlayers();
+          this.populatePlayersAndVolunteers();
         }).catch(err => console.log(err));
     }
 
-    populatePlayers() {
+    populatePlayersAndVolunteers() {
 
+      //get players registered for tournament
       let id = 1;
+      let rows = [];
       this.state.players.map(player => {
 
-        let approveButton = <MDBBtn color="blue" outline size="sm">Approve</MDBBtn>;
-        let declineButton = <MDBBtn color="blue" outline size="sm">Decline</MDBBtn>;
+        let approveButton = <MDBBtn color="blue" outline size="sm" id={player.user._id} onClick={this.approveUser}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" id={player.user._id} onClick={this.declineUser}>Decline</MDBBtn>;
 
         let row = {
           id: id,
@@ -114,10 +122,46 @@ import gameApi from "../../utils/gameAPI";
           row.approval.push('Player has been ' + player.status);
         }
 
-        this.rows.push(row);
+        rows.push(row);
         id = id + 1;
 
       });
+
+      console.log(rows);
+
+      this.setState({playersRows: rows});
+      console.log(this.state.playersRows);
+
+      //get volunteers registered for tournament
+      id = 1;
+      rows = [];
+      this.state.judges.map(judge => {
+
+        let approveButton = <MDBBtn color="blue" outline size="sm" userId={judge.user._id} onClick={this.approveUser}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" userId={judge.user._id} onClick={this.declineUser}>Decline</MDBBtn>;
+
+        let row = {
+          id: id,
+          name: judge.user.userName,
+          playerName: judge.user.playerName,
+          status: judge.status,
+          approval:[]
+        }
+
+        if (judge.status == 'pending'){
+          row.approval.push(approveButton);
+          row.approval.push(declineButton);
+        }
+
+        else {
+          row.approval.push('Volunteer has been ' + judge.status);
+        }
+
+        rows.push(row);
+        id = id + 1;
+      });
+
+      this.setState({judgesRows: rows});
     }
 
     loadAllGames() {
@@ -260,6 +304,52 @@ import gameApi from "../../utils/gameAPI";
       this.setState({ [e.target.id]: e.target.value });
     };
 
+    approveUser(event) {
+
+      const userId = event.target.id;
+      const data = {
+        players: [
+          {
+            user: userId,
+            status: 'approved'
+          }
+        ]
+      };
+
+      API.updateTournament(this.props.match.params.id, data)
+      .then (res => {
+        this.setState({
+          players: res.data.players,
+        });
+        this.componentDidMount();
+      })
+      .catch(err => console.log(err));
+
+    }
+
+    declineUser(event) {
+
+      const userId = event.target.id;
+      const data = {
+        players: [
+          {
+            user: userId,
+            status: 'decline'
+          }
+        ]
+      };
+
+      API.updateTournament(this.props.match.params.id, data)
+      .then (res => {
+        this.setState({
+          players: res.data.players,
+        });
+        this.componentDidMount();
+      })
+      .catch(err => console.log(err));
+
+    }
+
     render () {
         return (
           <MDBContainer>
@@ -313,21 +403,21 @@ import gameApi from "../../utils/gameAPI";
                               />
                               </MDBCol>
                               <MDBCol md="6">
-                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
-                                Game
-                              </label>
-                              <select 
-                                className="browser-default custom-select" 
-                                id="game" 
-                                onChange={this.onChange} 
-                                disabled={this.state.disable}>
-                              
-                              {this.state.games.length ? (
-                                this.state.games.map(game => (
-                                <option value={game._id}>{game.name}</option>
-                              ))
-                            ) : ("")}
-                          </select>
+                                <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                  Game
+                                </label>
+                                <select 
+                                  className="browser-default custom-select" 
+                                  id="game" 
+                                  onChange={this.onChange} 
+                                  disabled={this.state.disable}>
+                                
+                                {this.state.games.length ? (
+                                  this.state.games.map(game => (
+                                  <option value={game._id}>{game.name}</option>
+                                ))
+                                ) : ("")}
+                                </select>
                               </MDBCol>
                             </MDBRow>
                             <br />
@@ -370,10 +460,17 @@ import gameApi from "../../utils/gameAPI";
                           :''}
 
                           {this.state.tab === 'players' ?
+                          <MDBTable btn>
+                            <MDBTableHead columns={this.state.columns} />
+                            <MDBTableBody rows={this.state.playersRows} />
+                          </MDBTable> : ''
+                          }
+                          
+                          {this.state.tab === 'volunteers' ?
                             <MDBTable btn>
-                              <MDBTableHead columns={this.columns} />
-                              <MDBTableBody rows={this.rows} />
-                            </MDBTable> : ''
+                            <MDBTableHead columns={this.state.columns} />
+                            <MDBTableBody rows={this.state.judgesRows} />
+                          </MDBTable> : ''
                           }
                         </div>
                     </div>
