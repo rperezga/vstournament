@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import ParticipateCard from './ParticipateCard';
-import API from "../../utils/tournamentAPI"; 
+import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
 import { element } from "prop-types";
 
 class Participate extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       tab: 'pending',
       tabPending: 'nav-link active',
-      tabJudge: 'nav-link',
+      tabPlayer: 'nav-link',
       tabUpcoming: 'nav-link',
       tabFinished: 'nav-link',
       tabRejected: 'nav-link',
@@ -42,15 +42,15 @@ class Participate extends Component {
     if (id === 'pending') {
       this.setState({
         tabPending: 'nav-link active',
-        tabJudge: 'nav-link',
+        tabPlayer: 'nav-link',
         tabUpcoming: 'nav-link',
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
       })
-    } else if (id === 'judge') {
+    } else if (id === 'player') {
       this.setState({
         tabPending: 'nav-link',
-        tabJudge: 'nav-link active',
+        tabPlayer: 'nav-link active',
         tabUpcoming: 'nav-link',
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
@@ -58,7 +58,7 @@ class Participate extends Component {
     } else if (id === 'upcoming') {
       this.setState({
         tabPending: 'nav-link',
-        tabJudge: 'nav-link',
+        tabPlayer: 'nav-link',
         tabUpcoming: 'nav-link active',
         tabFinished: 'nav-link',
         tabRejected: 'nav-link',
@@ -66,7 +66,7 @@ class Participate extends Component {
     } else if (id === 'finished') {
       this.setState({
         tabPending: 'nav-link',
-        tabJudge: 'nav-link',
+        tabPlayer: 'nav-link',
         tabUpcoming: 'nav-link',
         tabFinished: 'nav-link active',
         tabRejected: 'nav-link',
@@ -74,7 +74,7 @@ class Participate extends Component {
     } else {
       this.setState({
         tabPending: 'nav-link',
-        tabJudge: 'nav-link',
+        tabPlayer: 'nav-link',
         tabUpcoming: 'nav-link',
         tabFinished: 'nav-link',
         tabRejected: 'nav-link active',
@@ -87,97 +87,95 @@ class Participate extends Component {
   render() {
     return (
       <div>
-       <div style={{ margin: '20px' }}>
+        <div style={{ margin: '20px' }}>
 
-<div style={{ margin: '30px' }}>
-  <h4>Participate</h4>
+          <div style={{ margin: '30px' }}>
+            <h4>PARTICIPATE</h4>
 
-  <div style={{ margin: "0 50px" }}>
-    <ul className="nav nav-tabs">
-    <li className="nav-item">
-        <a className={this.state.tabJudge} id="judge" onClick={this.handleClick}>Judge Bracket</a>
-      </li>
-      <li className="nav-item">
-        <a className={this.state.tabUpcoming} id="upcoming" onClick={this.handleClick}>Upcoming Tournaments</a>
-      </li>
-      <li className="nav-item">
-        <a className={this.state.tabPending} id="pending" onClick={this.handleClick} >Pending Applications</a>
-      </li>
-     
-     
-      <li className="nav-item">
-        <a className={this.state.tabFinished} id="finished" onClick={this.handleClick}>Finished Tournaments</a>
-      </li>
-      <li className="nav-item">
-        <a className={this.state.tabRejected} id="rejected" onClick={this.handleClick}>Rejected Applications</a>
-      </li>
-    </ul>
-  </div>
+            <div style={{ margin: "0 50px" }}>
+              <ul className="nav nav-tabs">
+                <li className="nav-item">
+                  <a className={this.state.tabPending} id="pending" onClick={this.handleClick} >Pending Applications</a>
+                </li>
+                <li className="nav-item">
+                  <a className={this.state.tabPlayer} id="player" onClick={this.handleClick}>Running Tournament</a>
+                </li>
+                <li className="nav-item">
+                  <a className={this.state.tabFinished} id="finished" onClick={this.handleClick}>Closed Tournaments</a>
+                </li>
+                <li className="nav-item">
+                  <a className={this.state.tabUpcoming} id="upcoming" onClick={this.handleClick}>New Tournaments</a>
+                </li>
+                <li className="nav-item">
+                  <a className={this.state.tabRejected} id="rejected" onClick={this.handleClick}>Rejected Applications</a>
+                </li>
+              </ul>
+            </div>
 
-  <div style={{ margin: "20px 50px" }}>
-    <h1>
+            <div style={{ margin: "20px 50px" }}>
+              <h1>
 
-      {this.state.tournaments.map((tournament, index) => {
-        const result = tournament.players.find(player => player.user === this.props.auth.user.id);
-          console.log(result);
-        if (this.state.tab === 'pending' && result.status === 'pending') {
-          return (
-            <ParticipateCard
-              name={tournament.name}
-              game={tournament.game.name}
-            />
-          )
-        } else if (result.status === 'approved') {
-          if (this.state.tab === 'judge' && tournament.status === 'running') {
-              var value = '';
-              let a = tournament.brackets;
-              a.map((element) => {
-                let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
-                if(ajudges){
-                  value = element.name
+                {this.state.tournaments.map((tournament, index) => {
+                  const result = tournament.players.find(player => player.user === this.props.auth.user.id);
+                  console.log(result);
+                  if (this.state.tab === 'pending' && result.status === 'pending') {
+                    return (
+                      <ParticipateCard
+                        name={tournament.name}
+                        game={tournament.game.name}
+                      />
+                    )
+                  } else if (result.status === 'approved') {
+                    if (this.state.tab === 'player' && tournament.status === 'running') {
+                      var value = '';
+                      let a = tournament.brackets;
+                      a.map((element) => {
+                        let ajudges = element.players.find(player => player === this.props.auth.user.id)
+                        if (ajudges) {
+                          value = element.name
+                        }
+                      })
+                      return (
+                        <ParticipateCard
+                          name={tournament.name}
+                          game={tournament.game}
+                          brackets={value}
+                        />
+                      )
+                    } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
+                      return (
+                        <ParticipateCard
+                          name={tournament.name}
+                          game={tournament.game.name}
+                        />
+                      )
+                    } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
+                      return (
+                        <ParticipateCard
+                          name={tournament.name}
+                          game={tournament.game.name}
+                        />
+                      )
+                    }
+                  }
+                  else if (this.state.tab === 'rejected' && result.status === 'rejected') {
+                    return (
+                      <ParticipateCard
+                        name={tournament.name}
+                        game={tournament.game.name}
+                      />
+                    )
+                  }
+                })
                 }
-              })
-              return (
-                <ParticipateCard
-                  name={tournament.name}
-                  game={tournament.game} 
-                  brackets={value}                            
-                />
-              )
-          } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
-            return (
-              <ParticipateCard
-                name={tournament.name}
-                game={tournament.game.name}
-              />
-            )
-          } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
-            return (
-              <ParticipateCard
-                name={tournament.name}
-                game={tournament.game.name}
-              />
-            )
-          }
-        }
-        else if (this.state.tab === 'rejected' && result.status === 'rejected') {
-          return (
-            <ParticipateCard
-              name={tournament.name}
-              game={tournament.game.name}
-            />
-          )
-        }
-      })
-      }
 
-    </h1>
-  </div>
-</div>
-</div>
+              </h1>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      
+
+
     );
   }
 }

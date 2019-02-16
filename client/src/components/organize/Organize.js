@@ -217,7 +217,6 @@ class Organize extends Component {
             <form noValidate onSubmit={this.onSubmit}>
               <MDBModalHeader toggle={this.toggle}>Create new Tournament</MDBModalHeader>
               <MDBModalBody>
-
                 <div className="grey-text">
                   <MDBInput
                     label="Name"
