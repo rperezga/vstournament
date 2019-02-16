@@ -16,40 +16,55 @@ const MatchSchema = new Schema({
 
     player1: {
 
-        player: {
+        isBye: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        user: {
             type: Schema.Types.ObjectId,
             ref: "User"
         },
         score: {
-            type: Number,
-            required: false
+            type: Number
         },
         isWinner: {
             type: Boolean,
-            required: false
+            required: true,
+            default: false
         }
     },
 
     player2: {
 
-        player: {
+        isBye: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        user: {
             type: Schema.Types.ObjectId,
             ref: "User"
         },
         score: {
-            type: Number,
-            required: false
+            type: Number
         },
         isWinner: {
             type: Boolean,
-            required: false
+            required: true,
+            default: false
         }
     },
 
-    // the possible values are new, running, finsihed
     status: {
         type: String,
-        required: true
+        required: true,
+        enum: [
+            "new",
+            "ready",
+            "finished"
+        ],
+        default: "new"
     }
 });
 
