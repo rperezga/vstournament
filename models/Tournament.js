@@ -15,6 +15,11 @@ const TournamentSchema = new Schema({
         required: true
     },
 
+    tournamentTemplate: {
+        type: String ,
+        required: true
+    },
+
     createdAt: {
         type: Date,
         default: Date.now
@@ -42,6 +47,17 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
+                default: "pending",
+                enum: [
+                    "pending",
+                    "approved",
+                    "declined"
+                ]
+            },
+            seedRank: {
+                type: Number,
+                required: true,
+                default: 0
             }
         }
     ],
@@ -56,6 +72,12 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
+                default: "pending",
+                enum: [
+                    "pending",
+                    "approved",
+                    "declined"
+                ]
             }
         }
     ],
