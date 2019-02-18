@@ -8,15 +8,20 @@ class Brackets extends Component {
       super(props);
 
       this.state = {
-         matches: [],
-      }
+         matches: this.props.matches
+      }      
+   }
+
+   componentDidMount() {
+      console.log(this.state.matches)
+      
    }
 
    render() {
       return (
          <MDBContainer>
             <MDBRow>
-               <MDBCol><Match player1="Ichigo" point1="10" point2="12" win='2' player2="Aizen" /></MDBCol>
+               <MDBCol><Match player1={this.state.matches[0].player1.user} point1="10" point2="12" win='2' player2="Aizen" /></MDBCol>
                <MDBCol></MDBCol>
                <MDBCol></MDBCol>
             </MDBRow>

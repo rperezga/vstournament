@@ -16,6 +16,7 @@ module.exports = {
         tournament
             .findById(req.params.id)
             .populate('game')  
+            .populate({path: 'brackets', populate: {path: 'matches'}})
             .populate('players.user')
             .populate('judges.user') 
             .then(dbModel => res.json(dbModel))
