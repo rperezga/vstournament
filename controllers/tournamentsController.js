@@ -7,6 +7,7 @@ module.exports = {
             .find(req.query)
             .populate('game')
             .populate('players.user')
+            .populate('judges.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -15,7 +16,9 @@ module.exports = {
         tournament
             .findById(req.params.id)
             .populate('game')  
-            .populate('players.user') 
+            .populate({path: 'brackets', populate: {path: 'matches'}})
+            .populate('players.user')
+            .populate('judges.user') 
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -47,7 +50,8 @@ module.exports = {
         tournament
             .find({ organizer: req.params.id })
             .populate('game')
-            .populate('players.user') 
+            .populate('players.user')
+            .populate('judges.user')  
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },

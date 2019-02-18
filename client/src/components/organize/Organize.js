@@ -43,6 +43,7 @@ class Organize extends Component {
       tournaments: [],
       games: [],
       game: '',
+      channel: '',
       tab: 'new',
       tabNew: 'nav-link active',
       tabLive: 'nav-link',
@@ -105,8 +106,7 @@ class Organize extends Component {
       .then(res => {
         console.log(res);
         this.setState({ tournaments: res.data });
-      }
-      )
+      })
       .catch(err => console.log(err));
   };
 
@@ -127,7 +127,8 @@ class Organize extends Component {
       organizer: this.state.organizer,
       game: this.state.game,
       venue: this.state.venue,
-      address: this.state.address
+      address: this.state.address,
+      channel: this.state.channel
     };
 
     API.saveTournament(tournamentData)
@@ -239,6 +240,14 @@ class Organize extends Component {
                     onChange={this.onChange}
                     value={this.state.address}
                     id="address"
+                    type="text"
+                    group
+                  />
+                  <MDBInput
+                    label="Channel"
+                    onChange={this.onChange}
+                    value={this.state.channel}
+                    id="channel"
                     type="text"
                     group
                   />
