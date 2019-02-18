@@ -8,7 +8,8 @@ class InputMatch extends Component {
         this.state = {
             match: {},
             player1: '',
-            player2: ''
+            player2: '',
+            
         }
     }
 
