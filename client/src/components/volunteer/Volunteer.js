@@ -47,10 +47,10 @@ class Volunteer extends Component {
     this.setState({
       modal: !this.state.modal
     });
-    this.player1 = this.state.match.player1.player.name
-    this.p1id = this.state.match.player1.player._id
-    this.player2 = this.state.match.player2.player.name
-    this.p2id = this.state.match.player2.player._id
+    this.player1 = this.state.match.player1.user.name
+    this.p1id = this.state.match.player1.user._id
+    this.player2 = this.state.match.player2.user.name
+    this.p2id = this.state.match.player2.user._id
     this.matchid = this.match
   }
 
@@ -72,6 +72,10 @@ class Volunteer extends Component {
     if (id === 'pending') {
       this.setState({
         tabPending: 'nav-link active',
+        tabJudge: 'nav-link',
+        tabUpcoming: 'nav-link',
+        tabFinished: 'nav-link',
+        tabRejected: 'nav-link',
 
       })
     } else if (id === 'judge') {
@@ -156,22 +160,24 @@ class Volunteer extends Component {
                   if (this.state.tab === 'judge' && tournament.status === 'running') {
                     var value = '';
                     let matches = [];
-                    let match = '';
-                    let matchId = '';
+                    let matchName = [];
+                    let matchId = [];
                     let a = tournament.brackets;
                     a.map((element) => {
                       let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
                       if (ajudges) {
                         console.log(` adjujes: ${ajudges}`)
-                        value = element.name
+                        value = element.name;
+                        console.log(`Value :${value}`)
+                        
                         matches = element.matches;
                         matches.map((element) => {
-                          if (element.judge === this.props.auth.user.id) {
-                            match = element.name;
-                            matchId = element._id;
-                          }
+                         
+                            matchName.push(element.name);
+                            matchId.push(element._id);
+                   
                         })
-                        console.log(`matchs: ${matches}`);
+                        
                       }
                     })
                     return (
@@ -180,7 +186,7 @@ class Volunteer extends Component {
                           name={tournament.name}
                           game={tournament.game}
                           brackets={value}
-                          match={match}
+                          matchName={matchName}
                           matchId={matchId}
                           toggle={this.toggle}
                         />
@@ -189,7 +195,7 @@ class Volunteer extends Component {
                           <MDBModalHeader toggle={this.toggle}>Match Edit</MDBModalHeader>
                           <MDBModalBody>
                             {/* id: player1, id: player2, id: match */}
-                            <InputMatch player1={this.player1} player2={this.player2} p1id={this.p1id} p2id={this.p2id} matchid={this.matchid} />
+                            <InputMatch toggle={this.toggle.bind(this)} player1={this.player1} player2={this.player2} p1id={this.p1id} p2id={this.p2id} matchid={this.matchid} />
                           </MDBModalBody>
                         </MDBModal>
                       </React.Fragment>

@@ -8,7 +8,8 @@ class InputMatch extends Component {
         this.state = {
             match: {},
             player1: '',
-            player2: ''
+            player2: '',
+            
         }
     }
 
@@ -19,7 +20,8 @@ class InputMatch extends Component {
     onSubmitClick = e => {
         this.data = {player1: this.state.player1, player2: this.state.player2}
         API.updateMatch(this.props.matchid, this.data ).then(res => {
-           alert("Match Updated");
+            {this.props.toggle()};
+          
         })
         //parent modal state = false
        

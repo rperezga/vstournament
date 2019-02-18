@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MDBBtn, MDBCard, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
+import Bracket from '../brackets/Brackets'
 
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 
@@ -12,6 +13,7 @@ class ViewTournament extends Component {
         super(props);
         this.state = {
             tournament: {},
+            bracketState: false,
             userId: '',
             asVolunteer: false,
             asPlayer: false,
@@ -26,8 +28,25 @@ class ViewTournament extends Component {
     componentDidMount() {
         API.getUser(this.props.auth.user.id).then(res => {
             this.setState({ userId: res.data.user._id });
-            this.loadTournament();
-        });
+            API.getTournament(this.props.match.params.id)
+                .then(res => {
+                    this.setState({ tournament: res.data });
+
+                    if (this.state.tournament.brackets.length > 0) {
+                        this.setState({ bracketState: true })
+                    }
+
+                    if (res.data.judges.find(judge => judge.user._id === this.props.auth.user.id)) {
+                        this.setState({ asVolunteer: true })
+                    }
+
+                    if (res.data.players.find(player => player.user._id === this.props.auth.user.id)) {
+                        this.setState({ asPlayer: true })
+                    }
+                }
+                )
+                .catch(err => console.log(err));
+        });        
     }
 
     handleClick(event) {
@@ -56,25 +75,6 @@ class ViewTournament extends Component {
         }
     }
 
-    loadTournament = () => {
-        const data = API.getTournament(this.props.match.params.id)
-            .then(res => {
-                this.setState({ tournament: res.data });
-
-                console.log(this.state.tournament)
-
-                if (res.data.judges.find(judge => judge.user === this.props.auth.user.id)) {
-                    this.setState({ asVolunteer: true })
-                }
-
-                if (res.data.players.find(player => player.user === this.props.auth.user.id)) {
-                    this.setState({ asPlayer: true })
-                }
-            }
-            )
-            .catch(err => console.log(err));
-    };
-
     volunteer = () => {
         const data = API.subsVolunteer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
@@ -94,7 +94,6 @@ class ViewTournament extends Component {
             })
             .catch(err => console.log(err));
     };
-
 
 
     render() {
@@ -118,15 +117,16 @@ class ViewTournament extends Component {
                                         <MDBBtn color="success" onClick={this.player} >Register</MDBBtn>
                                     }
                                 </div> :
-                                ""}
+                                ""
+                            }
 
                             {(this.props.auth.user.id && this.state.tournament.status === 'running') ?
                                 <div style={{ position: 'relative', width: '800px', margin: '0 auto' }}>
                                     <ReactTwitchEmbedVideo channel={this.state.tournament.channel} />
                                 </div>
-
                                 :
-                                ""}
+                                ""
+                            }
                         </div>
 
                         <hr />
@@ -147,7 +147,23 @@ class ViewTournament extends Component {
                             </ul>
                         </div>
 
-                        {this.state.tab == 'players' ?
+                        {this.state.tab == 'brackets' && this.state.bracketState ?
+                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                <Bracket matches={this.state.tournament.brackets[0].matches}/>
+                            </div>
+                            :
+                            ""
+                        }
+
+                        {this.state.tab == 'brackets' && !this.state.bracketState ?
+                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                <h3>Any bracket to show!</h3>
+                            </div>
+                            :
+                            ""
+                        }
+
+                        {this.state.tab == 'players' && this.state.tournament.players.length > 0 ?
 
                             <MDBTable>
                                 <MDBTableHead>
@@ -173,12 +189,25 @@ class ViewTournament extends Component {
                             ""
                         }
 
+                        {this.state.tab == 'players' && this.state.tournament.players.length == 0 ?
 
+                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                <h3>Any player registered yet!</h3>
+                            </div>
+                            :
+                            ""
+                        }
 
+                        {this.state.tab == 'updates' ?
+                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                <h3>Any notification yet!</h3>
+                            </div>
 
+                            :
+                            ""
+                        }
 
                     </MDBCard>
-
 
                 </div>
 
