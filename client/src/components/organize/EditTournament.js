@@ -105,8 +105,8 @@ import gameApi from "../../utils/gameAPI";
       let rows = [];
       this.state.players.map(player => {
 
-        let approveButton = <MDBBtn color="blue" outline size="sm" key={`${player.user._id.toString()}-approve-player`} data_user_id={player.user._id.toString()} onClick={this.approvePlayer}>Approve</MDBBtn>;
-        let declineButton = <MDBBtn color="blue" outline size="sm" key={`${player.user._id.toString()}-decline-player`} data_user_id={player.user._id.toString()} onClick={this.declinePlayer}>Decline</MDBBtn>;
+        let approveButton = <MDBBtn color="blue" outline size="sm" key={`approve-player-${player.user._id.toString()}`} id={`approve-player-${player.user._id.toString()}`} data-user-id={player.user._id.toString()} onClick={this.approvePlayer}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" key={`decline-player-${player.user._id.toString()}`} id={`decline-player-${player.user._id.toString()}`} data-user-id={player.user._id.toString()} onClick={this.declinePlayer}>Decline</MDBBtn>;
 
         let row = {
           id: id,
@@ -140,8 +140,8 @@ import gameApi from "../../utils/gameAPI";
       rows = [];
       this.state.judges.map(judge => {
 
-        let approveButton = <MDBBtn color="blue" outline size="sm" key={`${judge.user._id.toString()}-approve-judge`} data_user_id={judge.user._id.toString()} onClick={this.approveJudge}>Approve</MDBBtn>;
-        let declineButton = <MDBBtn color="blue" outline size="sm" key={`${judge.user._id.toString()}-decline-judge`} data_user_id={judge.user._id.toString()} onClick={this.declineJudge}>Decline</MDBBtn>;
+        let approveButton = <MDBBtn color="blue" outline size="sm" key={`approve-judge-${judge.user._id.toString()}`} id={`approve-judge-${judge.user._id.toString()}`} data-user-id={judge.user._id.toString()} onClick={this.approveJudge}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" key={`decline-judge-${judge.user._id.toString()}`} id={`decline-judge-${judge.user._id.toString()}`} data-user-id={judge.user._id.toString()} onClick={this.declineJudge}>Decline</MDBBtn>;
 
         let row = {
           id: id,
@@ -310,14 +310,14 @@ import gameApi from "../../utils/gameAPI";
 
 
     approvePlayer( event ) {
-      const tournamentId = this.props.match.params.id;
-      const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { player: { user: userId , status: 'approved' } };
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { player: { user: userId , status: 'approved' } };
 
       API.updatePlayerStatus( tournamentId , data )
       .then(
         ( response ) => {
-          var responseTournament = response.data;
+          var responseTournament = response.data.tournament;
           this.setState( { players: responseTournament.players } );
           this.componentDidMount();
         }
@@ -329,14 +329,14 @@ import gameApi from "../../utils/gameAPI";
 
 
     declinePlayer( event ) {
-      const tournamentId = this.props.match.params.id;
-      const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { player: { user: userId , status: 'declined' } };
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { player: { user: userId , status: 'declined' } };
 
       API.updatePlayerStatus( tournamentId , data )
       .then(
         ( response ) => {
-          var responseTournament = response.data;
+          var responseTournament = response.data.tournament;
           this.setState( { players: responseTournament.players } );
           this.componentDidMount();
         }
@@ -348,15 +348,15 @@ import gameApi from "../../utils/gameAPI";
 
 
     approveJudge( event ) {
-      const tournamentId = this.props.match.params.id;
-      const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { judge: { user: userId , status: 'approved' } };
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { judge: { user: userId , status: 'approved' } };
 
       API.updateJudgeStatus( tournamentId , data )
       .then(
         ( response ) => {
           var responseTournament = response.data.tournament;
-          this.setState( { players: responseTournament.judges } );
+          this.setState( { judges: responseTournament.judges } );
           this.componentDidMount();
         }
       )
@@ -367,15 +367,15 @@ import gameApi from "../../utils/gameAPI";
 
 
     declineJudge( event ) {
-      const tournamentId = this.props.match.params.id;
-      const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { judge: { user: userId , status: 'declined' } };
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { judge: { user: userId , status: 'declined' } };
 
       API.updateJudgeStatus( tournamentId , data )
       .then(
         ( response ) => {
           var responseTournament = response.data.tournament;
-          this.setState( { players: responseTournament.judges } );
+          this.setState( { judges: responseTournament.judges } );
           this.componentDidMount();
         }
       )
