@@ -63,6 +63,11 @@ export default {
     // update judge status
     updateJudgeStatus: function( id , data ) {
         return axios.put( `/api/tournaments/updateJudgeStatus/${id}` , data );
+    } ,
+
+    // generate brackets
+    generateBrackets: function( id ) {
+        return axios.put( `/api/tournaments/generateBrackets/${id}` );
     }
 
 };
