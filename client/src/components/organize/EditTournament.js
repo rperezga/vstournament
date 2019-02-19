@@ -50,6 +50,7 @@ import gameApi from "../../utils/gameAPI";
           game: '',
           address: '',
           venue: '',
+          channel:'',
           status: '',
           games: [],
           players: [],
@@ -88,6 +89,7 @@ import gameApi from "../../utils/gameAPI";
             gameId: res.data.game._id,
             address: res.data.address,
             venue: res.data.venue,
+            channel: res.data.channel,
             status: res.data.status,
             players: res.data.players,
             judges: res.data.judges
@@ -516,6 +518,22 @@ import gameApi from "../../utils/gameAPI";
                                 id="address"
                                 className="form-control"
                                 value={this.state.address}
+                                disabled={this.state.disable}
+                                onChange={this.onChange}
+                              />
+                              </MDBCol>
+                            </MDBRow>
+                            <br />
+                            <MDBRow>
+                            <MDBCol md="6">
+                              <label htmlFor="defaultFormContactNameEx" className="grey-text">
+                                Channel
+                              </label>
+                              <input
+                                type="text"
+                                id="channel"
+                                className="form-control"
+                                value={this.state.channel}
                                 disabled={this.state.disable}
                                 onChange={this.onChange}
                               />
