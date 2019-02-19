@@ -2,11 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const NotificationShema = new Schema({ 
+const NotificationShema = new Schema({
 
-    message: {
+    notificationType: {
         type: String,
-        required: true
+        required: true,
+        enum: [
+            'result',
+            'advances',
+            'eliminated',
+            'commentary'
+        ]
     },
 
     date: {
@@ -14,9 +20,9 @@ const NotificationShema = new Schema({
         default: Date.now
     },
 
-    notificationType: {
-        type: String,
-        required: true
+    tournament: {
+        type: Schema.Types.ObjectId,
+        ref: "Tournament"
     },
 
     bracket: {
@@ -24,15 +30,23 @@ const NotificationShema = new Schema({
         ref: "Bracket"
     },
 
-    tournament: {
+    match: {
         type: Schema.Types.ObjectId,
-        ref: "Tournament"
+        ref: "Bracket"
     },
 
-    event: {
+    player:{
         type: Schema.Types.ObjectId,
-        ref: "Event"
-    }
+        ref: "User"
+    },
+
+    message: [
+        {
+            type: String,
+            required: true
+        }
+    ]
+
 });
 
 module.exports = Notification = mongoose.model("Notification", NotificationShema, "notifications");

@@ -5,8 +5,8 @@ import {
     MDBRow,
     MDBCol,
     MDBAlert,
-    MDBTable, 
-    MDBTableBody, 
+    MDBTable,
+    MDBTableBody,
     MDBTableHead
   } from 'mdbreact';
 import API from '../../utils/tournamentAPI';
@@ -72,8 +72,10 @@ import gameApi from "../../utils/gameAPI";
         this.editTournamentInfo = this.editTournamentInfo.bind(this);
         this.onChange = this.onChange.bind(this);
         this.populatePlayersAndVolunteers = this.populatePlayersAndVolunteers.bind(this);
-        this.approveUser = this.approveUser.bind(this);
-        this.declineUser = this.declineUser.bind(this);
+        this.approvePlayer = this.approvePlayer.bind(this);
+        this.declinePlayer = this.declinePlayer.bind(this);
+        this.approveJudge = this.approveJudge.bind(this);
+        this.declineJudge = this.declineJudge.bind(this);
     }
 
     componentDidMount() {
@@ -87,7 +89,8 @@ import gameApi from "../../utils/gameAPI";
             address: res.data.address,
             venue: res.data.venue,
             status: res.data.status,
-            players: res.data.players
+            players: res.data.players,
+            judges: res.data.judges
           });
           this.setInfoMessage();
           this.loadAllGames();
@@ -102,8 +105,8 @@ import gameApi from "../../utils/gameAPI";
       let rows = [];
       this.state.players.map(player => {
 
-        let approveButton = <MDBBtn color="blue" outline size="sm" id={player.user._id} onClick={this.approveUser}>Approve</MDBBtn>;
-        let declineButton = <MDBBtn color="blue" outline size="sm" id={player.user._id} onClick={this.declineUser}>Decline</MDBBtn>;
+        let approveButton = <MDBBtn color="blue" outline size="sm" key={`approve-player-${player.user._id.toString()}`} id={`approve-player-${player.user._id.toString()}`} data-user-id={player.user._id.toString()} onClick={this.approvePlayer}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" key={`decline-player-${player.user._id.toString()}`} id={`decline-player-${player.user._id.toString()}`} data-user-id={player.user._id.toString()} onClick={this.declinePlayer}>Decline</MDBBtn>;
 
         let row = {
           id: id,
@@ -137,8 +140,8 @@ import gameApi from "../../utils/gameAPI";
       rows = [];
       this.state.judges.map(judge => {
 
-        let approveButton = <MDBBtn color="blue" outline size="sm" userId={judge.user._id} onClick={this.approveUser}>Approve</MDBBtn>;
-        let declineButton = <MDBBtn color="blue" outline size="sm" userId={judge.user._id} onClick={this.declineUser}>Decline</MDBBtn>;
+        let approveButton = <MDBBtn color="blue" outline size="sm" key={`approve-judge-${judge.user._id.toString()}`} id={`approve-judge-${judge.user._id.toString()}`} data-user-id={judge.user._id.toString()} onClick={this.approveJudge}>Approve</MDBBtn>;
+        let declineButton = <MDBBtn color="blue" outline size="sm" key={`decline-judge-${judge.user._id.toString()}`} id={`decline-judge-${judge.user._id.toString()}`} data-user-id={judge.user._id.toString()} onClick={this.declineJudge}>Decline</MDBBtn>;
 
         let row = {
           id: id,
@@ -177,35 +180,43 @@ import gameApi from "../../utils/gameAPI";
 
       if (this.state.status === 'new') {
         this.setState({
-          infoMessage: 'Tournament has been created. Press open to make tournament open for public',
+          infoMessage: `Tournament has been created. Press 'Open' to make tournament open for public.`,
           statusButton:'Open'
         })
       }
 
       else if (this.state.status === 'open') {
         this.setState ({
-          infoMessage: 'Tournament is open for registration and wating for approval of volunteers and players. Press close to close registration',
+          infoMessage: `Tournament is open for registration. Allow for players and volunteers to apply. Press 'Close' to close registration.`,
           statusButton: 'Close'
         })
       }
 
       else if (this.state.status === 'closed') {
         this.setState({
-          infoMessage:'Tournament is closed for registration. Press start to make tournament live',
+          infoMessage:`Tournament is closed for registration. Review players and volunteer applications. Press 'Generate Brackets' to create brackets and assign players and volunteers`,
+          statusButton: 'Generate Brackets'
+        })
+      }
+
+      else if (this.state.status === 'ready') {
+        this.setState({
+          infoMessage:`Brackets have been generated and tournament is ready! Press 'Start' to make tournament live.`,
           statusButton: 'Start'
         })
       }
 
+      // TODO: consider ending programatially
       else if (this.state.status === 'running') {
         this.setState({
-          infoMessage: 'Tournament is live. Press end once is done',
+          infoMessage: `Tournament is live! Press 'End' when you are finished running the tournament.`,
           statusButton: 'End'
         })
       }
 
       else if (this.state.status === 'finished') {
         this.setState({
-          infoMessage: 'Tournament has been completed. No other action require from your part',
+          infoMessage: 'Tournament has been completed. No other action require from your part.',
           statusButton: ''
         })
       }
@@ -241,25 +252,55 @@ import gameApi from "../../utils/gameAPI";
       }
     }
 
-    changeStatus () {
+    async changeStatus() {
+      var tournamentId = this.props.match.params.id;
+      var doGenerateBrackets = false;
+      var newTournamentStatus;
 
-      let status = '';
-
+      // determine new tournament status
       if (this.state.statusButton === 'Open')
-        {status = 'open';}
+        {newTournamentStatus = 'open';}
       else if (this.state.statusButton === 'Close')
-        {status = 'closed';}
+        {newTournamentStatus = 'closed';}
+      else if (this.state.statusButton === 'Generate Brackets') {
+        newTournamentStatus = 'ready';
+        doGenerateBrackets = true;
+      }
       else if (this.state.statusButton === 'Start')
-        {status = 'running';}
+        {newTournamentStatus = 'running';}
       else if (this.state.statusButton === 'End')
-        {status = 'finsihed';}
+        {newTournamentStatus = 'finsihed';}
 
-      API.updateStatus(this.props.match.params.id, {status: status})
+      try {
+        // generate brackets
+        if ( doGenerateBrackets ) {
+          let response = await API.generateBrackets( tournamentId );
+          let responseTournament = response.data.tournament;
+          console.log( responseTournament );
+        }
+
+        // update tournament status
+        let data = { status: newTournamentStatus };
+        API.updateStatus(tournamentId, data)
+          .then (res => {
+            this.setState({status: res.data.status, tab: 'info', tabInfo: 'nav-link active'});
+            this.setInfoMessage();
+          });
+      }
+      catch ( error ) {
+        console.log( error );
+      }
+
+      /*
+      // update tournament status
+      var data = { status: newTournamentStatus };
+      API.updateStatus(tournamentId, data)
         .then (res => {
           this.setState({status: res.data.status, tab: 'info', tabInfo: 'nav-link active'});
           this.setInfoMessage();
         })
         .catch(err => console.log(err));
+      */
     }
 
     editTournamentInfo () {
@@ -298,57 +339,88 @@ import gameApi from "../../utils/gameAPI";
           })
           .catch(err => console.log(err));
       }
-    } 
+    }
 
     onChange = e => {
       this.setState({ [e.target.id]: e.target.value });
     };
 
-    approveUser(event) {
 
-      const userId = event.target.id;
-      const data = {
-        players: [
-          {
-            user: userId,
-            status: 'approved'
+    approvePlayer( event ) {
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { player: { user: userId , status: 'approved' } };
+
+      API.updatePlayerStatus( tournamentId , data )
+        .then(
+          ( response ) => {
+            let responseTournament = response.data.tournament;
+            this.setState( { players: responseTournament.players } );
+            this.componentDidMount();
           }
-        ]
-      };
-
-      API.updateTournament(this.props.match.params.id, data)
-      .then (res => {
-        this.setState({
-          players: res.data.players,
-        });
-        this.componentDidMount();
-      })
-      .catch(err => console.log(err));
-
+        )
+        .catch(
+          ( error ) => console.log( error )
+        );
     }
 
-    declineUser(event) {
 
-      const userId = event.target.id;
-      const data = {
-        players: [
-          {
-            user: userId,
-            status: 'decline'
+    declinePlayer( event ) {
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { player: { user: userId , status: 'declined' } };
+
+      API.updatePlayerStatus( tournamentId , data )
+        .then(
+          ( response ) => {
+            let responseTournament = response.data.tournament;
+            this.setState( { players: responseTournament.players } );
+            this.componentDidMount();
           }
-        ]
-      };
-
-      API.updateTournament(this.props.match.params.id, data)
-      .then (res => {
-        this.setState({
-          players: res.data.players,
-        });
-        this.componentDidMount();
-      })
-      .catch(err => console.log(err));
-
+        )
+        .catch(
+          ( error ) => console.log( error )
+        );
     }
+
+
+    approveJudge( event ) {
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { judge: { user: userId , status: 'approved' } };
+
+      API.updateJudgeStatus( tournamentId , data )
+        .then(
+          ( response ) => {
+            let responseTournament = response.data.tournament;
+            this.setState( { judges: responseTournament.judges } );
+            this.componentDidMount();
+          }
+        )
+        .catch(
+          ( error ) => console.log( error )
+        );
+    }
+
+
+    declineJudge( event ) {
+      var tournamentId = this.props.match.params.id;
+      var userId = event.target.getAttribute( 'data-user-id' );
+      var data = { judge: { user: userId , status: 'declined' } };
+
+      API.updateJudgeStatus( tournamentId , data )
+        .then(
+          ( response ) => {
+            let responseTournament = response.data.tournament;
+            this.setState( { judges: responseTournament.judges } );
+            this.componentDidMount();
+          }
+        )
+        .catch(
+          ( error ) => console.log( error )
+        );
+    }
+
 
     render () {
         return (
@@ -376,7 +448,7 @@ import gameApi from "../../utils/gameAPI";
 
                         <div style={{ margin: "20px 50px" }}>
                           {this.state.tab === 'info' ?
-                          <div>                           
+                          <div>
                             <MDBAlert color="info" >
                               <MDBRow className="row">
                                 <MDBCol className="col-10" style={{paddingTop: '10px'}}>
@@ -399,19 +471,19 @@ import gameApi from "../../utils/gameAPI";
                                 className="form-control"
                                 value={this.state.name}
                                 disabled={this.state.disable}
-                                onChange={this.onChange} 
+                                onChange={this.onChange}
                               />
                               </MDBCol>
                               <MDBCol md="6">
                                 <label htmlFor="defaultFormContactNameEx" className="grey-text">
                                   Game
                                 </label>
-                                <select 
-                                  className="browser-default custom-select" 
-                                  id="game" 
-                                  onChange={this.onChange} 
+                                <select
+                                  className="browser-default custom-select"
+                                  id="game"
+                                  onChange={this.onChange}
                                   disabled={this.state.disable}>
-                                
+
                                 {this.state.games.length ? (
                                   this.state.games.map(game => (
                                   <option value={game._id}>{game.name}</option>
@@ -465,7 +537,7 @@ import gameApi from "../../utils/gameAPI";
                             <MDBTableBody rows={this.state.playersRows} />
                           </MDBTable> : ''
                           }
-                          
+
                           {this.state.tab === 'volunteers' ?
                             <MDBTable btn>
                             <MDBTableHead columns={this.state.columns} />
