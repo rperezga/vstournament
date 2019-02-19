@@ -36,4 +36,7 @@ router.route("/updatePlayerStatus/:id")
 router.route("/updateJudgeStatus/:id")
     .put( tournamentsController.updateJudgeStatus );
 
+router.route("/generateBrackets/:id")
+    .put( tournamentsController.generateBrackets );
+
 module.exports = router;
