@@ -17,7 +17,8 @@ const TournamentSchema = new Schema({
 
     tournamentTemplate: {
         type: String ,
-        required: true
+        required: true,
+        default: "eightPlayers"
     },
 
     createdAt: {
