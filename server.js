@@ -16,7 +16,6 @@ const tournaments = require("./routes/api/tournaments");
 const app = express();
 
 // Bodyparser middleware
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // DB Config
@@ -65,43 +64,43 @@ app.listen(port, () => console.log(`Server up and running on port ${port} !`));
 // ----  REAL TIME DATABASE  --------
 // ----  WEB SOCKET  -------- 
  
-io.on('connection', (socket) => {
-  socket.on('subscribeToTimer', (interval) => {
+// io.on('connection', (socket) => {
+//   socket.on('subscribeToTimer', (interval) => {
 
-    const pipeline = [
-      {
-        $project: { documentKey: false }
-      }
-    ];
+//     const pipeline = [
+//       {
+//         $project: { documentKey: false }
+//       }
+//     ];
     
-    MongoClient.connect(db)
-      .then(client => {
+//     MongoClient.connect(db)
+//       .then(client => {
     
-        console.log("Connected correctly to server");
-        // specify db and collections
-        const db = client.db();
-        const collection = db.collection("tests");
+//         console.log("Connected correctly to server");
+//         // specify db and collections
+//         const db = client.db();
+//         const collection = db.collection("tests");
     
-        const changeStream = collection.watch(pipeline);
-        // start listen to changes
-        changeStream.on("change", function (change) {
-          console.log('----------------------------------------------------')
-          console.log(change);
+//         const changeStream = collection.watch(pipeline);
+//         // start listen to changes
+//         changeStream.on("change", function (change) {
+//           console.log('----------------------------------------------------')
+//           console.log(change);
 
-          socket.emit('changeUpdate', change);
+//           socket.emit('changeUpdate', change);
           
-        });         
+//         });         
     
-      })
-      .catch(err => {
-        console.error(err);
-      });    
-  });
-});
+//       })
+//       .catch(err => {
+//         console.error(err);
+//       });    
+//   });
+// });
 
-const socketPort = 8080;
-io.listen(socketPort);
-console.log('listening on port ', socketPort);
+// const socketPort = 8080;
+// io.listen(socketPort);
+// console.log('listening on port ', socketPort);
 
 
 

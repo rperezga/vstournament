@@ -76,7 +76,7 @@ class ViewTournament extends Component {
     }
 
     volunteer = () => {
-        const data = API.subsVolunteer(this.state.tournament._id, { id: this.state.userId })
+        API.subsVolunteer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asVolunteer: true })
                 this.loadTournament()
@@ -86,7 +86,7 @@ class ViewTournament extends Component {
     };
 
     player = () => {
-        const data = API.subsPlayer(this.state.tournament._id, { id: this.state.userId })
+        API.subsPlayer(this.state.tournament._id, { id: this.state.userId })
             .then(res => {
                 this.setState({ asPlayer: true })
                 this.loadTournament()
