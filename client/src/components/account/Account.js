@@ -80,7 +80,6 @@ class Account extends Component {
 
 
   render() {
-    const { user } = this.props.auth;
 
     return (
       <MDBContainer className="mt-5 text-center">
