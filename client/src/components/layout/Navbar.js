@@ -2,86 +2,116 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
-import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import SideNav, { NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 
 import './Navbar.css'
 
 class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true
+    }
+
+    this.toggleNavMenu = this.toggleNavMenu.bind(this);
+  }
+
+  toggleNavMenu() {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
+
   render() {
     const { user } = this.props.auth;
     return (
       <React.Fragment>
+        <SideNav visible={this.props.visible} style={{ heigth: "100%", position: "fixed" }}>
 
-        <nav>
-          <div style={{textAlign: "center"}} >
-            <Link to="/" style={{ fontFamily: "monospace" }}>
-              <img src="./logo.png" id="logo" alt="VS Tournament" />
-            </Link>
-          </div>
-          <hr />
-        </nav>
+          <SideNav.Toggle onClick={() => {
+            this.props.toggleMenu(this.state.visible);
+            this.toggleNavMenu()
+          }
+          } />
 
-        <SideNav
-          onSelect={(selected) => {
+          {user.name ?
+            <SideNav.Nav defaultSelected="home">
 
-          }}
+              <NavItem eventKey="home">
+                <NavIcon>
+                  <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/">Tournaments</Link>
+                </NavText>
+              </NavItem>              
 
-          id="sidebar"
-        >
-          <SideNav.Toggle />
-          <SideNav.Nav defaultSelected="home">
+              <NavItem eventKey="organize">
+                <NavIcon>
+                  <Link to="/organize"><i className="fas fa-sitemap" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/organize">Organize</Link>
+                </NavText>
+              </NavItem>
 
-            <NavItem eventKey="home">
-              <NavIcon>
-                <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/">Tournaments</Link>
-              </NavText>
-            </NavItem>
+              <NavItem eventKey="volunteer">
+                <NavIcon>
+                  <Link to="/volunteer"><i className="fas fa-users" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/volunteer">Volunteer</Link>
+                </NavText>
+              </NavItem>
 
-            <NavItem eventKey="players">
-              <NavIcon>
-                <Link to="/players"><i className="fas fa-users" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/players">Players</Link>
-              </NavText>
-            </NavItem>
+              <NavItem eventKey="participate">
+                <NavIcon>
+                  <Link to="/participate"><i className="fas fa-bullhorn" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/participate">Paticipate</Link>
+                </NavText>
+              </NavItem>
 
-            <NavItem eventKey="organize">
-              <NavIcon>
-                <Link to="/organize"><i className="fas fa-sitemap" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/organize">Organize</Link>
-              </NavText>
-            </NavItem>
+              <NavItem eventKey="account">
+                <NavIcon>
+                  <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/account">Account</Link>
+                </NavText>
+              </NavItem>
+            </SideNav.Nav>
 
-            <NavItem eventKey="participate">
-              <NavIcon>
-                <Link to="/participate"><i className="fas fa-bullhorn" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/participate">Paticipate</Link>
-              </NavText>
-            </NavItem>
+            :
+            <SideNav.Nav defaultSelected="home">
 
-            <NavItem eventKey="account">
-              <NavIcon>
-                <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.75em' }} /></Link>
-              </NavIcon>
-              <NavText>
-                <Link to="/account">Account</Link>
-              </NavText>
-            </NavItem>
+              <NavItem eventKey="home">
+                <NavIcon>
+                  <Link to="/"><i className="fab fa-angellist" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/">Tournaments</Link>
+                </NavText>
+              </NavItem>
 
-          </SideNav.Nav>
+              <NavItem eventKey="account">
+                <NavIcon>
+                  <Link to="/account"><i className="far fa-user" style={{ fontSize: '1.4em' }} /></Link>
+                </NavIcon>
+                <NavText>
+                  <Link to="/account">Account</Link>
+                </NavText>
+              </NavItem>
+
+            </SideNav.Nav>
+          }
+
+
         </SideNav>
 
       </React.Fragment>
-
     );
   }
 }

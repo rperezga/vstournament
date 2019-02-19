@@ -6,14 +6,11 @@ import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
   MDBCardTitle,
   MDBCardText,
-  MDBCol,
-  MDBRow,
   MDBInput,
   MDBBtn
 } from 'mdbreact'
@@ -31,13 +28,13 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/events");
     }
 
     if (nextProps.errors) {
@@ -68,59 +65,49 @@ class Login extends Component {
     return (
       <React.Fragment >
 
-        <MDBRow>
-          <MDBCol md="4" className="offset-md-4">
-            <MDBCol>
-              <MDBCard style={{ width: "30rem" }}>
-                <MDBCardImage className="img-fluid" src="./login.jpg" waves />
-                <MDBCardBody>
-                  <MDBCardTitle>Sign in</MDBCardTitle>
-                  <MDBCardText>
-                    <form noValidate onSubmit={this.onSubmit}>
-                      <div className="grey-text">
+        <MDBCard style={{ width: "30rem", margin: "0 auto" }}>
+          <MDBCardImage className="img-fluid" src="./login.jpg" waves />
+          <MDBCardBody>
+            <MDBCardTitle>Sign in</MDBCardTitle>
+            <hr />
+            <MDBCardText>
+              <form noValidate onSubmit={this.onSubmit}>
+                <div className="grey-text">
 
-                        <MDBInput
-                          label="Type your email"
-                          icon="envelope"
-                          onChange={this.onChange}
-                          value={this.state.email}
-                          id="email"
-                          type="email"
-                          className={classnames("", {
-                            invalid: errors.email || errors.emailnotfound
-                          })}
-                          group
-                          type="email"
-                        />
+                  <MDBInput
+                    label="Type your email"
+                    onChange={this.onChange}
+                    value={this.state.email}
+                    id="email"
+                    type="email"
+                    className={classnames("", {
+                      invalid: errors.email || errors.emailnotfound
+                    })}
+                    group
+                  />
 
-                        <MDBInput
-                          label="Type your password"
-                          icon="lock"
-                          group
-                          type="password"
-                          validate
-                          onChange={this.onChange}
-                          value={this.state.password}
-                          id="password"
-                          type="password"
-                          className={classnames("", {
-                            invalid: errors.password || errors.passwordincorrect
-                          })}
-                        />
+                  <MDBInput
+                    label="Type your password"
+                    group
+                    type="password"
+                    id="password"
+                    onChange={this.onChange}
+                    value={this.state.password}
+                    className={classnames("", {
+                      invalid: errors.password || errors.passwordincorrect
+                    })}
+                  />
 
-                      </div>
-                      <div className="text-center">
-                        <MDBBtn type="submit" >Login</MDBBtn>
-                      </div>
-                    </form>
-                    <hr />
-                    <p className="font-weight-normal" style={{ textAlign: "center" }}>Do not have an account. <a href="#" className="font-weight-bold"><Link to="/register">Register Here!</Link></a></p>
-                  </MDBCardText>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-          </MDBCol>
-        </MDBRow>
+                </div>
+                <div className="text-center">
+                  <MDBBtn type="submit" >Sign in</MDBBtn>
+                </div>
+              </form>
+              <hr />
+              <p className="font-weight-normal" style={{ textAlign: "center" }}>Do not have an account. <a href="#" className="font-weight-bold"><Link to="/register">Register Here!</Link></a></p>
+            </MDBCardText>
+          </MDBCardBody>
+        </MDBCard>
       </React.Fragment>
     );
   }

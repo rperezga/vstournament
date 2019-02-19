@@ -11,12 +11,24 @@ const TournamentSchema = new Schema({
 
     game: {
         type: Schema.Types.ObjectId,
-        ref: "Game"
+        ref: "Game",
+        required: true
+    },
+
+    tournamentTemplate: {
+        type: String ,
+        required: true,
+        default: "eightPlayers"
+    },
+
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
 
     date: {
         type: Date,
-        default: Date.now
+        required: true
     },
 
     brackets: [
@@ -36,7 +48,17 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
-                required: true
+                default: "pending",
+                enum: [
+                    "pending",
+                    "approved",
+                    "declined"
+                ]
+            },
+            seedRank: {
+                type: Number,
+                required: true,
+                default: 0
             }
         }
     ],
@@ -51,7 +73,12 @@ const TournamentSchema = new Schema({
             //pending, approved, declined
             status: {
                 type: String,
-                required: true
+                default: "pending",
+                enum: [
+                    "pending",
+                    "approved",
+                    "declined"
+                ]
             }
         }
     ],
@@ -71,16 +98,42 @@ const TournamentSchema = new Schema({
             },
             position: {
                 type: Number,
-                required: true
             }
         }
     ],
-    
-    // the possible values are new, open, closed, running, ended
+
     status: {
         type: String,
+        required: true,
+        default: "new",
+        // enum: [
+        //     "new",    /* Organizer just created the tournament; only organizer can see under "Organize" */
+        //     "open",    /* Tournament is open to registration, becomes visible in "Tournaments". Players can register and volunteers can apply */
+        //     "closed",    /* Tournament registration is closed */
+        //     "running",    /* Tournmanent is live */
+        //     "finished"    /* Tournmanet is completed */
+        // ]
+    },
+
+    organizer: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+
+    venue: {
+        type: String,
         required: true
-    }
+    },
+
+    address: {
+        type: String,
+        required: true
+    },
+
+    channel: {
+        type: String,
+        required: true
+    },
 });
 
-module.exports = Tournament = mongoose.model("tournaments", TournamentSchema);
+module.exports = Tournament = mongoose.model("Tournament", TournamentSchema, "tournaments");
