@@ -53,6 +53,16 @@ export default {
 
     updateStatus: function (id, data) {
         return axios.put("/api/tournaments/status/" + id, data);
+    } ,
+
+    // update player status
+    updatePlayerStatus: function( id , data ) {
+        return axios.put( `/api/tournaments/updatePlayerStatus/${id}` , data );
+    } ,
+
+    // update judge status
+    updateJudgeStatus: function( id , data ) {
+        return axios.put( `/api/tournaments/updateJudgeStatus/${id}` , data );
     }
 
 };
