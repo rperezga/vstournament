@@ -164,7 +164,7 @@ module.exports = {
     updatePlayerStatus: async function( request , response ) {
         try {
             var tournamentId = request.params.id;
-            var requestPlayer = request.body;
+            var requestPlayer = request.body.player;
             // query tournament
             var tournament = await models.Tournament.findById( tournamentId );
             // find player to update
@@ -176,7 +176,7 @@ module.exports = {
             // save tournament
             tournament = await tournament.save();
             // return
-            response.json( tournament );
+            response.json( { tournament: tournament } );
         }
         catch( error ) {
             debugError( error );
@@ -189,7 +189,7 @@ module.exports = {
 
         try {
             var tournamentId = request.params.id;
-            var requestJudge = request.body;
+            var requestJudge = request.body.judge;
             debugValue( 'tournamentId' , tournamentId );
             debugValue( 'requestJudge' , requestJudge );
             // query tournament
@@ -204,11 +204,11 @@ module.exports = {
             // save tournament
             tournament = await tournament.save();
             // return
-            response.json( tournament );
+            response.json( { tournament: tournament } );
         }
         catch( error ) {
             debugError( error );
-            response.status( 422 ).json( { error: error.toString() } );
+            response.status( 422 ).json( { error: error.message } );
         }
 
         debugGroupEnd();

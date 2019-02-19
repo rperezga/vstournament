@@ -250,8 +250,9 @@ import gameApi from "../../utils/gameAPI";
 
       if (this.state.statusButton === 'Open')
         {status = 'open';}
-      else if (this.state.statusButton === 'Close')
-        {status = 'closed';}
+      else if (this.state.statusButton === 'Close') {
+        status = 'closed';
+      }
       else if (this.state.statusButton === 'Start')
         {status = 'running';}
       else if (this.state.statusButton === 'End')
@@ -311,7 +312,7 @@ import gameApi from "../../utils/gameAPI";
     approvePlayer( event ) {
       const tournamentId = this.props.match.params.id;
       const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { user: userId , status: 'approved' };
+      const data = { player: { user: userId , status: 'approved' } };
 
       API.updatePlayerStatus( tournamentId , data )
       .then(
@@ -330,7 +331,7 @@ import gameApi from "../../utils/gameAPI";
     declinePlayer( event ) {
       const tournamentId = this.props.match.params.id;
       const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { user: userId , status: 'declined' };
+      const data = { player: { user: userId , status: 'declined' } };
 
       API.updatePlayerStatus( tournamentId , data )
       .then(
@@ -349,12 +350,12 @@ import gameApi from "../../utils/gameAPI";
     approveJudge( event ) {
       const tournamentId = this.props.match.params.id;
       const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { user: userId , status: 'approved' };
+      const data = { judge: { user: userId , status: 'approved' } };
 
       API.updateJudgeStatus( tournamentId , data )
       .then(
         ( response ) => {
-          var responseTournament = response.data;
+          var responseTournament = response.data.tournament;
           this.setState( { players: responseTournament.judges } );
           this.componentDidMount();
         }
@@ -368,12 +369,12 @@ import gameApi from "../../utils/gameAPI";
     declineJudge( event ) {
       const tournamentId = this.props.match.params.id;
       const userId = event.target.getAttribute( 'data_user_id' );
-      const data = { user: userId , status: 'declined' };
+      const data = { judge: { user: userId , status: 'declined' } };
 
       API.updateJudgeStatus( tournamentId , data )
       .then(
         ( response ) => {
-          var responseTournament = response.data;
+          var responseTournament = response.data.tournament;
           this.setState( { players: responseTournament.judges } );
           this.componentDidMount();
         }
