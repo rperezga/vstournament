@@ -604,8 +604,10 @@ module.exports = {
     findById: function (req, res) {
         tournament
             .findById(req.params.id)
-            .populate('game')
-            .populate({path: 'brackets', populate: {path: 'matches'}})
+
+            .populate('game')  
+            .populate({path: 'brackets', populate: {path: 'matches', populate: {path:'player1.user'}}})
+            .populate({path: 'brackets', populate: {path: 'matches', populate: {path:'player2.user'}}})
             .populate('players.user')
             .populate('judges.user')
             .then(dbModel => res.json(dbModel))
