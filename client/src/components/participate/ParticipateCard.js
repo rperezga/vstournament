@@ -16,6 +16,7 @@ class ParticipateCard extends Component {
     }
 
     loadGame = () => {
+        console.log("en load game " + this.props.game);
         API.getGame(this.props.game)
             .then(res => {
                 this.setState({ game: res.data });
