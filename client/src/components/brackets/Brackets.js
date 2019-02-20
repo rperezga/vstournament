@@ -23,17 +23,15 @@ class Brackets extends Component {
    render() {
       return (
          <MDBContainer>
-            
-            <img src="./logo.png" id="logo" alt="VS Tournament" />
             <MDBRow>
                <MDBCol>
                {this.state.matches[0].status === 'new' ? <Match />
                      :
                   <Match
-                     player1={this.state.matches[0].player1.isBye ? "is" : this.state.matches[0].player1.user.userName}
-                     point1={this.state.matches[0].player1.isBye ? "Bye" : this.state.matches[0].player1.score}
-                     player2={this.state.matches[0].player2.isBye ? "is" : this.state.matches[0].player2.user.userName}
-                     point2={this.state.matches[0].player2.isBye ? "Bye" : this.state.matches[0].player2.score}
+                     player1={this.state.matches[0].player1.isBye ? "isBye" : this.state.matches[0].player1.user.userName}
+                     point1={this.state.matches[0].player1.isBye ? "" : this.state.matches[0].player1.score}
+                     player2={this.state.matches[0].player2.isBye ? "isBye" : this.state.matches[0].player2.user.userName}
+                     point2={this.state.matches[0].player2.isBye ? "" : this.state.matches[0].player2.score}
                   />
       }
                </MDBCol>
@@ -43,7 +41,7 @@ class Brackets extends Component {
             <MDBRow>
                <MDBCol></MDBCol>
                <MDBCol>
-                  {this.state.matches[4].status === 'new' ? <Match />
+                  {this.state.matches[4].status === 'new' ? ""
                      :
                      <Match
                         player1={this.state.matches[4].player1.user.userName}
@@ -58,10 +56,10 @@ class Brackets extends Component {
             <MDBRow>
                <MDBCol>
                   <Match
-                     player1={this.state.matches[1].player1.isBye ? "is" : this.state.matches[1].player1.user.userName}
-                     point1={this.state.matches[1].player1.isBye ? "Bye" : this.state.matches[1].player1.score}
-                     player2={this.state.matches[1].player2.isBye ? "is" : this.state.matches[1].player2.user.userName}
-                     point2={this.state.matches[1].player2.isBye ? "Bye" : this.state.matches[1].player2.score}
+                     player1={this.state.matches[1].player1.isBye ? "isBye" : this.state.matches[1].player1.user.userName}
+                     point1={this.state.matches[1].player1.isBye ? "" : this.state.matches[1].player1.score}
+                     player2={this.state.matches[1].player2.isBye ? "isBye" : this.state.matches[1].player2.user.userName}
+                     point2={this.state.matches[1].player2.isBye ? "" : this.state.matches[1].player2.score}
                   />
                </MDBCol>
                <MDBCol></MDBCol>
@@ -71,7 +69,7 @@ class Brackets extends Component {
                <MDBCol></MDBCol>
                <MDBCol></MDBCol>
                <MDBCol>
-                  {this.state.matches[6].status === 'new' ? <Match />
+                  {this.state.matches[6].status === 'new' ? ""
                      :
                      <Match
                         player1={this.state.matches[6].player1.user.userName}
@@ -85,10 +83,10 @@ class Brackets extends Component {
             <MDBRow>
                <MDBCol>
                   <Match
-                     player1={this.state.matches[2].player1.isBye ? "is" : this.state.matches[2].player1.user.userName}
-                     point1={this.state.matches[2].player1.isBye ? "Bye" : this.state.matches[2].player1.score}
-                     player2={this.state.matches[2].player2.isBye ? "is" : this.state.matches[2].player2.user.userName}
-                     point2={this.state.matches[2].player2.isBye ? "Bye" : this.state.matches[2].player2.score}
+                     player1={this.state.matches[2].player1.isBye ? "isBye" : this.state.matches[2].player1.user.userName}
+                     point1={this.state.matches[2].player1.isBye ? "" : this.state.matches[2].player1.score}
+                     player2={this.state.matches[2].player2.isBye ? "isBye" : this.state.matches[2].player2.user.userName}
+                     point2={this.state.matches[2].player2.isBye ? "" : this.state.matches[2].player2.score}
                   />
                </MDBCol>
                <MDBCol></MDBCol>
@@ -97,7 +95,7 @@ class Brackets extends Component {
             <MDBRow>
                <MDBCol></MDBCol>
                <MDBCol>
-                  {this.state.matches[5].status === 'new' ? <Match />
+                  {this.state.matches[5].status === 'new' ? ""
                      :
                      <Match
                         player1={this.state.matches[5].player1.user.userName}
@@ -112,10 +110,10 @@ class Brackets extends Component {
             <MDBRow>
                <MDBCol>
                   <Match
-                     player1={this.state.matches[3].player1.isBye ? "is" : this.state.matches[3].player1.user.userName}
-                     point1={this.state.matches[3].player1.isBye ? "Bye" : this.state.matches[3].player1.score}
-                     player2={this.state.matches[3].player2.isBye ? "is" : this.state.matches[3].player2.user.userName}
-                     point2={this.state.matches[3].player2.isBye ? "Bye" : this.state.matches[3].player2.score}
+                     player1={this.state.matches[3].player1.isBye ? "isBye" : this.state.matches[3].player1.user.userName}
+                     point1={this.state.matches[3].player1.isBye ? "" : this.state.matches[3].player1.score}
+                     player2={this.state.matches[3].player2.isBye ? "isBye" : this.state.matches[3].player2.user.userName}
+                     point2={this.state.matches[3].player2.isBye ? "" : this.state.matches[3].player2.score}
                   />
                </MDBCol>
                <MDBCol></MDBCol>
