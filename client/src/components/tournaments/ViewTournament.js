@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Bracket from '../brackets/Brackets'
 
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
+import { subscribeToTimer } from '../../socket';
 
 class ViewTournament extends Component {
 
@@ -21,8 +22,17 @@ class ViewTournament extends Component {
             tabBrackets: 'nav-link active',
             tabPlayers: 'nav-link',
             tabUpdates: 'nav-link',
+            value: 'no update yet',
+            notifications: []
         }
         this.handleClick = this.handleClick.bind(this);
+
+        subscribeToTimer((value) => {
+            let response = JSON.stringify(value);
+            this.setState({
+                value: response
+            })
+        });
     }
 
     componentDidMount() {
@@ -130,7 +140,7 @@ class ViewTournament extends Component {
                             }
                         </div>
 
-                       
+
 
                         <h4 style={{ margin: "0 0 20px 20px" }}>{this.state.tournament.name}</h4>
 
@@ -216,8 +226,10 @@ class ViewTournament extends Component {
                         {this.state.tab == 'updates' ?
                             <div style={{ textAlign: 'center', marginTop: '30px' }}>
                                 <h3>Any notification yet!</h3>
+                                <p className="App-intro">
+                                    This is the value: {this.state.value}
+                                </p>
                             </div>
-
                             :
                             ""
                         }
