@@ -13,21 +13,30 @@ router.route("/:id")
     .delete(tournamentsController.remove);
 
 router.route("/byuser/:id")
-    .get(tournamentsController.findByUserId)
+    .get(tournamentsController.findByUserId);
 
 router.route("/judge/:id")
-    .get(tournamentsController.findByJudge)
-    
+    .get(tournamentsController.findByJudge);
+
 router.route("/player/:id")
-    .get(tournamentsController.findByPlayer)
+    .get(tournamentsController.findByPlayer);
 
 router.route("/subsvolunteer/:id")
-    .put(tournamentsController.subsVolunteer)
+    .put(tournamentsController.subsVolunteer);
 
 router.route("/subsplayer/:id")
-    .put(tournamentsController.subsPlayer)
+    .put(tournamentsController.subsPlayer);
 
 router.route("/status/:id")
-    .put(tournamentsController.updateStatus)
+    .put(tournamentsController.updateStatus);
+
+router.route("/updatePlayerStatus/:id")
+    .put( tournamentsController.updatePlayerStatus );
+
+router.route("/updateJudgeStatus/:id")
+    .put( tournamentsController.updateJudgeStatus );
+
+router.route("/generateBrackets/:id")
+    .put( tournamentsController.generateBrackets );
 
 module.exports = router;
