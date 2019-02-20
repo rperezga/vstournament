@@ -48,6 +48,7 @@ import gameApi from "../../utils/gameAPI";
         this.state = {
           name: '',
           game: '',
+          gameId:'',
           address: '',
           venue: '',
           channel:'',
@@ -132,10 +133,7 @@ import gameApi from "../../utils/gameAPI";
 
       });
 
-      console.log(rows);
-
       this.setState({playersRows: rows});
-      console.log(this.state.playersRows);
 
       //get volunteers registered for tournament
       id = 1;
@@ -278,7 +276,6 @@ import gameApi from "../../utils/gameAPI";
         if ( doGenerateBrackets ) {
           let response = await API.generateBrackets( tournamentId );
           let responseTournament = response.data.tournament;
-          console.log( responseTournament );
         }
 
         // update tournament status
@@ -322,9 +319,11 @@ import gameApi from "../../utils/gameAPI";
       if (this.state.editButton == 'Update'){
         const data = {
           name: this.state.name,
-          game: this.state.game,
+          game: {
+            _id: this.state.gameId},
           venue: this.state.venue,
-          address: this.state.address
+          address: this.state.address,
+          channel: this.state.channel
         }
 
         API.updateTournament(this.props.match.params.id, data)
@@ -336,7 +335,8 @@ import gameApi from "../../utils/gameAPI";
               address: res.data.address,
               venue: res.data.venue,
               status: res.data.status,
-              players: res.data.players
+              players: res.data.players,
+              channel: res.data.channel
             })
           })
           .catch(err => console.log(err));
@@ -482,9 +482,10 @@ import gameApi from "../../utils/gameAPI";
                                 </label>
                                 <select
                                   className="browser-default custom-select"
-                                  id="game"
+                                  id="gameId"
                                   onChange={this.onChange}
-                                  disabled={this.state.disable}>
+                                  disabled={this.state.disable}
+                                  value={this.state.gameId}>
 
                                 {this.state.games.length ? (
                                   this.state.games.map(game => (
