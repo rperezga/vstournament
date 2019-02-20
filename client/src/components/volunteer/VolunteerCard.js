@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../../utils/tournamentAPI";
+import { element } from "prop-types";
 
 class VolunteerCard extends Component {
 
@@ -12,7 +13,8 @@ class VolunteerCard extends Component {
 
     componentDidMount() {
         this.loadGame();
-        console.log(this.props)
+        console.log(` Props:`)
+        console.log( this.props)
     }
 
     loadGame = () => {
@@ -41,13 +43,20 @@ class VolunteerCard extends Component {
                         {this.props.brackets ? <h5>Bracket: {this.props.brackets}</h5> : ''}
                         
                     </div>
-                    <div className="col-4" style={{textAlign: "center"}}>
-                    {this.props.match ? <button className="btn btn-primary" id="savebtn" dataid={this.props.matchId} onClick={()=>{ this.props.toggle()}}>{this.props.match}</button>  : ''}
-                    
-                    </div>
+
+                    {this.props.matchName ? <div> {this.props.matchName.map((element,index ) => {
+                       return( <div className="col-4" style={{textAlign: "center"}}>
+                       {element ? <button className="btn btn-primary" id="savebtn" dataid={this.props.matchId[index]} onClick={()=>{ this.props.toggle()}}>{element}</button>  : ''}
+                       
+                       </div>)
+                   
+                   })}</div>: ""}
+
+                  
                 </div>
             </li>
             </React.Fragment>
+            
         );
     }
 }

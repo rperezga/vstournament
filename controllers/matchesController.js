@@ -11,7 +11,7 @@ module.exports = {
 
     findById: function (req, res) {
         match
-            .findById(req.params.id).populate('player1.player').populate('player2.player')
+            .findById(req.params.id).populate('player1.user').populate('player2.user')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },

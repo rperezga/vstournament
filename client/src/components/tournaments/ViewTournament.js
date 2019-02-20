@@ -46,7 +46,7 @@ class ViewTournament extends Component {
                 }
                 )
                 .catch(err => console.log(err));
-        });        
+        });
     }
 
     handleClick(event) {
@@ -123,21 +123,26 @@ class ViewTournament extends Component {
                             {(this.props.auth.user.id && this.state.tournament.status === 'running') ?
                                 <div style={{ position: 'relative', width: '800px', margin: '0 auto' }}>
                                     <ReactTwitchEmbedVideo channel={this.state.tournament.channel} />
+                                    <hr />
                                 </div>
                                 :
                                 ""
                             }
                         </div>
 
-                        <hr />
+                       
 
                         <h4 style={{ margin: "0 0 20px 20px" }}>{this.state.tournament.name}</h4>
 
                         <div>
                             <ul className="nav nav-tabs">
-                                <li className="nav-item">
-                                    <a className={this.state.tabBrackets} id="brackets" onClick={this.handleClick}>Brackets</a>
-                                </li>
+                                {this.state.tournament.status === 'open' || this.state.tournament.status === 'new' ?
+                                    "" :
+                                    <li className="nav-item">
+                                        <a className={this.state.tabBrackets} id="brackets" onClick={this.handleClick}>Brackets</a>
+                                    </li>
+                                }
+
                                 <li className="nav-item">
                                     <a className={this.state.tabPlayers} id="players" onClick={this.handleClick}>Players</a>
                                 </li>
@@ -147,18 +152,28 @@ class ViewTournament extends Component {
                             </ul>
                         </div>
 
-                        {this.state.tab == 'brackets' && this.state.bracketState ?
-                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
-                                <Bracket matches={this.state.tournament.brackets[0].matches}/>
+                        {this.state.tab == 'brackets' && this.state.bracketState
+                            ?
+                            <div>
+                                {this.state.tournament.status === 'open' || this.state.tournament.status === 'new' ? "" :
+                                    <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                        <Bracket matches={this.state.tournament.brackets[0].matches} />
+                                    </div>
+                                }
                             </div>
                             :
                             ""
                         }
 
                         {this.state.tab == 'brackets' && !this.state.bracketState ?
-                            <div style={{ textAlign: 'center', marginTop: '30px' }}>
-                                <h3>Any bracket to show!</h3>
+                            <div>
+                                {this.state.tournament.status === 'open' || this.state.tournament.status === 'new' ? "" :
+                                    <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                                        <h3>Any bracket to show!</h3>
+                                    </div>
+                                }
                             </div>
+
                             :
                             ""
                         }
