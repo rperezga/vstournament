@@ -276,7 +276,6 @@ import gameApi from "../../utils/gameAPI";
         if ( doGenerateBrackets ) {
           let response = await API.generateBrackets( tournamentId );
           let responseTournament = response.data.tournament;
-          console.log( responseTournament );
         }
 
         // update tournament status
@@ -326,7 +325,7 @@ import gameApi from "../../utils/gameAPI";
           address: this.state.address,
           channel: this.state.channel
         }
-        console.log(data.game);
+
         API.updateTournament(this.props.match.params.id, data)
           .then (res => {
             this.setState({
