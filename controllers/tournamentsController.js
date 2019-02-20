@@ -610,6 +610,7 @@ module.exports = {
             .populate({path: 'brackets', populate: {path: 'matches', populate: {path:'player2.user'}}})
             .populate('players.user')
             .populate('judges.user')
+            .populate('notifications')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
