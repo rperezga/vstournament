@@ -26,6 +26,7 @@ class Tournaments extends Component {
 
     render() {
         return (
+            
             <div style={{ width: "94%", marginLeft: "3%" }}>
                 <h4>Live Tournaments</h4>
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
