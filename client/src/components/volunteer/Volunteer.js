@@ -151,7 +151,7 @@ class Volunteer extends Component {
                     <div>
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     </div>
                   )
@@ -184,7 +184,7 @@ class Volunteer extends Component {
                       <React.Fragment>
                         <VolunteerCard
                           name={tournament.name}
-                          game={tournament.game}
+                          game={tournament.game._id}
                           brackets={value}
                           matchName={matchName}
                           matchId={matchId}
@@ -207,14 +207,14 @@ class Volunteer extends Component {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   }
@@ -223,7 +223,7 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
-                      game={tournament.game.name}
+                      game={tournament.game._id}
                     />
                   )
                 }
