@@ -10,7 +10,7 @@ class CardTournament extends Component {
     render() {
         return (
             <React.Fragment>
-                
+
                 <Link to={"/viewtournament/" + this.props.id} >
                     <MDBCard style={{ width: "20rem", margin: "20px" }}>
                         <MDBCardImage className="img-fluid" src={this.props.thumbnail || "https://placehold.it/400x170"} waves />

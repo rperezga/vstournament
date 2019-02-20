@@ -33,16 +33,16 @@ class ViewTournament extends Component {
 
         subscribeToTimer((value) => {
             let response = value.fullDocument;
-            if(this.state.tournament._id == response.tournament){
+            if (this.state.tournament._id == response.tournament) {
                 toast(response.message);
-                this.setState((prevState,props) => {
-                    return({notifications: [...prevState.notifications,response]});
+                this.setState((prevState, props) => {
+                    return ({ notifications: [...prevState.notifications, response] });
                 })
-            }  
+            }
         });
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         API.getUser(this.props.auth.user.id).then(res => {
             this.setState({ userId: res.data.user._id });
             API.getTournament(this.props.match.params.id)
@@ -73,7 +73,7 @@ class ViewTournament extends Component {
                 }
                 )
                 .catch(err => console.log(err));
-        });        
+        });
     }
 
     handleClick(event) {
@@ -247,16 +247,15 @@ class ViewTournament extends Component {
                             {this.state.tab == 'updates' && this.state.notifications.length > 0 ?
                                 <div>
                                     {this.state.notifications.map(notification => {
-                                       return <div>
-                                           
-                                            {this.state.tournament._id == notification.tournament ? 
-                                                 <Notification
-                                                ntfType={notification.notificationType}
-                                                ntfDate={notification.date}
-                                                ntfMessage={notification.message}
-                                            />
-                                            : ""
-                                         } 
+                                        return <div>
+                                            {this.state.tournament._id == notification.tournament ?
+                                                <Notification
+                                                    ntfType={notification.notificationType}
+                                                    ntfDate={notification.date}
+                                                    ntfMessage={notification.message}
+                                                />
+                                                : ""
+                                            }
                                         </div>
                                     })}
                                 </div>
