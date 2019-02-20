@@ -153,7 +153,6 @@ class Volunteer extends Component {
                         name={tournament.name}
                         game={tournament.game.name}
                       />
-                      <Brackets />
                     </div>
                   )
                 } else if (result.status === 'approved') {
