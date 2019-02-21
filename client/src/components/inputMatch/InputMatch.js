@@ -86,6 +86,14 @@ class InputMatch extends Component {
         var applyAdvanceRuleDataResponse = await tournamentAPI.advancePlayers( this.props.tournamentid , applyAdvanceRuleData );
         // console.log( 'applyAdvanceRuleDataResponse.data' , applyAdvanceRuleDataResponse.data );
 
+        // notify result
+        var createResultNotificationData = {
+            bracketId: this.props.bracketid ,
+            matchId: this.props.matchid ,
+        };
+        var applyAdvanceRuleDataResponse = await tournamentAPI.createResultNotification( this.props.tournamentid , createResultNotificationData );
+        // console.log( 'applyAdvanceRuleDataResponse.data' , applyAdvanceRuleDataResponse.data );
+
         this.props.closemodal();
 
         // console.groupEnd();

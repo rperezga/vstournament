@@ -454,7 +454,11 @@ class EditTournament extends Component {
                           {this.state.infoMessage}
                         </MDBCol>
                         <MDBCol className="col-2">
-                          <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button>
+                          {
+                            !( this.state.status === 'finished' ) ?
+                            <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button> :
+                            ''
+                          }
                         </MDBCol>
                       </MDBRow>
                     </MDBAlert>

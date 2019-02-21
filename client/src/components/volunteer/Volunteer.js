@@ -174,10 +174,13 @@ class Volunteer extends Component {
                         ( judge ) => ( judge.user === this.props.auth.user.id )
                       );
                       return (
-                        ( ( this.state.tab === 'pending' ) && ( tournament.status === 'pending' ) ) ||
                         ( ( this.state.tab === 'judge' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'running' ) ) ||
-                        ( ( this.state.tab === 'finished' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'closed' ) ) ||
                         ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'new' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'open' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'closed' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'ready' ) ) ||
+                        ( ( this.state.tab === 'finished' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'finished' ) ) ||
+                        ( ( this.state.tab === 'pending' ) && ( tournament.status === 'pending' ) ) ||
                         ( ( this.state.tab === 'rejected' ) && ( tournamentJudge.status === 'rejected' ) )
                       )
                     }

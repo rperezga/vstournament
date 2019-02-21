@@ -42,4 +42,7 @@ router.route("/generateBrackets/:id")
 router.route("/advancePlayers/:id")
     .put( tournamentsController.advancePlayers );
 
+router.route("/createResultNotification/:id")
+    .put( tournamentsController.createResultNotification );
+
 module.exports = router;

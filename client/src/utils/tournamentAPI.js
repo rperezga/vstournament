@@ -78,6 +78,11 @@ export default {
     // advance players to next match
     advancePlayers: function( id , data ) {
         return axios.put( `/api/tournaments/advancePlayers/${id}` , data );
+    } ,
+
+    // create result notification
+    createResultNotification: function( id , data ) {
+        return axios.put( `/api/tournaments/createResultNotification/${id}` , data );
     }
 
 };
