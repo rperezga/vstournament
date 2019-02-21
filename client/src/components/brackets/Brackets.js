@@ -3,9 +3,6 @@ import { MDBContainer, MDBBtn, MDBRow, MDBCol } from 'mdbreact';
 import Match from '../match/Match';
 
 
-
-
-
 class Brackets extends Component {
    constructor(props) {
       super(props);
@@ -15,25 +12,20 @@ class Brackets extends Component {
       }
    }
 
-   componentDidMount() {
-      console.log(this.state.matches)
-
-   }
-
    render() {
       return (
          <MDBContainer>
             <MDBRow>
                <MDBCol>
-               {this.state.matches[0].status === 'new' ? <Match />
+                  {this.state.matches[0].status === 'new' ? <Match />
                      :
-                  <Match
-                     player1={this.state.matches[0].player1.isBye ? "isBye" : this.state.matches[0].player1.user.userName}
-                     point1={this.state.matches[0].player1.isBye ? "" : this.state.matches[0].player1.score}
-                     player2={this.state.matches[0].player2.isBye ? "isBye" : this.state.matches[0].player2.user.userName}
-                     point2={this.state.matches[0].player2.isBye ? "" : this.state.matches[0].player2.score}
-                  />
-      }
+                     <Match
+                        player1={this.state.matches[0].player1.isBye ? "isBye" : this.state.matches[0].player1.user.userName}
+                        point1={this.state.matches[0].player1.isBye ? "" : this.state.matches[0].player1.score}
+                        player2={this.state.matches[0].player2.isBye ? "isBye" : this.state.matches[0].player2.user.userName}
+                        point2={this.state.matches[0].player2.isBye ? "" : this.state.matches[0].player2.score}
+                     />
+                  }
                </MDBCol>
                <MDBCol></MDBCol>
                <MDBCol></MDBCol>

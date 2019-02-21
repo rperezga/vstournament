@@ -70,7 +70,6 @@ class App extends Component {
     return (
 
       <Provider store={store}>
-
         <Router>
           <React.Fragment>
             <Navbar toggleMenu={this.toggleMenu.bind(this)} />
@@ -85,7 +84,7 @@ class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/organize" component={Organize} />
                 <PrivateRoute exact path="/volunteer" component={Volunteer} />
-                <PrivateRoute exact path="/participate" component={Participate} />              
+                <PrivateRoute exact path="/participate" component={Participate} />
                 <PrivateRoute exact path="/account" component={Account} />
                 <PrivateRoute exact path="/edit-tournament/:id" component={EditTournament} />
               </Switch>
@@ -93,7 +92,6 @@ class App extends Component {
 
           </React.Fragment>
         </Router>
-
       </Provider>
     );
   }

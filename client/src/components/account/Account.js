@@ -6,9 +6,9 @@ import { logoutUser } from "../../actions/authActions";
 import API from "../../utils/tournamentAPI";
 import APIUser from "../../utils/userAPI";
 
-import { MDBJumbotron, MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter  } from "mdbreact";
+import { MDBJumbotron, MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 
-class Account extends Component {  
+class Account extends Component {
 
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ class Account extends Component {
       name: '',
       team: '',
       region: ''
-    }    
+    }
   }
 
   onChange = e => {
@@ -41,25 +41,25 @@ class Account extends Component {
   onEditClick = e => {
     this.setState({
       modal: !this.state.modal
-    }); 
+    });
 
-    this.state.userName = this.state.user.userName 
+    this.state.userName = this.state.user.userName
     this.state.playerName = this.state.user.playerName
     this.state.name = this.state.user.name
     this.state.team = this.state.user.team
-    this.state.region = this.state.user.region 
+    this.state.region = this.state.user.region
   };
 
   onCancelClick = e => {
     this.setState({
       modal: !this.state.modal
-    }); 
+    });
   };
 
   onSubmitClick = e => {
     this.setState({
       modal: !this.state.modal
-    }); 
+    });
 
     const userData = {
       userName: this.state.userName,
@@ -69,14 +69,14 @@ class Account extends Component {
       region: this.state.region
     };
 
-    APIUser.updateUser(this.props.auth.user.id, userData).then((res)=>{
-      if(res){
+    APIUser.updateUser(this.props.auth.user.id, userData).then((res) => {
+      if (res) {
         API.getUser(this.props.auth.user.id).then(res => {
           this.setState({ user: res.data.user });
         });
       }
     })
-  };  
+  };
 
 
   render() {
@@ -130,7 +130,7 @@ class Account extends Component {
                 className="btn btn-large waves-effect waves-light hoverable red accent-3"
               >
                 Logout
-              </button>             
+              </button>
 
             </MDBJumbotron>
           </MDBCol>
@@ -138,7 +138,7 @@ class Account extends Component {
 
         <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
           <form>
-            
+
             <MDBModalHeader toggle={this.toggle}>Edit Account</MDBModalHeader>
             <MDBModalBody>
               <MDBInput

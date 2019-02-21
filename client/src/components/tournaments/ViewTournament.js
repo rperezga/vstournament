@@ -128,11 +128,8 @@ class ViewTournament extends Component {
             <React.Fragment>
                 <ToastContainer />
 
-
                 <div>
-
                     <Link to="/" style={{ margin: "50px" }}> <i className="fas fa-arrow-left" /> Back to tournaments </Link>
-
                     <div style={{ width: '94%', margin: "30px auto" }}>
 
                         <MDBCard style={{ padding: "30px" }}>
@@ -266,21 +263,13 @@ class ViewTournament extends Component {
                             {this.state.tab == 'updates' && this.state.notifications.length == 0 ?
                                 <div style={{ textAlign: 'center', marginTop: '30px' }}>
                                     <h3>Any notification yet!</h3>
-                                    <p className="App-intro">
-                                        This is the value: {this.state.value}
-                                    </p>
                                 </div>
                                 :
                                 ""
                             }
-
-
                         </MDBCard>
-
                     </div>
-
                 </div>
-
             </React.Fragment>
         );
     }
