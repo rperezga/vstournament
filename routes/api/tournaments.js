@@ -39,4 +39,7 @@ router.route("/updateJudgeStatus/:id")
 router.route("/generateBrackets/:id")
     .put( tournamentsController.generateBrackets );
 
+router.route("/advancePlayers/:id")
+    .put( tournamentsController.advancePlayers );
+
 module.exports = router;
