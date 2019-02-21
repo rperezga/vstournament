@@ -71,8 +71,13 @@ export default {
     },
 
     // generate brackets
-    generateBrackets: function (id) {
-        return axios.put(`/api/tournaments/generateBrackets/${id}`);
+    generateBrackets: function( id ) {
+        return axios.put( `/api/tournaments/generateBrackets/${id}` );
+    } ,
+
+    // advance players to next match
+    advancePlayers: function( id , data ) {
+        return axios.put( `/api/tournaments/advancePlayers/${id}` , data );
     }
 
 };
