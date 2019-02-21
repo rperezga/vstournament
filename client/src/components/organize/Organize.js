@@ -176,7 +176,7 @@ class Organize extends Component {
             <div style={{ margin: "20px 50px" }}>
               <h1>
                 {this.state.tournaments.map((tournament) => {
-                  if (this.state.tab === 'new' && (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed')) {
+                  if (this.state.tab === 'new' && (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed' || tournament.status === 'ready')) {
                     return (
                       <OrganizeTab
                         name={tournament.name}
@@ -185,7 +185,7 @@ class Organize extends Component {
                         tournamentId={tournament._id}
                       />
                     )
-                  } 
+                  }
                   else if(this.state.tab === 'live' && tournament.status === 'running'){
                     return (
                       <OrganizeTab

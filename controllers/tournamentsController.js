@@ -490,7 +490,6 @@ const assignAndSeedPlayers = async function( tournamentId ) {
     // debugValue( 'tournament' , tournament );
 
     // save updated documents
-    var savedTournament;
     await asyncForEach(
         updatedDocuments ,
         async ( updatedDocument ) => {
@@ -586,6 +585,182 @@ const advanceByes = async function( tournamentId ) {
 }
 
 
+/*** FUNCTION advancePlayersMain()
+***/
+
+const advancePlayersMain = async function( tournamentId , bracketId , matchId ) {
+    debugGroup( 'FUNCTION advancePlayersMain()' );
+    debugValue( 'tournamentId' , tournamentId );
+    debugValue( 'matchId' , matchId );
+
+    var tournament = await models.Tournament.findById( tournamentId )
+        .populate(
+            {
+                path: 'brackets' ,
+                populate: {
+                    path: 'matches'
+                }
+            }
+        );
+    // debugValue( 'tournament' , tournament );
+    var tournamentTemplate = tournamentTemplates[ tournament.tournamentTemplate ];
+    // debugValue( 'tournamentTemplate' , tournamentTemplate );
+    var updatedDocumentIds = [];
+    var updatedDocuments = [];
+
+    // find bracket and match index
+    /*
+    var isMatchFound = false;
+    var bracketIndex = 0;
+    var matchIndex = 0;
+    while( !isMatchFound && ( bracketIndex < tournament.brackets.length ) ) {
+        while( !isMatchFound && ( matchIndex < tournament.brackets[ bracketIndex ].length ) ) {
+            if ( tournament[ bracketIndex ][ matchIndex ].id === matchId ) {
+                isMatchFound = true;
+            }
+        }
+    }
+    */
+    var bracketIndex = tournament.brackets.findIndex(
+        ( bracket ) => ( bracket.id === bracketId )
+    );
+    var matchIndex = tournament.brackets[ bracketIndex ].matches.findIndex(
+        ( match ) => ( match.id === matchId )
+    );
+    debugValue( 'bracketIndex' , bracketIndex );
+    debugValue( 'matchIndex' , matchIndex );
+
+    // find advance rule
+    var advanceRule = tournamentTemplate.advanceRules.find(
+        ( advanceRule ) => (
+            ( advanceRule.bracketIndex === bracketIndex ) &&
+            ( advanceRule.matchIndex === matchIndex )
+        )
+    );
+
+    // apply advance rule
+    applyAdvanceRule( tournament , advanceRule , updatedDocumentIds , updatedDocuments );
+
+    // save updated documents
+    await asyncForEach(
+        updatedDocuments ,
+        async ( updatedDocument ) => {
+            let savedDocument = await updatedDocument.save();
+            debugInfo( `Saved document ${ savedDocument.id }.` );
+        }
+    );
+
+    // debugValue( 'tournament' , tournament );
+    debugGroupEnd();
+    return tournament;
+}
+
+
+/*** FUNCTION createResultNotificationMain()
+***/
+
+const createResultNotificationMain = async function( tournamentId , bracketId , matchId ) {
+    debugGroup( 'FUNCTION createResultNotificationMain()' );
+    // debugValue( 'tournamentId' , tournamentId );
+    // debugValue( 'bracketId' , bracketId );
+    // debugValue( 'matchId' , matchId );
+
+    var tournament = await models.Tournament.findById( tournamentId );
+    var bracket = await models.Bracket.findById( bracketId );
+    var match = await models.Match.findById( matchId );
+    debugValue( 'tournament' , tournament );
+    debugValue( 'bracket' , bracket );
+    debugValue( 'match' , match );
+    var doCreateNotification = true;
+
+    // check match is finished
+    if ( match.status !== 'finished' ) {
+        doCreateNotification = false;
+        // debugGroupEnd();
+        // throw new RangeError( 'Match should be finished.' )
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    // check match has a winner
+    if ( !match.player1.isWinner && !match.player2.isWinner) {
+        doCreateNotification = false;
+        // debugGroupEnd();
+        // throw new RangeError( 'Match should should have a winner.' )
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    // check match has no byes
+    if ( match.player1.isBye || match.player2.isBye ) {
+        doCreateNotification = false;
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    if ( doCreateNotification ) {
+        // find additional details
+        await match.populate( 'player1.user' ).execPopulate();
+        await match.populate( 'player2.user' ).execPopulate();
+        debugValue( 'match' , match );
+
+        // create new notification
+        newNotification = models.Notification();
+        newNotification.date = new Date();
+        newNotification.notificationType = 'result';
+        newNotification.tournament = tournament._id;
+        newNotification.bracket = bracket._id;
+        newNotification.match = match._id;
+        // newNotification.message = `[${ bracket.name }] [${ match.name }] ${ match.player1.user.playerName } : ${ match.player1.score } – ${ match.player2.score } : ${ match.player2.user.playerName }`
+        newNotification.message = `${ match.name }: ${ match.player1.user.playerName } vs ${ match.player2.user.playerName }: ${ match.player1.score }–${ match.player2.score }`;
+        debugValue( 'newNotification' , newNotification );
+
+        // assign notification to tournament
+        tournament.notifications.push( newNotification._id );
+
+        // save documents
+        var savedNotification = await newNotification.save();
+        var savedTournament = await tournament.save();
+
+        debugGroupEnd();
+        return savedTournament;
+    }
+    else {
+        debugGroupEnd();
+        return tournament;
+    }
+
+}
+
+
+/*** FUNCTION createCommentaryNotificationMain()
+***/
+
+const createCommentaryNotificationMain = async function( tournamentId , commentary ) {
+    debugGroup( 'FUNCTION createCommentaryNotificationMain()' );
+    debugValue( 'tournamentId' , tournamentId );
+    debugValue( 'commentary' , commentary );
+
+    var tournament = await models.Tournament.findById( tournamentId );
+    debugValue( 'tournament' , tournament );
+
+    // create new notification
+    newNotification = models.Notification();
+    newNotification.date = new Date();
+    newNotification.notificationType = 'commentary';
+    newNotification.tournament = tournament._id;
+    newNotification.message = commentary;
+    debugValue( 'newNotification' , newNotification );
+
+    // assign notification to tournament
+    tournament.notifications.push( newNotification._id );
+
+    // save documents
+    var savedNotification = await newNotification.save();
+    var savedTournament = await tournament.save();
+
+    debugGroupEnd();
+    return savedTournament;
+}
+
+
 /*** Export
 ***/
 
@@ -605,11 +780,12 @@ module.exports = {
         tournament
             .findById(req.params.id)
 
-            .populate('game')  
+            .populate('game')
             .populate({path: 'brackets', populate: {path: 'matches', populate: {path:'player1.user'}}})
             .populate({path: 'brackets', populate: {path: 'matches', populate: {path:'player2.user'}}})
             .populate('players.user')
             .populate('judges.user')
+            .populate('notifications')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -652,7 +828,24 @@ module.exports = {
             .find({ 'judges.user': req.params.id })
             .populate('game')
             .populate('brackets')
-            .populate({path: 'brackets', populate: {path: 'matches'}})
+            .populate(
+                {
+                    path: 'brackets',
+                    populate: {
+                        path: 'matches',
+                        populate: [
+                            {
+                                path: 'player1.user' ,
+                                select: 'playerName'
+                            } ,
+                            {
+                                path: 'player2.user' ,
+                                select: 'playerName'
+                            }
+                        ]
+                    }
+                }
+            )
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -687,7 +880,10 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
 
+
     updatePlayerStatus: async function( request , response ) {
+        debugGroup( 'updatePlayerStatus()' );
+
         try {
             var tournamentId = request.params.id;
             var requestPlayer = request.body.player;
@@ -708,16 +904,17 @@ module.exports = {
             debugError( error );
             response.status( 422 ).json( { error: error.toString() } );
         }
+
+        debugGroupEnd();
     } ,
 
+
     updateJudgeStatus: async function( request , response ) {
-        debugGroupEnd( 'updateJudgeStatus()' );
+        debugGroup( 'updateJudgeStatus()' );
 
         try {
             var tournamentId = request.params.id;
             var requestJudge = request.body.judge;
-            debugValue( 'tournamentId' , tournamentId );
-            debugValue( 'requestJudge' , requestJudge );
             // query tournament
             var tournament = await models.Tournament.findById( tournamentId );
             // find judge to update
@@ -726,7 +923,6 @@ module.exports = {
             );
             // update judge
             judge.status = requestJudge.status;
-            debugValue( 'requestJudge' , requestJudge );
             // save tournament
             tournament = await tournament.save();
             // return
@@ -740,8 +936,9 @@ module.exports = {
         debugGroupEnd();
     } ,
 
+
     generateBrackets: async function( request , response ) {
-        debugGroupEnd( 'generateBrackets()' );
+        debugGroup( 'generateBrackets()' );
 
         try {
             var tournamentId = request.params.id;
@@ -760,6 +957,68 @@ module.exports = {
         catch( error ) {
             debugError( error );
             response.status( 422 ).json( { error: error.message } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    advancePlayers: async function( request , response ) {
+        debugGroup( 'advancePlayers()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var bracketId = request.body.bracketId;
+            var matchId = request.body.matchId;
+            // advance players
+            var tournament = await advancePlayersMain( tournamentId , bracketId , matchId );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    createResultNotification: async function( request , response ) {
+        debugGroup( 'createResultNotification()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var bracketId = request.body.bracketId;
+            var matchId = request.body.matchId;
+            // create result notification
+            var tournament = await createResultNotificationMain( tournamentId , bracketId , matchId );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    createCommentaryNotification: async function( request , response ) {
+        debugGroup( 'createCommentaryNotification()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var commentary = request.body.commentary;
+            // create commentary notification
+            var tournament = await createCommentaryNotificationMain( tournamentId , commentary );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
         }
 
         debugGroupEnd();

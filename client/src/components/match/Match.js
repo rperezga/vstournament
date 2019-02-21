@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './match.css';
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 
 class Match extends Component {
