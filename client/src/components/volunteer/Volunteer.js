@@ -3,62 +3,83 @@ import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import APIMatch from "../../utils/matchAPI";
 import VolunteerCard from './VolunteerCard';
-import { element } from "prop-types";
 
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-
-import Brackets from '../brackets/Brackets';
+import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import InputMatch from '../inputMatch/InputMatch';
+
 class Volunteer extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       tab: 'pending',
-      tabPending: 'nav-link active',
-      tabJudge: 'nav-link',
+      tabJudge: 'nav-link active',
       tabUpcoming: 'nav-link',
       tabFinished: 'nav-link',
+      tabPending: 'nav-link',
       tabRejected: 'nav-link',
       tournaments: [],
-      modal: false,
-      match: {}
+      match: {} ,
+      modal: false ,
+      modalTournamentId: undefined ,
+      modalBracketId: undefined ,
+      modalMatchId: undefined ,
+      modalMatch: undefined
     }
 
     this.handleClick = this.handleClick.bind(this);
-    this.toggle = this.toggle.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
     this.loadTournaments();
 
+    /*
     this.match = '5c5fb700ef4c2897efa5e501'
     APIMatch.getMatch(this.match)
       .then(res => {
         this.setState({ match: res.data });
-        console.log(this.state.match)
+        // console.log(this.state.match)
       }
       )
       .catch(err => console.log(err));
+    */
   }
 
-  toggle() {
-    console.log("CClicked")
-    this.setState({
-      modal: !this.state.modal
-    });
-    this.player1 = this.state.match.player1.user.name
-    this.p1id = this.state.match.player1.user._id
-    this.player2 = this.state.match.player2.user.name
-    this.p2id = this.state.match.player2.user._id
-    this.matchid = this.match
+
+  openModal( tournamentId , bracketId , matchId , match ) {
+    // console.group( 'Volunteer.openModal()' );
+    // console.log( 'tournamentId:' , tournamentId );
+    // console.log( 'bracketId:' , bracketId );
+    // console.log( 'matchId:' , matchId );
+    // console.log( 'match:' , match );
+
+    this.setState(
+      {
+        modal: !this.state.modal ,
+        modalTournamentId: tournamentId ,
+        modalBracketId: bracketId ,
+        modalMatchId: matchId ,
+        modalMatch: match
+      }
+    );
+
+    // console.groupEnd();
   }
 
-  loadTournaments = () => {
+
+  closeModal() {
+    this.loadTournaments();
+    this.setState( { modal: !this.state.modal } );
+  }
+
+
+  loadTournaments() {
     API.getJudgeTournaments(this.props.auth.user.id)
       .then(res => {
         this.setState({ tournaments: res.data });
-        console.log(this.state.tournaments)
+        // console.log(this.state.tournaments)
       }
       )
       .catch(err => console.log(err));
@@ -123,16 +144,16 @@ class Volunteer extends Component {
           <div style={{ margin: "0 50px" }}>
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a className={this.state.tabPending} id="pending" onClick={this.handleClick} >Pending Applications</a>
+                <a className={this.state.tabJudge} id="judge" onClick={this.handleClick}>Live Tournaments</a>
               </li>
               <li className="nav-item">
-                <a className={this.state.tabJudge} id="judge" onClick={this.handleClick}>Running Tournament</a>
+                <a className={this.state.tabUpcoming} id="upcoming" onClick={this.handleClick}>Upcoming Tournaments</a>
               </li>
               <li className="nav-item">
-                <a className={this.state.tabFinished} id="finished" onClick={this.handleClick}>Closed Tournament</a>
+                <a className={this.state.tabFinished} id="finished" onClick={this.handleClick}>Finished Tournaments</a>
               </li>
               <li className="nav-item">
-                <a className={this.state.tabUpcoming} id="upcoming" onClick={this.handleClick}>New Tournament</a>
+                <a className={this.state.tabPending} id="pending" onClick={this.handleClick}>Pending Applications</a>
               </li>
               <li className="nav-item">
                 <a className={this.state.tabRejected} id="rejected" onClick={this.handleClick}>Rejected Applications</a>
@@ -143,97 +164,61 @@ class Volunteer extends Component {
           <div style={{ margin: "20px 50px" }}>
             <h1>
 
-              {this.state.tournaments.map((tournament, index) => {
-                const result = tournament.judges.find(judge => judge.user === this.props.auth.user.id);
-
-                if (this.state.tab === 'pending' && result.status === 'pending') {
-                  return (
-                    <div>
-                      <VolunteerCard
-                        name={tournament.name}
-                        game={tournament.game._id}
-                      />
-                    </div>
+              {
+                (
+                  // return tournaments in active tab
+                  this.state.tournaments.filter(
+                    ( tournament ) => {
+                      // find judge in tournament
+                      let tournamentJudge = tournament.judges.find(
+                        ( judge ) => ( judge.user === this.props.auth.user.id )
+                      );
+                      return (
+                        ( ( this.state.tab === 'judge' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'running' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'new' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'open' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'closed' ) ) ||
+                        ( ( this.state.tab === 'upcoming' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'ready' ) ) ||
+                        ( ( this.state.tab === 'finished' ) && ( tournamentJudge.status === 'approved' ) && ( tournament.status === 'finished' ) ) ||
+                        ( ( this.state.tab === 'pending' ) && ( tournament.status === 'pending' ) ) ||
+                        ( ( this.state.tab === 'rejected' ) && ( tournamentJudge.status === 'rejected' ) )
+                      )
+                    }
                   )
-                } else if (result.status === 'approved') {
-                  if (this.state.tab === 'judge' && tournament.status === 'running') {
-                    var value = '';
-                    let matches = [];
-                    let matchName = [];
-                    let matchId = [];
-                    let matchPlayer1 = [];
-                    let matchPlayer2 = [];
-                    let a = tournament.brackets;
-                    a.map((element) => {
-                      let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
-                      if (ajudges) {
-                        value = element.name;                        
-                        matches = element.matches;
-                        matches.map((element) => {
-                         
-                            matchName.push(element.name);
-                            matchId.push(element._id);
-                            matchPlayer1.push(element.player1);
-                            matchPlayer2.push(element.player2);
-                   
-                        })
-                        
-                      }
-                    })
-                    return (
-                      <React.Fragment>
-                        <VolunteerCard
-                          name={tournament.name}
-                          game={tournament.game._id}
-                          brackets={value}
-                          matchName={matchName}
-                          matchId={matchId}
-                          toggle={this.toggle}
-                          player1={matchPlayer1}
-                          player2={matchPlayer2}
-                        />
-
-                        <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-                          <MDBModalHeader toggle={this.toggle}>Match Edit</MDBModalHeader>
-                          <MDBModalBody>
-                            {/* id: player1, id: player2, id: match */}
-                            <InputMatch toggle={this.toggle.bind(this)} player1={this.player1} player2={this.player2} p1id={this.p1id} p2id={this.p2id} matchid={this.matchid} />
-                          </MDBModalBody>
-                        </MDBModal>
-                      </React.Fragment>
-
-                    )
-                  } else if (this.state.tab === 'finished' && tournament.status === 'closed') {
-                    return (
-                      <VolunteerCard
-                        name={tournament.name}
-                        game={tournament.game._id}
-                      />
-                    )
-                  } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
-                    return (
-                      <VolunteerCard
-                        name={tournament.name}
-                        game={tournament.game._id}
-                      />
-                    )
-                  }
-                }
-                else if (this.state.tab === 'rejected' && result.status === 'rejected') {
-                  return (
-                    <VolunteerCard
-                      name={tournament.name}
-                      game={tournament.game._id}
-                    />
+                  .map(
+                    ( tournament , tournamentIndex ) => {
+                      // console.log( '[Volunteer.render()] tournamentIndex' , tournamentIndex );
+                      // console.log( '[Volunteer.render()] tournament._id' , tournament._id );
+                      // console.log( '[Volunteer.render()] tournament.name' , tournament.name );
+                      return (
+                        <React.Fragment key={`tournament-${tournament._id}-ReactFragment`}>
+                          <VolunteerCard  id={`tournament-${tournament._id}-VolunteerCard`} tournament={tournament} userid={this.props.auth.user.id} openmodal={this.openModal} />
+                        </React.Fragment>
+                      )
+                    }
                   )
-                }
-              })
-
+                )
               }
 
             </h1>
           </div>
         </div>
+
+
+        <MDBModal isOpen={this.state.modal} toggle={this.closeModal}>
+          <MDBModalHeader toggle={this.closeModal}>Match Edit</MDBModalHeader>
+          <MDBModalBody>
+            <InputMatch
+              tournamentid={this.state.modalTournamentId}
+              bracketid={this.state.modalBracketId}
+              matchid={this.state.modalMatchId}
+              match={this.state.modalMatch}
+              closemodal={this.closeModal}
+            />
+          </MDBModalBody>
+        </MDBModal>
+
+
       </div>
 
     );
