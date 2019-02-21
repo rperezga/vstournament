@@ -9,7 +9,7 @@ class InputMatch extends Component {
             match: {},
             player1: '',
             player2: '',
-            
+
         }
     }
 
@@ -17,14 +17,13 @@ class InputMatch extends Component {
         e.preventDefault();
         this.setState({ [e.target.id]: e.target.value });
     }
+
     onSubmitClick = e => {
-        this.data = {player1: this.state.player1, player2: this.state.player2}
-        API.updateMatch(this.props.matchid, this.data ).then(res => {
-            {this.props.toggle()};
-          
+        this.data = { player1: this.state.player1, player2: this.state.player2 }
+        API.updateMatch(this.props.matchid, this.data).then(res => {
+            { this.props.toggle() };
+
         })
-        //parent modal state = false
-       
     };
 
     render() {

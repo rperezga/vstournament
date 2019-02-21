@@ -4,10 +4,6 @@ import Moment from 'react-moment';
 
 class Notification extends Component {
 
-    componentDidMount() {
-        console.log(this.props)
-    }
-
     render() {
         return (
             <div className="container" style={{ margin: "20px" }}>
@@ -85,3 +81,4 @@ class Notification extends Component {
 }
 
 export default Notification;
+

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import API from "../../utils/tournamentAPI";
-
 import CardTournament from "./CardTournament"
 
 class Tournaments extends Component {
@@ -16,7 +15,6 @@ class Tournaments extends Component {
     loadAllTournaments = () => {
         API.getTournaments()
             .then(res => {
-                console.log(res.data)
                 this.setState({ tournaments: res.data });
             }
             )

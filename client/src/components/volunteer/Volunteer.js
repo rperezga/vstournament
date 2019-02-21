@@ -3,12 +3,10 @@ import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import APIMatch from "../../utils/matchAPI";
 import VolunteerCard from './VolunteerCard';
-import { element } from "prop-types";
 
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-
-import Brackets from '../brackets/Brackets';
+import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import InputMatch from '../inputMatch/InputMatch';
+
 class Volunteer extends Component {
 
   constructor(props) {
@@ -36,14 +34,12 @@ class Volunteer extends Component {
     APIMatch.getMatch(this.match)
       .then(res => {
         this.setState({ match: res.data });
-        console.log(this.state.match)
       }
       )
       .catch(err => console.log(err));
   }
 
   toggle() {
-    console.log("CClicked")
     this.setState({
       modal: !this.state.modal
     });
@@ -58,7 +54,6 @@ class Volunteer extends Component {
     API.getJudgeTournaments(this.props.auth.user.id)
       .then(res => {
         this.setState({ tournaments: res.data });
-        console.log(this.state.tournaments)
       }
       )
       .catch(err => console.log(err));
@@ -151,7 +146,7 @@ class Volunteer extends Component {
                     <div>
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     </div>
                   )
@@ -161,33 +156,36 @@ class Volunteer extends Component {
                     let matches = [];
                     let matchName = [];
                     let matchId = [];
+                    let matchPlayer1 = [];
+                    let matchPlayer2 = [];
                     let a = tournament.brackets;
                     a.map((element) => {
                       let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
                       if (ajudges) {
-                        console.log(` adjujes: ${ajudges}`)
                         value = element.name;
-                        console.log(`Value :${value}`)
-                        
                         matches = element.matches;
                         matches.map((element) => {
-                         
-                            matchName.push(element.name);
-                            matchId.push(element._id);
-                   
+
+                          matchName.push(element.name);
+                          matchId.push(element._id);
+                          matchPlayer1.push(element.player1);
+                          matchPlayer2.push(element.player2);
+
                         })
-                        
+
                       }
                     })
                     return (
                       <React.Fragment>
                         <VolunteerCard
                           name={tournament.name}
-                          game={tournament.game}
+                          game={tournament.game._id}
                           brackets={value}
                           matchName={matchName}
                           matchId={matchId}
                           toggle={this.toggle}
+                          player1={matchPlayer1}
+                          player2={matchPlayer2}
                         />
 
                         <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
@@ -204,14 +202,14 @@ class Volunteer extends Component {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   }
@@ -220,7 +218,7 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
-                      game={tournament.game.name}
+                      game={tournament.game._id}
                     />
                   )
                 }

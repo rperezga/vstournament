@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ParticipateCard from './ParticipateCard';
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
-import { element } from "prop-types";
 
 class Participate extends Component {
   constructor(props) {
@@ -28,7 +27,6 @@ class Participate extends Component {
     API.getPlayerTournaments(this.props.auth.user.id)
       .then(res => {
         this.setState({ tournaments: res.data });
-        console.log(this.state.tournaments)
       }
       )
       .catch(err => console.log(err));
@@ -83,7 +81,6 @@ class Participate extends Component {
   }
 
 
-
   render() {
     return (
       <div>
@@ -117,12 +114,11 @@ class Participate extends Component {
 
                 {this.state.tournaments.map((tournament, index) => {
                   const result = tournament.players.find(player => player.user === this.props.auth.user.id);
-                  console.log(result);
                   if (this.state.tab === 'pending' && result.status === 'pending') {
                     return (
                       <ParticipateCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   } else if (result.status === 'approved') {
@@ -168,14 +164,11 @@ class Participate extends Component {
                   }
                 })
                 }
-
               </h1>
             </div>
           </div>
         </div>
       </div>
-
-
     );
   }
 }
