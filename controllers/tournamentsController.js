@@ -490,7 +490,6 @@ const assignAndSeedPlayers = async function( tournamentId ) {
     // debugValue( 'tournament' , tournament );
 
     // save updated documents
-    var savedTournament;
     await asyncForEach(
         updatedDocuments ,
         async ( updatedDocument ) => {
@@ -654,6 +653,111 @@ const advancePlayersMain = async function( tournamentId , bracketId , matchId ) 
     // debugValue( 'tournament' , tournament );
     debugGroupEnd();
     return tournament;
+}
+
+
+/*** FUNCTION createResultNotificationMain()
+***/
+
+const createResultNotificationMain = async function( tournamentId , bracketId , matchId ) {
+    debugGroup( 'FUNCTION createResultNotificationMain()' );
+    // debugValue( 'tournamentId' , tournamentId );
+    // debugValue( 'bracketId' , bracketId );
+    // debugValue( 'matchId' , matchId );
+
+    var tournament = await models.Tournament.findById( tournamentId );
+    var bracket = await models.Bracket.findById( bracketId );
+    var match = await models.Match.findById( matchId );
+    debugValue( 'tournament' , tournament );
+    debugValue( 'bracket' , bracket );
+    debugValue( 'match' , match );
+    var doCreateNotification = true;
+
+    // check match is finished
+    if ( match.status !== 'finished' ) {
+        doCreateNotification = false;
+        // debugGroupEnd();
+        // throw new RangeError( 'Match should be finished.' )
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    // check match has a winner
+    if ( !match.player1.isWinner && !match.player2.isWinner) {
+        doCreateNotification = false;
+        // debugGroupEnd();
+        // throw new RangeError( 'Match should should have a winner.' )
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    // check match has no byes
+    if ( match.player1.isBye || match.player2.isBye ) {
+        doCreateNotification = false;
+    }
+    debugValue( 'doCreateNotification' , doCreateNotification );
+
+    if ( doCreateNotification ) {
+        // find additional details
+        await match.populate( 'player1.user' ).execPopulate();
+        await match.populate( 'player2.user' ).execPopulate();
+        debugValue( 'match' , match );
+
+        // create new notification
+        newNotification = models.Notification();
+        newNotification.date = new Date();
+        newNotification.notificationType = 'result';
+        newNotification.tournament = tournament._id;
+        newNotification.bracket = bracket._id;
+        newNotification.match = match._id;
+        // newNotification.message = `[${ bracket.name }] [${ match.name }] ${ match.player1.user.playerName } : ${ match.player1.score } – ${ match.player2.score } : ${ match.player2.user.playerName }`
+        newNotification.message = `${ match.name }: ${ match.player1.user.playerName } vs ${ match.player2.user.playerName }: ${ match.player1.score }–${ match.player2.score }`;
+        debugValue( 'newNotification' , newNotification );
+
+        // assign notification to tournament
+        tournament.notifications.push( newNotification._id );
+
+        // save documents
+        var savedNotification = await newNotification.save();
+        var savedTournament = await tournament.save();
+
+        debugGroupEnd();
+        return savedTournament;
+    }
+    else {
+        debugGroupEnd();
+        return tournament;
+    }
+
+}
+
+
+/*** FUNCTION createCommentaryNotificationMain()
+***/
+
+const createCommentaryNotificationMain = async function( tournamentId , commentary ) {
+    debugGroup( 'FUNCTION createCommentaryNotificationMain()' );
+    debugValue( 'tournamentId' , tournamentId );
+    debugValue( 'commentary' , commentary );
+
+    var tournament = await models.Tournament.findById( tournamentId );
+    debugValue( 'tournament' , tournament );
+
+    // create new notification
+    newNotification = models.Notification();
+    newNotification.date = new Date();
+    newNotification.notificationType = 'commentary';
+    newNotification.tournament = tournament._id;
+    newNotification.message = commentary;
+    debugValue( 'newNotification' , newNotification );
+
+    // assign notification to tournament
+    tournament.notifications.push( newNotification._id );
+
+    // save documents
+    var savedNotification = await newNotification.save();
+    var savedTournament = await tournament.save();
+
+    debugGroupEnd();
+    return savedTournament;
 }
 
 
@@ -868,6 +972,47 @@ module.exports = {
             var matchId = request.body.matchId;
             // advance players
             var tournament = await advancePlayersMain( tournamentId , bracketId , matchId );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    createResultNotification: async function( request , response ) {
+        debugGroup( 'createResultNotification()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var bracketId = request.body.bracketId;
+            var matchId = request.body.matchId;
+            // create result notification
+            var tournament = await createResultNotificationMain( tournamentId , bracketId , matchId );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    createCommentaryNotification: async function( request , response ) {
+        debugGroup( 'createCommentaryNotification()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var commentary = request.body.commentary;
+            // create commentary notification
+            var tournament = await createCommentaryNotificationMain( tournamentId , commentary );
             // return
             response.json( { tournament: tournament } );
         }
