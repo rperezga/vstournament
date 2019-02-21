@@ -265,7 +265,7 @@ class EditTournament extends Component {
       doGenerateBrackets = true;
     }
     else if (this.state.statusButton === 'Start') { newTournamentStatus = 'running'; }
-    else if (this.state.statusButton === 'End') { newTournamentStatus = 'finsihed'; }
+    else if (this.state.statusButton === 'End') { newTournamentStatus = 'finished'; }
 
     try {
       // generate brackets
