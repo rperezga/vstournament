@@ -661,6 +661,9 @@ const advancePlayersMain = async function( tournamentId , bracketId , matchId ) 
 
 const createResultNotificationMain = async function( tournamentId , bracketId , matchId ) {
     debugGroup( 'FUNCTION createResultNotificationMain()' );
+    // debugValue( 'tournamentId' , tournamentId );
+    // debugValue( 'bracketId' , bracketId );
+    // debugValue( 'matchId' , matchId );
 
     var tournament = await models.Tournament.findById( tournamentId );
     var bracket = await models.Bracket.findById( bracketId );
@@ -706,7 +709,7 @@ const createResultNotificationMain = async function( tournamentId , bracketId , 
         newNotification.bracket = bracket._id;
         newNotification.match = match._id;
         // newNotification.message = `[${ bracket.name }] [${ match.name }] ${ match.player1.user.playerName } : ${ match.player1.score } – ${ match.player2.score } : ${ match.player2.user.playerName }`
-        newNotification.message = `${ match.name }: ${ match.player1.user.playerName } vs ${ match.player2.user.playerName }: ${ match.player1.score } – ${ match.player2.score }`
+        newNotification.message = `${ match.name }: ${ match.player1.user.playerName } vs ${ match.player2.user.playerName }: ${ match.player1.score }–${ match.player2.score }`;
         debugValue( 'newNotification' , newNotification );
 
         // assign notification to tournament
@@ -716,13 +719,46 @@ const createResultNotificationMain = async function( tournamentId , bracketId , 
         var savedNotification = await newNotification.save();
         var savedTournament = await tournament.save();
 
+        debugGroupEnd();
         return savedTournament;
     }
+    else {
+        debugGroupEnd();
+        return tournament;
+    }
 
-    debugGroupEnd();
 }
 
 
+/*** FUNCTION createCommentaryNotificationMain()
+***/
+
+const createCommentaryNotificationMain = async function( tournamentId , commentary ) {
+    debugGroup( 'FUNCTION createCommentaryNotificationMain()' );
+    debugValue( 'tournamentId' , tournamentId );
+    debugValue( 'commentary' , commentary );
+
+    var tournament = await models.Tournament.findById( tournamentId );
+    debugValue( 'tournament' , tournament );
+
+    // create new notification
+    newNotification = models.Notification();
+    newNotification.date = new Date();
+    newNotification.notificationType = 'commentary';
+    newNotification.tournament = tournament._id;
+    newNotification.message = commentary;
+    debugValue( 'newNotification' , newNotification );
+
+    // assign notification to tournament
+    tournament.notifications.push( newNotification._id );
+
+    // save documents
+    var savedNotification = await newNotification.save();
+    var savedTournament = await tournament.save();
+
+    debugGroupEnd();
+    return savedTournament;
+}
 
 
 /*** Export
@@ -955,8 +991,28 @@ module.exports = {
             var tournamentId = request.params.id;
             var bracketId = request.body.bracketId;
             var matchId = request.body.matchId;
-            // advance players
+            // create result notification
             var tournament = await createResultNotificationMain( tournamentId , bracketId , matchId );
+            // return
+            response.json( { tournament: tournament } );
+        }
+        catch( error ) {
+            debugError( error );
+            response.status( 422 ).json( { error: error.toString() } );
+        }
+
+        debugGroupEnd();
+    } ,
+
+
+    createCommentaryNotification: async function( request , response ) {
+        debugGroup( 'createCommentaryNotification()' );
+
+        try {
+            var tournamentId = request.params.id;
+            var commentary = request.body.commentary;
+            // create commentary notification
+            var tournament = await createCommentaryNotificationMain( tournamentId , commentary );
             // return
             response.json( { tournament: tournament } );
         }

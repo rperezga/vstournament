@@ -45,4 +45,7 @@ router.route("/advancePlayers/:id")
 router.route("/createResultNotification/:id")
     .put( tournamentsController.createResultNotification );
 
+router.route("/createCommentaryNotification/:id")
+    .put( tournamentsController.createCommentaryNotification );
+
 module.exports = router;

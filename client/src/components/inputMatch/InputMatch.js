@@ -91,8 +91,8 @@ class InputMatch extends Component {
             bracketId: this.props.bracketid ,
             matchId: this.props.matchid ,
         };
-        var applyAdvanceRuleDataResponse = await tournamentAPI.createResultNotification( this.props.tournamentid , createResultNotificationData );
-        // console.log( 'applyAdvanceRuleDataResponse.data' , applyAdvanceRuleDataResponse.data );
+        var acreateResultNotificationResponse = await tournamentAPI.createResultNotification( this.props.tournamentid , createResultNotificationData );
+        // console.log( 'acreateResultNotificationResponse.data' , acreateResultNotificationResponse.data );
 
         this.props.closemodal();
 

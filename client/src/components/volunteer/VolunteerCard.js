@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { MDBBtn, MDBInput } from 'mdbreact';
 import API from "../../utils/tournamentAPI";
 import { element } from "prop-types";
 import Moment from 'react-moment';
@@ -6,12 +7,19 @@ import Moment from 'react-moment';
 class VolunteerCard extends Component {
 
     constructor(props) {
+        // console.group( 'VolunteerCard.constructor()');
+
         super(props);
         // console.log( '[VolunteerCard.constructor()] this.props:' , this.props );
 
         this.state = {
-          // game: {}
+          commentary: ''
         }
+
+        this.handleChangeCommentary = this.handleChangeCommentary.bind(this);
+        this.handleSubmitCommentary = this.handleSubmitCommentary.bind(this);
+
+        // console.groupEnd();
     }
 
     componentDidMount() {
@@ -19,15 +27,43 @@ class VolunteerCard extends Component {
         // this.loadGame();
     }
 
-    // loadGame = () => {
-    //     API.getGame(this.props.game._id)
-    //         .then(res => {
-    //             this.setState({ game: res.data });
-    //             console.log(this.state.game)
-    //         }
-    //         )
-    //         .catch(err => console.log(err));
-    // };
+
+    handleChangeCommentary( event ) {
+        // console.group( 'VolunteerCard.handleChangeCommentary()');
+        // console.log( 'event.target:' , event.target );
+        // console.log( 'event.target.name:' , event.target.name );
+        // console.log( 'event.target.value:' , event.target.value );
+        // console.log( 'this.state:' , this.state );
+
+        this.setState( { commentary: event.target.value } );
+
+        // console.log( 'this.state:' , this.state );
+        // console.groupEnd();
+    }
+
+
+    async handleSubmitCommentary( event ) {
+        // console.group( 'VolunteerCard.handleSubmitCommentary()');
+        // console.log( 'event.target:' , event.target );
+        // console.log( 'this.props:' , this.props );
+        // console.log( 'this.state:' , this.state );
+        event.preventDefault();
+
+        if ( this.state.commentary !== '' ) {
+            // notify commentary
+            var createCommentaryNotificationData = {
+                commentary: this.state.commentary
+            };
+            var createCommentaryNotificationResponse = await API.createCommentaryNotification( this.props.tournament._id , createCommentaryNotificationData );
+            // console.log( 'createCommentaryNotificationResponse.data' , createCommentaryNotificationResponse.data );
+
+            // reset  textbox
+            this.setState( { commentary: '' } );
+        }
+
+        // console.groupEnd();
+    }
+
 
     render() {
         return (
@@ -41,6 +77,34 @@ class VolunteerCard extends Component {
                         <h3>{this.props.tournament.name}</h3>
                         <h4>Game: {this.props.tournament.game.name}</h4>
                         <h5>Date: <Moment format=" YYYY/MM/DD HH:mm">{this.props.tournament.date}</Moment></h5>
+
+                        <form id="commentary-form">
+                            <div className="form-row">
+                                <div className="form-group col-12">
+                                    {/*<textarea className="form-control" id="commentary-form-commentary" name="commentary" placeholder="Enter commentary here" rows="3"></textarea>*/}
+                                    <MDBInput
+                                        id="commentary-form-commentary"
+                                        name="commentary"
+                                        type="textarea"
+                                        label="Commentary"
+                                        placeholder="Enter commentary here"
+                                        value={this.state.commentary}
+                                        onChange={this.handleChangeCommentary}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group col-12 d-flex justify-content-end">
+                                    <MDBBtn
+                                        id="commentary-form-submit"
+                                        onClick={this.handleSubmitCommentary}
+                                    >
+                                    Submit
+                                    </MDBBtn>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
                     {
                         (
