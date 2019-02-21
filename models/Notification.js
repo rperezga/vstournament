@@ -25,6 +25,16 @@ const NotificationShema = new Schema({
         ref: "Tournament"
     },
 
+    bracket: {
+        type: Schema.Types.ObjectId,
+        ref: "Bracket"
+    },
+
+    match: {
+        type: Schema.Types.ObjectId,
+        ref: "Match"
+    },
+
     message: {
         type: String,
         required: true

@@ -51,7 +51,7 @@ class Tournaments extends Component {
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">
 
                     {this.state.tournaments.map((tournament, index) => {
-                        if (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed') {
+                        if (tournament.status === 'new' || tournament.status === 'open' || tournament.status === 'closed' || tournament.status === 'ready') {
                             return (
                                 <CardTournament
                                     id={tournament._id}

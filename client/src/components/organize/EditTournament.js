@@ -265,7 +265,7 @@ class EditTournament extends Component {
       doGenerateBrackets = true;
     }
     else if (this.state.statusButton === 'Start') { newTournamentStatus = 'running'; }
-    else if (this.state.statusButton === 'End') { newTournamentStatus = 'finsihed'; }
+    else if (this.state.statusButton === 'End') { newTournamentStatus = 'finished'; }
 
     try {
       // generate brackets
@@ -454,7 +454,11 @@ class EditTournament extends Component {
                           {this.state.infoMessage}
                         </MDBCol>
                         <MDBCol className="col-2">
-                          <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button>
+                          {
+                            !( this.state.status === 'finished' ) ?
+                            <button className="btn btn-primary" onClick={this.changeStatus}>{this.state.statusButton}</button> :
+                            ''
+                          }
                         </MDBCol>
                       </MDBRow>
                     </MDBAlert>
