@@ -4,6 +4,7 @@ import { MDBBtn, MDBCard, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact"
 import API from "../../utils/tournamentAPI";
 import { connect } from "react-redux";
 import Bracket from '../brackets/Brackets'
+import Notification from '../notification/Notification'
 
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 import { subscribeToTimer } from '../../socket';
@@ -53,6 +54,9 @@ class ViewTournament extends Component {
                     if (res.data.players.find(player => player.user._id === this.props.auth.user.id)) {
                         this.setState({ asPlayer: true })
                     }
+
+                    this.setState({ notifications: res.data.notifications })
+                    console.log(this.state.notifications)
                 }
                 )
                 .catch(err => console.log(err));
@@ -223,7 +227,21 @@ class ViewTournament extends Component {
                             ""
                         }
 
-                        {this.state.tab == 'updates' ?
+                        {this.state.tab == 'updates' && this.state.notifications.length > 0 ?
+                            <div>
+                                {this.state.notifications.map(notification => {
+                                    return <Notification 
+                                        ntfType={notification.notificationType} 
+                                        ntfDate={notification.date}
+                                        ntfMessage={notification.message}
+                                    />
+                                })}
+                            </div>
+                            :
+                            ""
+                        }
+
+                        {this.state.tab == 'updates' && this.state.notifications.length == 0 ?
                             <div style={{ textAlign: 'center', marginTop: '30px' }}>
                                 <h3>Any notification yet!</h3>
                                 <p className="App-intro">

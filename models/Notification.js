@@ -6,7 +6,7 @@ const NotificationShema = new Schema({
 
     notificationType: {
         type: String,
-        // required: true,
+        required: true,
         enum: [
             'result',
             'advances',
@@ -23,14 +23,12 @@ const NotificationShema = new Schema({
     tournament: {
         type: Schema.Types.ObjectId,
         ref: "Tournament"
-    },    
+    },
 
-    message: [
-        {
-            type: String,
-            required: true
-        }
-    ]
+    message: {
+        type: String,
+        required: true
+    }
 
 });
 
