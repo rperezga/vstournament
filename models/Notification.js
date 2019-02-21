@@ -23,14 +23,12 @@ const NotificationShema = new Schema({
     tournament: {
         type: Schema.Types.ObjectId,
         ref: "Tournament"
-    },    
+    },
 
-    message: [
-        {
-            type: String,
-            required: true
-        }
-    ]
+    message: {
+        type: String,
+        required: true
+    }
 
 });
 

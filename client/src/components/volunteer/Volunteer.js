@@ -151,7 +151,7 @@ class Volunteer extends Component {
                     <div>
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     </div>
                   )
@@ -161,19 +161,20 @@ class Volunteer extends Component {
                     let matches = [];
                     let matchName = [];
                     let matchId = [];
+                    let matchPlayer1 = [];
+                    let matchPlayer2 = [];
                     let a = tournament.brackets;
                     a.map((element) => {
                       let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
                       if (ajudges) {
-                        console.log(` adjujes: ${ajudges}`)
-                        value = element.name;
-                        console.log(`Value :${value}`)
-                        
+                        value = element.name;                        
                         matches = element.matches;
                         matches.map((element) => {
                          
                             matchName.push(element.name);
                             matchId.push(element._id);
+                            matchPlayer1.push(element.player1);
+                            matchPlayer2.push(element.player2);
                    
                         })
                         
@@ -183,11 +184,13 @@ class Volunteer extends Component {
                       <React.Fragment>
                         <VolunteerCard
                           name={tournament.name}
-                          game={tournament.game}
+                          game={tournament.game._id}
                           brackets={value}
                           matchName={matchName}
                           matchId={matchId}
                           toggle={this.toggle}
+                          player1={matchPlayer1}
+                          player2={matchPlayer2}
                         />
 
                         <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
@@ -204,14 +207,14 @@ class Volunteer extends Component {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   } else if (this.state.tab === 'upcoming' && tournament.status === 'new') {
                     return (
                       <VolunteerCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   }
@@ -220,7 +223,7 @@ class Volunteer extends Component {
                   return (
                     <VolunteerCard
                       name={tournament.name}
-                      game={tournament.game.name}
+                      game={tournament.game._id}
                     />
                   )
                 }

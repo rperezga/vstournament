@@ -44,9 +44,9 @@ class VolunteerCard extends Component {
                         
                     </div>
 
-                    {this.props.matchName ? <div> {this.props.matchName.map((element,index ) => {
-                       return( <div className="col-4" style={{textAlign: "center"}}>
-                       {element ? <button className="btn btn-primary" id="savebtn" dataid={this.props.matchId[index]} onClick={()=>{ this.props.toggle()}}>{element}</button>  : ''}
+                    {this.props.matchName ? <div className="col-4"> {this.props.matchName.map((element,index ) => {
+                       return( <div style={{textAlign: "center"}}>
+                       {element && (!this.props.player1[index].isBye && !this.props.player2[index].isBye) ? <button style={{width: "100%"}} className="btn btn-primary" id="savebtn" dataid={this.props.matchId[index]} onClick={()=>{ this.props.toggle()}}>{element}</button>  : ''}
                        
                        </div>)
                    

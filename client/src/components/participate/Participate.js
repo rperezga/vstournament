@@ -122,7 +122,7 @@ class Participate extends Component {
                     return (
                       <ParticipateCard
                         name={tournament.name}
-                        game={tournament.game.name}
+                        game={tournament.game._id}
                       />
                     )
                   } else if (result.status === 'approved') {
