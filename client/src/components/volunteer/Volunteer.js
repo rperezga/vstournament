@@ -3,12 +3,10 @@ import { connect } from "react-redux";
 import API from "../../utils/tournamentAPI";
 import APIMatch from "../../utils/matchAPI";
 import VolunteerCard from './VolunteerCard';
-import { element } from "prop-types";
 
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-
-import Brackets from '../brackets/Brackets';
+import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import InputMatch from '../inputMatch/InputMatch';
+
 class Volunteer extends Component {
 
   constructor(props) {
@@ -36,14 +34,12 @@ class Volunteer extends Component {
     APIMatch.getMatch(this.match)
       .then(res => {
         this.setState({ match: res.data });
-        console.log(this.state.match)
       }
       )
       .catch(err => console.log(err));
   }
 
   toggle() {
-    console.log("CClicked")
     this.setState({
       modal: !this.state.modal
     });
@@ -58,7 +54,6 @@ class Volunteer extends Component {
     API.getJudgeTournaments(this.props.auth.user.id)
       .then(res => {
         this.setState({ tournaments: res.data });
-        console.log(this.state.tournaments)
       }
       )
       .catch(err => console.log(err));
@@ -167,17 +162,17 @@ class Volunteer extends Component {
                     a.map((element) => {
                       let ajudges = element.judges.find(judge => judge === this.props.auth.user.id)
                       if (ajudges) {
-                        value = element.name;                        
+                        value = element.name;
                         matches = element.matches;
                         matches.map((element) => {
-                         
-                            matchName.push(element.name);
-                            matchId.push(element._id);
-                            matchPlayer1.push(element.player1);
-                            matchPlayer2.push(element.player2);
-                   
+
+                          matchName.push(element.name);
+                          matchId.push(element._id);
+                          matchPlayer1.push(element.player1);
+                          matchPlayer2.push(element.player2);
+
                         })
-                        
+
                       }
                     })
                     return (

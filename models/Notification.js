@@ -6,7 +6,7 @@ const NotificationShema = new Schema({
 
     notificationType: {
         type: String,
-        // required: true,
+        required: true,
         enum: [
             'result',
             'advances',

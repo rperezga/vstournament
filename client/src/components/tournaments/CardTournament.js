@@ -3,10 +3,7 @@ import { MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBBtn, 
 import Moment from 'react-moment';
 import { Link } from "react-router-dom";
 
-
-
 class CardTournament extends Component {
-
     render() {
         return (
             <React.Fragment>

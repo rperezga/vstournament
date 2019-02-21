@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import API from "../../utils/tournamentAPI";
-
 import CardTournament from "./CardTournament"
 
 class Tournaments extends Component {
@@ -16,7 +15,6 @@ class Tournaments extends Component {
     loadAllTournaments = () => {
         API.getTournaments()
             .then(res => {
-                console.log(res.data)
                 this.setState({ tournaments: res.data });
             }
             )
@@ -26,7 +24,6 @@ class Tournaments extends Component {
 
     render() {
         return (
-            
             <div style={{ width: "94%", marginLeft: "3%" }}>
                 <h4>Live Tournaments</h4>
                 <div className="d-flex align-content-stretch flex-wrap bd-highlight example-parent">

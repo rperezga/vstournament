@@ -45,7 +45,7 @@ class Navbar extends Component {
                 <NavText>
                   <Link to="/">Tournaments</Link>
                 </NavText>
-              </NavItem>              
+              </NavItem>
 
               <NavItem eventKey="organize">
                 <NavIcon>
@@ -107,10 +107,7 @@ class Navbar extends Component {
 
             </SideNav.Nav>
           }
-
-
         </SideNav>
-
       </React.Fragment>
     );
   }
